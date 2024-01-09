@@ -11,9 +11,33 @@ package frc.robot;
  *
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
+ * 
+ * Unit suffixes:
+ * none - unitless (ratios)
+ * M - meters
+ * MS - meters/second
+ * MS2 - meters/second^2
+ * R - radians
+ * RS - radians/second
+ * RS2 - radians/second^2
+ * D - degrees
+ * DS - degrees/second
+ * DS2 - degrees/second^2
  */
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+  }
+
+  public static class Chassis {
+    // width and height of chassis
+    public static final double TRACK_WIDTH_M = 0.61;
+    public static final double WHEEL_BASE_M = 0.61;
+
+    
+  }
+
+  public static class Swerve {
+    
   }
 }
