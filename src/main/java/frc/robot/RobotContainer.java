@@ -107,9 +107,9 @@ public class RobotContainer
    */
   private void configureBindings()
   { 
+    driveStick.button(1).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
     driveStick.button(2).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    driveStick.button(3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    driveStick.button(4).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    // driveStick.button(3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
   }
 
   /**
