@@ -16,4 +16,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static class WristConstants{ // random placeholder numbers
+    public static final int WRIST_MOTOR = 1;
+    public static final int WRIST_MAX_ANGLE = 2;
+    public static final int WRIST_MIN_ANGLE = 3;
+    public static final int WRIST_ENCODER = 4;
+    public static final int WRIST_GEAR_RATIO = 5;
+    public static final int WRIST_ENCODER_OFFSET = 6;
+  }
 }
