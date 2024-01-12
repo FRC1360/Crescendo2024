@@ -187,7 +187,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("NavX roll", navX.getRoll().getDegrees());
 
     for (SwerveModuleCustom module : swerveModules) {
-      SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " angle", module.getMagEncoder().getDegrees());
+      SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " angle", module.getCanCoder().getDegrees());
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " target  ", module.targetAngle);
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "speed", module.getSpeed());
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "target speed", module.targetSpeed);

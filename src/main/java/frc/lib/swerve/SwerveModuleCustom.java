@@ -17,6 +17,7 @@ import frc.lib.util.PIDConstants;
 import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
+import swervelib.encoders.CANCoderSwerve;
 import swervelib.math.SwerveModuleState2;
 
 public class SwerveModuleCustom {
@@ -30,7 +31,8 @@ public class SwerveModuleCustom {
     /* Encoders and their values */
     private RelativeEncoder driveEncoder;
     private RelativeEncoder integratedAngleEncoder;
-    public MagEncoder angleEncoder;
+    //public MagEncoder angleEncoder;
+    public CANCoderSwerve angleEncoder; 
     private double lastAngle;
     private double angleOffset;
 
@@ -51,7 +53,9 @@ public class SwerveModuleCustom {
         this.driveSVA = moduleConstants.driveSVA;
 
         /* Angle Encoder Config */
-        angleEncoder = new MagEncoder(moduleConstants.magEncoderID, moduleConstants.angleOffset);
+        angleEncoder = new CANCoderSwerve(moduleConstants.canCoderID);  
+        
+        angleEncoder.setAbsoluteEncoderOffset(moduleConstants.angleOffset);
 
         /* Angle Motor Config */
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -72,7 +76,7 @@ public class SwerveModuleCustom {
         SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Integrated Encoder",
                 this.getState().angle.getDegrees());
         SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Mag Encoder",
-                this.getMagEncoder().getDegrees());
+                this.getCanCoder().getDegrees());
         SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Set Point", this.lastAngle);
         SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Drive Encoder Velocity",
                 this.driveEncoder.getVelocity());
@@ -95,7 +99,7 @@ public class SwerveModuleCustom {
     }
 
     public void resetToAbsolute() {
-        integratedAngleEncoder.setPosition(this.getMagEncoder().getDegrees());
+        integratedAngleEncoder.setPosition(this.getCanCoder().getDegrees());
     }
 
     private void configAngleMotor() {
@@ -166,8 +170,8 @@ public class SwerveModuleCustom {
         lastAngle = angle.getDegrees() - angle.getDegrees() % 360;
     }
 
-    public Rotation2d getMagEncoder() {
-        return Rotation2d.fromRadians(this.angleEncoder.getAbsoluteAngle());
+    public Rotation2d getCanCoder() {
+        return Rotation2d.fromDegrees(this.angleEncoder.getAbsolutePosition());
     }
 
     public Rotation2d getAngle() {
