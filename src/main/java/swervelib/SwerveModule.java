@@ -180,6 +180,10 @@ public class SwerveModule
     {
       double percentOutput = desiredState.speedMetersPerSecond / maxSpeed;
       driveMotor.set(percentOutput);
+      if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
+      {
+        SmartDashboard.putNumber("Module[" + configuration.name + "] Motor Output", percentOutput);
+      }
     } else
     {
       // Taken from the CTRE SwerveModule class.
@@ -198,6 +202,12 @@ public class SwerveModule
 
       double velocity = desiredState.speedMetersPerSecond * (cosineScalar);
       driveMotor.setReference(velocity, 0);
+
+      if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
+      {
+        SmartDashboard.putNumber("Module[" + configuration.name + "] Speed Setpoint", velocity);
+        SmartDashboard.putNumber("Module[" + configuration.name + "] Measured Speed", driveMotor.getVelocity());
+      }
     }
 
     /* // Not necessary anymore.
@@ -231,7 +241,6 @@ public class SwerveModule
 
     if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
     {
-      SmartDashboard.putNumber("Module[" + configuration.name + "] Speed Setpoint", desiredState.speedMetersPerSecond);
       SmartDashboard.putNumber("Module[" + configuration.name + "] Angle Setpoint", desiredState.angle.getDegrees());
     }
   }
@@ -312,7 +321,7 @@ public class SwerveModule
       angle += 360;
     }
 
-    return angle;
+    return angle - 180;
   }
 
   /**
