@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
+
 // import org.photonvision.EstimatedRobotPose;
 // import org.photonvision.PhotonCamera;
 
@@ -35,7 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public Translation2d currentSpeed = new Translation2d(0, 0);
   private PIDConstants anglePID = Constants.Swerve.anglePID; 
 
- // PhotonCameraWrapper pCameraWrapper; 
+  PhotonCameraWrapper pCameraWrapper; 
 
   public SwerveSubsystem() {
     // Gyro setup
@@ -43,7 +45,7 @@ public class SwerveSubsystem extends SubsystemBase {
     navX.setInverted(Constants.Swerve.isGyroInverted);
 
 
-    //pCameraWrapper = new PhotonCameraWrapper(); 
+    pCameraWrapper = new PhotonCameraWrapper(); 
     // Swerve module setup
     swerveModules = new SwerveModuleCustom[] {
         new SwerveModuleCustom(0, Constants.Swerve.Mod0.constants),
@@ -57,6 +59,8 @@ public class SwerveSubsystem extends SubsystemBase {
         getPositions(), new Pose2d());
 
     this.anglePID.sendDashboard("angle pid");
+
+    SmartDashboard.putData(field);
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -196,14 +200,14 @@ public class SwerveSubsystem extends SubsystemBase {
     // Estimator update
     swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
 
-    // Optional<EstimatedRobotPose> result =
-    //             pCameraWrapper.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition());
+    Optional<EstimatedRobotPose> result =
+                pCameraWrapper.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition());
 
-    // if (result.isPresent()) {
-    //     EstimatedRobotPose camPose = result.get();
-    //     swerveDrivePoseEstimator.addVisionMeasurement(
-    //             camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-    // }
+    if (result.isPresent()) {
+        EstimatedRobotPose camPose = result.get();
+        swerveDrivePoseEstimator.addVisionMeasurement(
+                camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+    }
 
 
     field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());

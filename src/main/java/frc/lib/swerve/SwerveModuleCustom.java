@@ -55,7 +55,7 @@ public class SwerveModuleCustom {
         /* Angle Encoder Config */
         angleEncoder = new CANCoderSwerve(moduleConstants.canCoderID);  
         
-        angleEncoder.setAbsoluteEncoderOffset(moduleConstants.angleOffset);
+        System.out.println(angleEncoder.setAbsoluteEncoderOffset(moduleConstants.angleOffset));
 
         /* Angle Motor Config */
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
