@@ -77,7 +77,7 @@ public class SwerveSubsystem extends SubsystemBase {
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 translation.getX(), translation.getY(),
-                rotation,
+                -rotation,
                 navX.getYaw())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation),
         this.centerOfRotation);
@@ -192,7 +192,8 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) { 
-    this.drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond, false, false);
+    System.out.println("driving x: " + speeds.vxMetersPerSecond + " y: " + speeds.vyMetersPerSecond + " omega: " + speeds.omegaRadiansPerSecond); 
+    this.drive(new Translation2d(speeds.vyMetersPerSecond, speeds.vxMetersPerSecond), speeds.omegaRadiansPerSecond, false, false);
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() { 
