@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel;
+//import com.revrobotics.CANSparkLowLevel;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -42,7 +42,7 @@ public class WristSubsystem extends SubsystemBase {
     private Double angularVelocity; // degrees per second
 
     public WristSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
-        this.wristMotor = new CANSparkMax(Constants.WristConstants.WRIST_MOTOR, MotorType.kBrushless);
+        this.wristMotor = new CANSparkMax(Constants.STPConstants.WRIST_MOTOR, MotorType.kBrushless);
         
         this.wristOffset = 0.0;
         // kP = 0.0125
@@ -61,7 +61,7 @@ public class WristSubsystem extends SubsystemBase {
         this.manualOffset = manualOffset;
         this.manualOffsetEnable = manualOffsetEnable;
 
-        this.absoluteEncoder = new AnalogEncoder(Constants.WristConstants.WRIST_ENCODER);
+        this.absoluteEncoder = new AnalogEncoder(Constants.STPConstants.WRIST_ENCODER);
 
         this.lastTime = -1; 
         this.lastAngle = Double.NaN; 
@@ -70,12 +70,15 @@ public class WristSubsystem extends SubsystemBase {
         resetMotorRotations();
     }
 
+
     public void setIdleMode(IdleMode mode) { 
         this.wristMotor.setIdleMode(mode); 
     }
 
+
+
     public void resetMotorRotations() {
-        double newPos = (this.absoluteEncoder.getAbsolutePosition() - Constants.WristConstants.WRIST_ENCODER_OFFSET) / Constants.WristConstants.WRIST_GEAR_RATIO;
+        double newPos = (this.absoluteEncoder.getAbsolutePosition() - Constants.STPConstants.WRIST_ENCODER_OFFSET) / Constants.STPConstants.WRIST_GEAR_RATIO;
 
         if(this.wristMotor.getEncoder().setPosition(newPos) == REVLibError.kOk) {
             System.out.println("Reset Shoulder Rotations to 0");
@@ -84,6 +87,7 @@ public class WristSubsystem extends SubsystemBase {
         }
         
     }
+
 
 
     public double getMotorRotations() {
@@ -97,8 +101,8 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     public void setWristSpeed(double speed) {
-        if (this.getWristAngle() > Constants.WristConstants.WRIST_MAX_ANGLE
-             || this.getWristAngle() < Constants.WristConstants.WRIST_MIN_ANGLE)
+        if (this.getWristAngle() > Constants.STPConstants.WRIST_MAX_ANGLE
+             || this.getWristAngle() < Constants.STPConstants.WRIST_MIN_ANGLE)
              speed = 0.0; 
         this.wristMotor.set(speed);
     }
@@ -107,8 +111,8 @@ public class WristSubsystem extends SubsystemBase {
      * Sets arm voltage based off 0.0 - 12.0
      */
     public void setWristVoltage(double voltage) {
-        if (this.getWristAngle() > Constants.WristConstants.WRIST_MAX_ANGLE
-            || this.getWristAngle() < Constants.WristConstants.WRIST_MIN_ANGLE)
+        if (this.getWristAngle() > Constants.STPConstants.WRIST_MAX_ANGLE
+            || this.getWristAngle() < Constants.STPConstants.WRIST_MIN_ANGLE)
                 voltage = 0.0; 
         this.wristMotor.setVoltage(voltage);
     }
@@ -154,7 +158,7 @@ public class WristSubsystem extends SubsystemBase {
      * Converts motor rotations to angle (0 - 360)
      */
     public double encoderToAngleConversion(double encoderPosition) {
-        return (encoderPosition * 360.0 * 2.0 * Constants.WristConstants.WRIST_GEAR_RATIO);
+        return (encoderPosition * 360.0 * 2.0 * Constants.STPConstants.WRIST_GEAR_RATIO);
     }
 
     public void updateSmartDashboard() {
