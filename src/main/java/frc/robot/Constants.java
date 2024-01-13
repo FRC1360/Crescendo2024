@@ -36,7 +36,7 @@ public final class Constants {
                 new Transform3d(
                         new Translation3d(-0.0762, 0.2286, 0.7366), //forward is positive X, left is positive Y, and up is positive Z.
                         new Rotation3d(
-                                0, Math.toRadians(28.0),
+                                0, Math.toRadians(-28.0),
                                 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final String cameraName = "Camera_Module_v1";
@@ -134,10 +134,10 @@ public final class Constants {
         public static final class AutoConstants {
             // PID values to follow paths. NOT *DIRECTLY* FOR MODULE SPEED, try DRIVE_PID
             // and ANGLE_PID first
-            public static com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(0.13, 0, 0.0045);
-            public static com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.013, 0.000001, 0);
-            public static double maxSpeed = 4 * 0.7; // meters
-            public static double maxAcceleration = 2 * 0.9; // m/s^2
+            public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(0.5, 0, 0.0045);
+            public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.013, 0.000001, 0);
+            public static final double maxSpeed = 4 * 0.7; // meters
+            public static final double maxAcceleration = 2 * 0.9; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); 
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); 
         }
