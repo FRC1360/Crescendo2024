@@ -23,7 +23,7 @@ private ShintakeSubsystem m_shooter;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.varIntake(Constants.DEFAULT_INTAKE_SPEED);
+    m_shooter.varIntake(Constants.ShintakeConstants.DEFAULT_INTAKE_SPEED);
   }
 
   // Called once the command ends or is interrupted.

@@ -19,16 +19,16 @@ public class ShintakeSubsystem extends SubsystemBase {
   private CANSparkMax m_back;
 
   public ShintakeSubsystem() {
-    this.m_left = new CANSparkMax(Constants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
-    this.m_right = new CANSparkMax(Constants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
-    this.m_back = new CANSparkMax(Constants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
+    this.m_left = new CANSparkMax(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_right = new CANSparkMax(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
   }
   
   //Moves both motors in the direction to intake when given a positive number
   //When not inverted, motors turn right
   public void intakePiece() {
     m_back.setInverted(false);
-    m_back.set(Constants.INTAKE_SPEED_BACK);
+    m_back.set(Constants.ShintakeConstants.INTAKE_SPEED_BACK);
   }
 
   //Moves both motors in the direction to shoot when given a positive number
@@ -36,18 +36,18 @@ public class ShintakeSubsystem extends SubsystemBase {
     m_left.setInverted(true);
     m_right.setInverted(false);
     m_back.setInverted(false);
-    m_left.set(Constants.SHOOT_SPEED_FRONT);
-    m_right.set(Constants.SHOOT_SPEED_FRONT);
-    m_back.set(Constants.SHOOT_SPEED_BACK);
+    m_left.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
+    m_right.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
+    m_back.set(Constants.ShintakeConstants.SHOOT_SPEED_BACK);
   }
 
   public void shootAmp() {
     m_left.setInverted(false);
     m_right.setInverted(true);
     m_back.setInverted(true);
-    m_left.set(Constants.SHOOT_SPEED_FRONT);
-    m_right.set(Constants.SHOOT_SPEED_FRONT);
-    m_back.set(Constants.SHOOT_SPEED_BACK);
+    m_left.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
+    m_right.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
+    m_back.set(Constants.ShintakeConstants.SHOOT_SPEED_BACK);
   }
 
   //Stops both motors
