@@ -22,11 +22,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private CANSparkMax ACPMotorSlave;
     private double targetAngle;
 
-    //public OrbitPID holdPIDController;  // PID Controller for HoldToTarget
+    // we can use SparkMAX integrated PID, its got more features and is easier to use
     public OrbitPID movePIDController;  // PID Controller for following Trapazoid Motion Profile
+    // you shouldn't need separate motion profiles for each direction, PIDF will handle gravity and whatnot
     public TrapezoidProfile.Constraints ACPUpMotionProfileConstraints;
-    public TrapezoidProfile.Constraints ACPDownMotionProfileConstraints;
-
+    public TrapezoidProfile.Constraints ACPDownMotionProfileConstraints; 
 
     private double angularVelocity;  // angular velocity in deg / second
     private double lastAngle;
@@ -35,6 +35,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private boolean transitioning;
     private double scheduledAngle;
 
+    // this can be moved to the command, avoid handling operator input in subsystems
     private DoubleSupplier manualOffset;
     private BooleanSupplier manualOffsetEnable;
 
@@ -42,8 +43,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public ArmFeedforward ACPFeedForward;  
     
+    // try handling states using an enum, its more readable and effective
     private boolean inIntakePosition;
-
     private boolean isSafe; 
 
     public ArmChassisPivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
@@ -56,7 +57,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         // This units are deg / second for velocity and deg / sec^2 for acceleration
         this.ACPUpMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 350.0); 
-        this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0); 
+        this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0);
         this.targetAngle = Constants.ACPConstants.HOME_POSITION_ACP;
 
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
@@ -87,8 +88,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.inIntakePosition = false;
         this.isSafe = true; 
 
-        resetMotorRotations();
-        
+        resetMotorRotations();   
     }
 
     public void checkSafety() { 
@@ -195,10 +195,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         return this.scheduledAngle;
     }
 
+    // this should probably be a flag set by commands when they start moving the arm, not something that you check this way
+    // this isnt very flexible and may give bad data near the target positions
     public void checkTransitioning() {
         transitioning = !(Math.abs(this.getACPAngle()) < 2) && (this.getScheduledAngle() > 0.0 && this.getACPAngle() < 0.0) || (this.getScheduledAngle() < 0.0 && this.getACPAngle() > 0.0);
     }
 
+    // the shintake isnt part of this subsystem
     public boolean getIntakePosition() {
         return this.inIntakePosition;
     }
