@@ -14,8 +14,8 @@ package frc.robot;
  */
 public final class Constants {
   public static final int kDriverControllerPort = 0;
-  public static final int INTAKE_SPEED_FRONT = 100;
   public static final int INTAKE_SPEED_BACK = 70;
+  public static final int DEFAULT_INTAKE_SPEED = 50;
   public static final int SHOOT_SPEED_FRONT = 100;
   public static final int SHOOT_SPEED_BACK = 50;
   public static final int RIGHT_SHOOTAKE_CAN_ID = 0;

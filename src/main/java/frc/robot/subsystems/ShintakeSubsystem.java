@@ -27,16 +27,24 @@ public class ShintakeSubsystem extends SubsystemBase {
   //Moves both motors in the direction to intake when given a positive number
   //When not inverted, motors turn right
   public void intakePiece() {
-    m_left.set(Constants.INTAKE_SPEED_FRONT);
-    m_right.setInverted(true);
-    m_right.set(Constants.INTAKE_SPEED_FRONT);
-    m_back.setInverted(true);
+    m_back.setInverted(false);
     m_back.set(Constants.INTAKE_SPEED_BACK);
   }
 
   //Moves both motors in the direction to shoot when given a positive number
-  public void shootPiece() {
+  public void shootSpeaker() {
     m_left.setInverted(true);
+    m_right.setInverted(false);
+    m_back.setInverted(false);
+    m_left.set(Constants.SHOOT_SPEED_FRONT);
+    m_right.set(Constants.SHOOT_SPEED_FRONT);
+    m_back.set(Constants.SHOOT_SPEED_BACK);
+  }
+
+  public void shootAmp() {
+    m_left.setInverted(false);
+    m_right.setInverted(true);
+    m_back.setInverted(true);
     m_left.set(Constants.SHOOT_SPEED_FRONT);
     m_right.set(Constants.SHOOT_SPEED_FRONT);
     m_back.set(Constants.SHOOT_SPEED_BACK);
@@ -49,10 +57,7 @@ public class ShintakeSubsystem extends SubsystemBase {
     m_back.set(0.0);
   }
 
-  public void varIntake(int frontSpeed, int backSpeed) {
-    m_left.set(frontSpeed);
-    m_right.setInverted(true);
-    m_right.set(frontSpeed);
+  public void varIntake(int backSpeed) {
     m_back.setInverted(true);
     m_back.set(backSpeed);
   }
