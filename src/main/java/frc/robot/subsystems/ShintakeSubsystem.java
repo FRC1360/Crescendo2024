@@ -12,48 +12,56 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 
-public class ShootakeSubsystem extends SubsystemBase {
+public class ShintakeSubsystem extends SubsystemBase {
 
   private CANSparkMax m_left;
   private CANSparkMax m_right;
+  private CANSparkMax m_back;
 
-  public ShootakeSubsystem() {
-    this.m_left = new CANSparkMax(Constants.OperatorConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
-    this.m_right = new CANSparkMax(Constants.OperatorConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+  public ShintakeSubsystem() {
+    this.m_left = new CANSparkMax(Constants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_right = new CANSparkMax(Constants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_back = new CANSparkMax(Constants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
   }
   
   //Moves both motors in the direction to intake when given a positive number
   //When not inverted, motors turn right
   public void intakePiece() {
-    m_left.set(Constants.OperatorConstants.INTAKE_SPEED);
+    m_left.set(Constants.INTAKE_SPEED_FRONT);
     m_right.setInverted(true);
-    m_right.set(Constants.OperatorConstants.INTAKE_SPEED);
+    m_right.set(Constants.INTAKE_SPEED_FRONT);
+    m_back.setInverted(true);
+    m_back.set(Constants.INTAKE_SPEED_BACK);
   }
 
   //Moves both motors in the direction to shoot when given a positive number
   public void shootPiece() {
     m_left.setInverted(true);
-    m_left.set(Constants.OperatorConstants.SHOOT_SPEED);
-    m_right.set(Constants.OperatorConstants.SHOOT_SPEED);
+    m_left.set(Constants.SHOOT_SPEED_FRONT);
+    m_right.set(Constants.SHOOT_SPEED_FRONT);
+    m_back.set(Constants.SHOOT_SPEED_BACK);
   }
 
   //Stops both motors
   public void stop() {
     m_left.set(0.0);
     m_right.set(0.0);
+    m_back.set(0.0);
   }
 
-  public void varIntake(int speed) {
-    m_left.set(speed);
+  public void varIntake(int frontSpeed, int backSpeed) {
+    m_left.set(frontSpeed);
     m_right.setInverted(true);
-    m_right.set(speed);
+    m_right.set(frontSpeed);
+    m_back.setInverted(true);
+    m_back.set(backSpeed);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    if (m_left.get() == 0 && m_right.get() == 0) {
+    if (m_left.get() == 0 || m_right.get() == 0 || m_back.get() == 0) {
       SmartDashboard.putBoolean("Intake in motion: ", false);
     }
     else {

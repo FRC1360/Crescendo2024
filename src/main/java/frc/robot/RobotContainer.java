@@ -7,10 +7,10 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.autos.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.Shootake.DefaultShootakeCommand;
-import frc.robot.commands.Shootake.IntakeCommand;
+import frc.robot.commands.Shintake.DefaultShintakeCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.ShootakeSubsystem;
+import frc.robot.subsystems.ShintakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,17 +24,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShootakeSubsystem m_shootakeSubsystem = new ShootakeSubsystem();
+  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final DefaultShootakeCommand m_defaultShootakeCommand = new DefaultShootakeCommand(m_shootakeSubsystem);
+  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
         private final CommandJoystick m_leftController = new CommandJoystick(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_shootakeSubsystem.setDefaultCommand(m_defaultShootakeCommand);
+    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
@@ -51,7 +51,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    m_leftController.button(7).onTrue(new IntakeCommand(m_shootakeSubsystem));
+    m_leftController.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
   }
 
   /**

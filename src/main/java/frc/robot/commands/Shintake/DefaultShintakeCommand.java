@@ -2,26 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Shootake;
+package frc.robot.commands.Shintake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShootakeSubsystem;
 
-public class IntakeCommand extends Command {
+import frc.robot.subsystems.ShintakeSubsystem;
 
-  private ShootakeSubsystem m_shooter;
+public class DefaultShintakeCommand extends Command {
 
-  public IntakeCommand(ShootakeSubsystem shooter) {
+private ShintakeSubsystem m_shooter;
+
+  public DefaultShintakeCommand(ShintakeSubsystem shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.m_shooter = shooter;
+
     addRequirements(shooter);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.intakePiece();
+    m_shooter.varIntake(50, 30);
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +35,6 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
