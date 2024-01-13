@@ -23,6 +23,7 @@ import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
 import frc.lib.util.PIDConstants;
 import frc.robot.Constants;
+import frc.robot.subsystems.swerve.SwerveAutoConfig;
 import swervelib.math.SwerveModuleState2;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -61,6 +62,13 @@ public class SwerveSubsystem extends SubsystemBase {
     this.anglePID.sendDashboard("angle pid");
 
     SmartDashboard.putData(field);
+
+    // Configure the AutoBuilder that handles all the auto path following!!
+   SwerveAutoConfig.configureAutoBuilder(this);
+  }
+
+  public void zeroGyro() { 
+    this.navX.resetGyro();
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -181,6 +189,14 @@ public class SwerveSubsystem extends SubsystemBase {
         pose.getX(),
         pose.getY(),
         pose.getRotation().getDegrees());
+  }
+
+  public void driveRobotRelative(ChassisSpeeds speeds) { 
+    this.drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond, false, false);
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds() { 
+    return Constants.Swerve.swerveKinematics.toChassisSpeeds(getStates()); 
   }
 
   @Override

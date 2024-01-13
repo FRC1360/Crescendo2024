@@ -6,11 +6,23 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.autos.Autos;
+import frc.robot.autos.FetchPath;
+import frc.robot.autos.PathfindAuto;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.ArrayList;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,12 +42,30 @@ public class RobotContainer {
   private final CommandJoystick right_controller = new CommandJoystick(1);
 
   public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  
+  public SendableChooser<Command> autoChooser; 
 
+  public ArrayList<Command> tempInitAutos; 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    this.tempInitAutos = new ArrayList<Command>(); 
+  }
+
+  public void loadAllAutos() { 
+    this.tempInitAutos.clear(); // in case if robot is not power cycled, data within class are typically cached 
+    System.out.println(AutoBuilder.getAllAutoNames()); 
+    for (String pathName : AutoBuilder.getAllAutoNames()) { 
+      this.tempInitAutos.add(new FetchPath(pathName).getCommand()); 
+    }
+  }
+
+  public void initalizeAutoChooser() { 
+    this.autoChooser = AutoBuilder.buildAutoChooser(); 
+    SmartDashboard.putData(this.autoChooser); 
   }
 
   /**
@@ -62,7 +92,10 @@ public class RobotContainer {
         () -> -modifyAxis(left_controller.getX()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
         () -> modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
         right_controller));
+
+    left_controller.button(1).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -71,7 +104,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    //return Autos.exampleAuto(m_exampleSubsystem);
+    return new PathfindAuto(new Pose2d(14.69, 1.08, Rotation2d.fromDegrees(-60.0))).getCommand();
   }
 
   private static double deadband(double value, double deadband) {
