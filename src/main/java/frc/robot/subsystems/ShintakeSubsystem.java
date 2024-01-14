@@ -66,7 +66,7 @@ public class ShintakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    if (m_left.get() == 0 || m_right.get() == 0 || m_back.get() == 0) {
+    if (m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0) {
       SmartDashboard.putBoolean("Intake in motion: ", false);
     }
     else {

@@ -56,7 +56,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    leftController.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
