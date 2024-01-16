@@ -17,12 +17,12 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static class STPConstants{ // random placeholder numbers
-    public static final int WRIST_MOTOR = 1;
-    public static final int WRIST_MAX_ANGLE = 2;
-    public static final int WRIST_MIN_ANGLE = 3;
-    public static final int WRIST_ENCODER = 4;
-    public static final int WRIST_GEAR_RATIO = 5;
-    public static final int WRIST_ENCODER_OFFSET = 6;
+    public static final int ShintakePivot_MOTOR = 1;
+    public static final int ShintakePivot_MAX_ANGLE = 2;
+    public static final int ShintakePivot_MIN_ANGLE = 3;
+    public static final int ShintakePivot_ENCODER = 4;
+    public static final int ShintakePivot_GEAR_RATIO = 5;
+    public static final int ShintakePivot_ENCODER_OFFSET = 6;
 
     public static final double HOME_POSITION_STP= 170.0; // Originally 175.0
     public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't

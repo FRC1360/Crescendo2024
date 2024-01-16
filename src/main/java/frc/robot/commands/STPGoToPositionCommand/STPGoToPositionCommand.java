@@ -3,12 +3,12 @@ package frc.robot.commands.STPGoToPositionCommand;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.util.OrbitTimer;
 
 public class STPGoToPositionCommand extends CommandBase {
     
-    private WristSubsystem wrist;
+    private ShintakePivotSubsystem ShintakePivot;
     private double angle;
 
     private TrapezoidProfile motionProfile;
@@ -17,35 +17,35 @@ public class STPGoToPositionCommand extends CommandBase {
 
     private OrbitTimer timer;
 
-    public STPGoToPositionCommand(WristSubsystem wrist, double angle) {
-        this.wrist = wrist;
+    public STPGoToPositionCommand(ShintakePivotSubsystem ShintakePivot, double angle) {
+        this.ShintakePivot = ShintakePivot;
         this.angle = angle;
         this.timer = new OrbitTimer();
-        addRequirements(wrist);
+        addRequirements(ShintakePivot);
     }
 
     @Override
     public void initialize() {
-        this.wrist.movePIDController.reset();
-        this.wrist.setWristOffset(angle);
+        this.ShintakePivot.movePIDController.reset();
+        this.ShintakePivot.setShintakePivotOffset(angle);
 
         double startVelocity = 0.0;
 
-        if (!this.wrist.getAngularVelocity().isNaN()) { 
-            startVelocity = this.wrist.getAngularVelocity().doubleValue(); 
+        if (!this.ShintakePivot.getAngularVelocity().isNaN()) { 
+            startVelocity = this.ShintakePivot.getAngularVelocity().doubleValue(); 
         } 
 
-        this.startState = new TrapezoidProfile.State(this.wrist.getWristAngle(), startVelocity);
-        //this.endState = new TrapezoidProfile.State(this.wrist.getTargetAngle(), 0.0);
-        this.endState = new TrapezoidProfile.State(this.wrist.getWristOffset(), 0.0);
+        this.startState = new TrapezoidProfile.State(this.ShintakePivot.getShintakePivotAngle(), startVelocity);
+        //this.endState = new TrapezoidProfile.State(this.ShintakePivot.getTargetAngle(), 0.0);
+        this.endState = new TrapezoidProfile.State(this.ShintakePivot.getShintakePivotOffset(), 0.0);
 
-        this.motionProfile = new TrapezoidProfile(this.wrist.wristMotionProfileConstraints, 
+        this.motionProfile = new TrapezoidProfile(this.ShintakePivot.ShintakePivotMotionProfileConstraints, 
             this.endState,
             this.startState);
         
         this.timer.start();
 
-        System.out.println("Set Wrist Offset = " + this.angle);
+        System.out.println("Set ShintakePivot Offset = " + this.angle);
     }
 
     @Override
@@ -53,20 +53,20 @@ public class STPGoToPositionCommand extends CommandBase {
         TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec());
 
         double target = profileTarget.position;
-        double input = this.wrist.getWristAngle();
+        double input = this.ShintakePivot.getShintakePivotAngle();
 
-        SmartDashboard.putNumber("Wrist_Move_Profile_Position", profileTarget.position);
-        SmartDashboard.putNumber("Wrist_Move_Profile_Velocity", profileTarget.velocity);
+        SmartDashboard.putNumber("ShintakePivot_Move_Profile_Position", profileTarget.position);
+        SmartDashboard.putNumber("ShintakePivot_Move_Profile_Velocity", profileTarget.velocity);
 
-        double pidOutput = this.wrist.movePIDController.calculate(target, input);
-        //SmartDashboard.putNumber("Wrist_Motion_Profile_Ouput", pidOutput);
+        double pidOutput = this.ShintakePivot.movePIDController.calculate(target, input);
+        //SmartDashboard.putNumber("ShintakePivot_Motion_Profile_Ouput", pidOutput);
 
         //if (Math.abs(speed) > 0.50) speed =  Math.copySign(0.5, speed); 
         double feedforwardOutput = 0.0;
         
-        if (!this.wrist.getAngularVelocity().isNaN()) { 
-            feedforwardOutput = this.wrist.wristFeedForward.calculate(Math.toRadians(profileTarget.position), 
-                                                                        Math.toRadians(this.wrist.getAngularVelocity())); 
+        if (!this.ShintakePivot.getAngularVelocity().isNaN()) { 
+            feedforwardOutput = this.ShintakePivot.ShintakePivotFeedForward.calculate(Math.toRadians(profileTarget.position), 
+                                                                        Math.toRadians(this.ShintakePivot.getAngularVelocity())); 
         } 
 
         double speed = pidOutput + feedforwardOutput; 
@@ -75,16 +75,16 @@ public class STPGoToPositionCommand extends CommandBase {
             speed = Math.copySign(0.4, speed);  // Clamping speed to prevent motor stall
         }
 
-        // SmartDashboard.putNumber("Wrist_Move_PID_Output", pidOutput);
-        // SmartDashboard.putNumber("Wrist_FF_Output", feedforwardOutput);
-        SmartDashboard.putNumber("Wrist_Move_PID_And_FF_Output", speed); 
+        // SmartDashboard.putNumber("ShintakePivot_Move_PID_Output", pidOutput);
+        // SmartDashboard.putNumber("ShintakePivot_FF_Output", feedforwardOutput);
+        SmartDashboard.putNumber("ShintakePivot_Move_PID_And_FF_Output", speed); 
 
-        this.wrist.setWristNormalizedVoltage(speed);
+        this.ShintakePivot.setShintakePivotNormalizedVoltage(speed);
     }
 
     @Override
     public boolean isFinished() {
         return this.motionProfile.isFinished(this.timer.getTimeDeltaSec())  
-            /*&& Math.abs(this.wrist.getWristAngle() - this.wrist.getTargetAngle()) < 3.0*/;
+            /*&& Math.abs(this.ShintakePivot.getShintakePivotAngle() - this.ShintakePivot.getTargetAngle()) < 3.0*/;
     }
 }
