@@ -19,16 +19,14 @@ private final CANSparkMax m_climbMotorLead;
 private final CANSparkMax m_climbMotorSlave;
 private OrbitPID highPID;
 private double targetHeight;
-private double currentHeight;
-private final RelativeEncoder m_climbEncoderLead;
-private final RelativeEncoder m_climbEncoderSlave;
+private Boolean isExtended = false;
 
 public ClimberSubsystem() {
   this.m_climbMotorLead = new CANSparkMax(Constants.ClimbConstants.CLIMBER_LEAD_CAN_ID, MotorType.kBrushless);
   this.m_climbMotorSlave = new CANSparkMax(Constants.ClimbConstants.CLIMBER_SLAVE_CAN_ID, MotorType.kBrushless);;
-  this.m_climbEncoderLead = m_climbMotorLead.getEncoder();
-  this.m_climbEncoderSlave = m_climbMotorSlave.getEncoder();
   this.highPID.configure(0, 0, 0);
+
+  m_climbMotorSlave.follow(m_climbMotorLead);
 }
 
 public RelativeEncoder getRelativeClimbEncoder() {
@@ -39,9 +37,14 @@ public CANSparkMax getClimbMotor() {
   return m_climbMotorLead;
 }
 
+public CANSparkMax getClimbMotorInverted() {
+  final CANSparkMax m_climbMotorInverted = m_climbMotorLead;
+  m_climbMotorInverted.setInverted(true);
+  return m_climbMotorInverted;
+}
+
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Current height", currentHeight);
-    SmartDashboard.putNumber("Target height", targetHeight);
+    SmartDashboard.putBoolean("is extended: ", isExtended);
   }
 }

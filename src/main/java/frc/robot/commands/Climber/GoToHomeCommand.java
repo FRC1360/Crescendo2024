@@ -14,7 +14,7 @@ import frc.robot.util.OrbitPID;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class ExtendCommand extends Command {
+public class GoToHomeCommand extends Command {
 
   private final ClimberSubsystem m_climber;
   private final CommandXboxController m_cont;
@@ -22,12 +22,14 @@ public class ExtendCommand extends Command {
   private double last_err = Double.NaN;
   private RelativeEncoder m_extendEncoderLead;
   private CANSparkMax m_climbMotor;
+  private CANSparkMax m_climbMotorInverted;
 
-  public ExtendCommand(ClimberSubsystem climber, CommandXboxController cont) {
+  public GoToHomeCommand(ClimberSubsystem climber, CommandXboxController cont) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_climber = climber;
     this.m_cont = cont;
     this.m_climbMotor = m_climber.getClimbMotor();
+    this.m_climbMotorInverted = m_climber.getClimbMotorInverted();
     this.m_extendEncoderLead = m_climber.getRelativeClimbEncoder();
     this.heightPID = new OrbitPID(0, 0, 0);
     /*SmartDashboard.putNumber("ki", 0);
@@ -38,7 +40,7 @@ public class ExtendCommand extends Command {
 
   @Override
   public void initialize() {
-    m_extendEncoderLead.setPosition(0);
+    m_extendEncoderLead.setPosition(Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS);
     double kI = SmartDashboard.getNumber("ki", 0);
     double kP = SmartDashboard.getNumber("kp", 0);
     double kD = SmartDashboard.getNumber("kd", 0);
@@ -50,10 +52,11 @@ public class ExtendCommand extends Command {
   public void execute() {
     // use position to get height and use that instead of value
     SmartDashboard.putNumber("lead encoder value", m_extendEncoderLead.getPosition());
-    SmartDashboard.putNumber("target height", Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS);
+    SmartDashboard.putNumber("target height", 0);
 
     // We need the actual height from motor roations
-    double output = heightPID.calculate(Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS, m_extendEncoderLead.getPosition());
+    // We need the height of 0 in rotations
+    double output = heightPID.calculate(0, m_extendEncoderLead.getPosition());
     m_climbMotor.set(output);
 
     //instead of positon, subtract current height
