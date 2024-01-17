@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     
-    //m_robotContainer.swerveSubsystem.setCurrentPose(new Pose2d(15.5, 3.5, Rotation2d.fromDegrees(0.0)));
+    //m_robotContainer.swerveSubsystem.setCurrentPose(new Pose2d(12.5, 3.5, Rotation2d.fromDegrees(90.0)));
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

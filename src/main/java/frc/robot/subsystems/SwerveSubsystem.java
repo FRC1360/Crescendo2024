@@ -87,6 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // set the states for each module
     for (SwerveModuleCustom mod : swerveModules) {
+      System.out.println("Swerve Module #" + mod.moduleNumber + " angle: " + mod.targetAngle + " speed : " + mod.targetSpeed); 
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
@@ -193,7 +194,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds speeds) { 
     System.out.println("driving x: " + speeds.vxMetersPerSecond + " y: " + speeds.vyMetersPerSecond + " omega: " + speeds.omegaRadiansPerSecond); 
-    this.drive(new Translation2d(speeds.vyMetersPerSecond, speeds.vxMetersPerSecond), speeds.omegaRadiansPerSecond, false, false);
+    // make field relative? 
+    System.out.println("gyro: " +  navX.getYaw() + "pose estimator: " + swerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees()); 
+    this.drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond, false, false);
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() { 
