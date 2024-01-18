@@ -34,18 +34,7 @@ public class ACPGoToPositionCommand extends Command {
         this.startState = new TrapezoidProfile.State(this.shoulder.getACPAngle(), 0.0);
         this.endState = new TrapezoidProfile.State(this.shoulder.getTargetAngle(), 0.0);
 
-        if (this.shoulder.getACPAngle() - this.shoulder.getTargetAngle() < 0) { 
-            // Going up
-            this.motionProfile = new TrapezoidProfile(this.shoulder.ACPUpMotionProfileConstraints,
-                this.endState,
-                this.startState);
-        }
-        else { 
-            // Going down or stationary
-            this.motionProfile = new TrapezoidProfile(this.shoulder.ACPDownMotionProfileConstraints,
-                this.endState,
-                this.startState);
-        }
+        //what do i do with ACPUpMotionProfileConstraints & ACPDownMotionProfileConstraints
 
         this.timer.start();
 
@@ -54,7 +43,22 @@ public class ACPGoToPositionCommand extends Command {
     @Override
     public void execute() {
         
-        TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec());
+        TrapezoidProfile.State profileTarget;
+
+        if (this.shoulder.getACPAngle() - this.shoulder.getTargetAngle() < 0) { 
+            // Going up
+            profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
+                this.endState,
+                this.startState);
+        }
+        else { 
+            // Going down or stationary
+            profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
+                this.endState,
+                this.startState);
+        }
+
+        //TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec());
 
         double target = profileTarget.position;
 
