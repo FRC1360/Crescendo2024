@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -25,6 +24,7 @@ public final class SwerveAutoConfig {
             ), 
             () -> false, 
             swerve
-        );        
+        );
+        System.out.println("AutoBuilder Confiured!");
     }
 }

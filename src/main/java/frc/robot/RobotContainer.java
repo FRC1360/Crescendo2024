@@ -105,7 +105,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return Autos.exampleAuto(m_exampleSubsystem);
-    return new PathfindAuto(new Pose2d(14.69, 1.08, Rotation2d.fromDegrees(-60.0))).getCommand();
+    return new PathfindAuto(new Pose2d(14.0, 1.8, Rotation2d.fromDegrees(-60.0))).getCommand();
   }
 
   private static double deadband(double value, double deadband) {
