@@ -130,7 +130,7 @@ public class SwerveModuleCustom {
         driveEncoder.setPosition(0.0);
 
         if (/* this.moduleNumber == 0 || */ this.moduleNumber == 2) {  // Noticed that drive motor at swerve 0 is not behaving properly
-            this.driveMotor.setInverted(true);
+            this.driveMotor.setInverted(!Constants.Swerve.DRIVE_INVERT);
         }
     }
 

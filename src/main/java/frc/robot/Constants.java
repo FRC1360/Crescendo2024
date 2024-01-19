@@ -54,7 +54,7 @@ public final class Constants {
         public static int PEAK_CURRENT_LIMIT = 50;
         public static int CONTINUOUS_CURRENT_LIMIT = 40;
         public static boolean ANGLE_INVERT = true;
-        public static boolean DRIVE_INVERT = false;
+        public static boolean DRIVE_INVERT = true;
         public static boolean isGyroInverted = true;
         public static IdleMode IDLE_MODE = IdleMode.kBrake;
 
@@ -136,7 +136,7 @@ public final class Constants {
             // and ANGLE_PID first
             public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(0.13, 0, 0.0045);
             public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.013, 0.000001, 0);
-            public static final double maxSpeed = 0.25; //4 * 0.7; // m/s
+            public static final double maxSpeed = 4 * 0.7; // m/s
             public static final double maxAcceleration = 2 * 0.9; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); 
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); 

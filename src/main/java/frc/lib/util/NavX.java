@@ -5,6 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NavX {
     // gyro values
@@ -50,6 +51,11 @@ public class NavX {
         pitchOffset = gyro.getPitch();
         rollOffset = gyro.getRoll();
         System.out.println("NavX Reset"); 
+    }
+
+    public void updateSD() {
+        SmartDashboard.putNumber("NavX raw Yaw", gyro.getFusedHeading());
+        SmartDashboard.putNumber("Yaw offset", yawOffset);
     }
 
 }

@@ -78,7 +78,7 @@ public class SwerveSubsystem extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 translation.getX(), translation.getY(),
                 -rotation,
-                navX.getYaw())
+                swerveDrivePoseEstimator.getEstimatedPosition().getRotation())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation),
         this.centerOfRotation);
     // Get rid of tiny tiny movements in the wheels to have more consistent driving
@@ -176,7 +176,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setCurrentPose(Pose2d newPose) {
     swerveDrivePoseEstimator.resetPosition(
         navX.getYaw(),
-        getPositions(),
+        getPositions(), 
         newPose);
   }
 
@@ -244,6 +244,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Speed Y", currentSpeed.getY());
 
     SmartDashboard.putString("Estimated Pose", this.getFormattedPose());
+
+    navX.updateSD();
   }
 
 }
