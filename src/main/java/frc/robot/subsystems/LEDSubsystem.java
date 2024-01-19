@@ -10,7 +10,7 @@ public class LEDSubsystem extends SubsystemBase{
     private LEDStates LEDstate;
 
     public enum LEDStates {
-        ENABLED, DISABLED, CONE, CUBE, SPECIAL
+        ENABLED, DISABLED, FOLDED, SOURCE, AMP, SUBWOOFER_SPEAKER, PODIUM_SPEAKER, CLIMBING
     }
     
     
@@ -28,35 +28,55 @@ public class LEDSubsystem extends SubsystemBase{
         this.LEDstate = LEDStates.DISABLED;
     }
 
-    public void setLEDCone() {
-        this.LEDstate = LEDStates.CONE;
+    public void setLEDFOLDED() {
+        this.LEDstate = LEDStates.FOLDED;
     }
 
-    public void setLEDCube() {
-        this.LEDstate = LEDStates.CUBE;
+    public void setLEDSOURCE() {
+        this.LEDstate = LEDStates.SOURCE;
     }
 
-    public void setLEDSpecial() {
-        this.LEDstate = LEDStates.SPECIAL;
+    public void setLEDAMP() {
+        this.LEDstate = LEDStates.AMP;
+    }
+    public void setLEDSUBWOOFER_SPEAKER(){
+        this.LEDstate = LEDStates.SUBWOOFER_SPEAKER;
+    }
+    public void setLEDPODIUM_SPEAKER(){
+        this.LEDstate = LEDStates.PODIUM_SPEAKER;
+    }
+    public void setLEDCLIMBING(){
+        this.LEDstate = LEDStates.CLIMBING;
     }
 
     @Override
     public void periodic() {
         switch(this.LEDstate) {
             case ENABLED:
-                this.LEDColour = 0.95; // GRAY
+                this.LEDColour = 0; //tbd
                 break;
-            case DISABLED:
+            case DISABLED: 
+                this.LEDColour = 0; //tbd
+                break;
+            case FOLDED:
+                this.LEDColour = 0.6; // ORANGE(If in possesion of note)
+                break;
+            case SOURCE:
+                this.LEDColour = 0.69; 
+                break;
+            case AMP:
                 this.LEDColour = 0.61; // RED
                 break;
-            case CONE:
-                this.LEDColour = 0.69; // YELLOW
+            case SUBWOOFER_SPEAKER:
+                this.LEDColour = 0.69; // Yellow
                 break;
-            case CUBE:
+            case CLIMBING:
                 this.LEDColour = 0.91; // VIOLET
                 break;
-            case SPECIAL:
-                this.LEDColour = 0.73; // LIME
+            case PODIUM_SPEAKER:
+                this.LEDColour = 0.77; // GREEN
+                break;
+                
         }
 
         this.LEDController.set(this.LEDColour);
