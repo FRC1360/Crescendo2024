@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,14 +16,16 @@ import frc.robot.Constants;
 
 public class ShintakeSubsystem extends SubsystemBase {
 
-  private CANSparkFlex m_left;
-  private CANSparkFlex m_right;
+  private CANSparkMax m_left;
+  private CANSparkMax m_right;
   private CANSparkMax m_back;
+  private DigitalInput m_digital;
 
   public ShintakeSubsystem() {
-    this.m_left = new CANSparkFlex(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
-    this.m_right = new CANSparkFlex(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_left = new CANSparkMax(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_right = new CANSparkMax(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
     this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
+    this.m_digital = new DigitalInput(9);
   }
   
   //Moves both motors in the direction to intake when given a positive number
@@ -61,6 +64,10 @@ public class ShintakeSubsystem extends SubsystemBase {
   public void varIntake(int backSpeed) {
     m_back.setInverted(true);
     m_back.set(backSpeed);
+  }
+
+  public Boolean getDigitalInput() {
+    return m_digital.get();
   }
 
   @Override
