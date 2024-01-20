@@ -46,4 +46,7 @@ public final class Constants {
   public static final double SOURCE_POSITION_STP = 150.0;
   public static final double SOURCE_POSITION_ACP = -48.0;
   }
+
+public static final int LEAD_INTAKE_MOTOR_ID = 0;
+public static final int FOLLOW_INTAKE_MOTOR_ID = 0;
 }
