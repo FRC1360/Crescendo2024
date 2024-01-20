@@ -10,7 +10,7 @@ public class LEDSubsystem extends SubsystemBase{
     private LEDStates LEDstate;
 
     public enum LEDStates {
-        ENABLED, DISABLED, FOLDED, SOURCE, AMP, SUBWOOFER_SPEAKER, PODIUM_SPEAKER, CLIMBING
+        ENABLED, DISABLED, DEFAULT, NOTE, SOURCE, AMP, SUBWOOFER_SPEAKER, PODIUM_SPEAKER, DEFENDED_SPEAKER, CLIMBING
     }
     
     
@@ -27,9 +27,13 @@ public class LEDSubsystem extends SubsystemBase{
     public void setLEDDisable() {
         this.LEDstate = LEDStates.DISABLED;
     }
+    
+    public void setLEDDEFAULT(){
+        this.LEDstate = LEDStates.DEFAULT;
+    }
 
-    public void setLEDFOLDED() {
-        this.LEDstate = LEDStates.FOLDED;
+    public void setLEDNOTE() {
+        this.LEDstate = LEDStates.NOTE;
     }
 
     public void setLEDSOURCE() {
@@ -45,6 +49,9 @@ public class LEDSubsystem extends SubsystemBase{
     public void setLEDPODIUM_SPEAKER(){
         this.LEDstate = LEDStates.PODIUM_SPEAKER;
     }
+    public void setLEDDEFENDED_SPEAKER(){
+        this.LEDstate = LEDStates.DEFENDED_SPEAKER;
+    }
     public void setLEDCLIMBING(){
         this.LEDstate = LEDStates.CLIMBING;
     }
@@ -58,7 +65,9 @@ public class LEDSubsystem extends SubsystemBase{
             case DISABLED: 
                 this.LEDColour = 0; //tbd
                 break;
-            case FOLDED:
+            case DEFAULT:
+                this.LEDColour = 0.87; //Blue
+            case NOTE:
                 this.LEDColour = 0.6; // ORANGE(If in possesion of note)
                 break;
             case SOURCE:
@@ -76,6 +85,8 @@ public class LEDSubsystem extends SubsystemBase{
             case PODIUM_SPEAKER:
                 this.LEDColour = 0.77; // GREEN
                 break;
+            case DEFENDED_SPEAKER:
+                this.LEDColour = 0.73; //LIME
                 
         }
 
