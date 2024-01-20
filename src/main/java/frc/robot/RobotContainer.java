@@ -16,6 +16,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import java.util.ArrayList;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -96,7 +97,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new PathfindAuto(new Pose2d(14.0, 1.8, Rotation2d.fromDegrees(-60.0))).getCommand();
+    Command pathfindAuto = new PathfindAuto(new Pose2d(12.42, 1.39, new Rotation2d(0.0))).getCommand();
+    Command pathFollowAuto = new FetchPath("New Path").getCommand();
+    return pathfindAuto.andThen(pathFollowAuto);
+    
   }
 
   private static double deadband(double value, double deadband) {
