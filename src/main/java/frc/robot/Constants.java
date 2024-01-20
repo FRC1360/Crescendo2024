@@ -30,8 +30,7 @@ public final class Constants {
   public static final int kDriverControllerPort = 0;
 
   public static class ShintakeConstants{
-    public static final double OUTAKE_SPEED_BACK = 40;
-    public static final double OUTAKE_SPEED_FRONT = 40;
+    public static final double UNFEED_SPEED_BACK = 40;
     public static final int INTAKE_SPEED_BACK = 70;
     public static final double INITIAL_DEFAULT_INTAKE_SPEED = 60;
     public static final double SECOND_DEFAULT_INTAKE_SPEED = 30;
@@ -43,6 +42,7 @@ public final class Constants {
     public static final int LEFT_SHOOTAKE_CAN_ID = 1;
     public static final int BACK_SHOOTAKE_ID = 2;
     public static final int SHINTAKE_SENSOR_PIN = 7;
+    public static final double UNFEED_SPEED_FRONT = 0;
   }
 
   public static class VisionConstants {

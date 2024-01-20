@@ -72,12 +72,15 @@ public class ShintakeSubsystem extends SubsystemBase {
     m_right.set(speed);
   }
 
-  public void Outake() {
+  public void UnfeedFront() {
     m_right.setInverted(true);
-    m_right.set(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
-    m_left.set(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
+    m_right.set(Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
+    m_left.set(Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
+  }
+
+  public void UnfeedBack() {
     m_back.setInverted(true);
-    m_back.set(Constants.ShintakeConstants.OUTAKE_SPEED_BACK);
+    m_back.set(Constants.ShintakeConstants.UNFEED_SPEED_BACK);
   }
 
   public Boolean getDigitalInput() {
