@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,58 +17,75 @@ import frc.robot.Constants;
 
 public class ShintakeSubsystem extends SubsystemBase {
 
-  private CANSparkMax m_left;
-  private CANSparkMax m_right;
+  private CANSparkFlex m_left;
+  private CANSparkFlex m_right;
   private CANSparkMax m_back;
   private DigitalInput m_digital;
+  private Counter m_counter;
 
   public ShintakeSubsystem() {
-    this.m_left = new CANSparkMax(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
-    this.m_right = new CANSparkMax(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    //Using CANSparkFlexes for the two shooter neo vortexes
+    this.m_left = new CANSparkFlex(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_right = new CANSparkFlex(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
     this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
-    this.m_digital = new DigitalInput(9);
-  }
-  
-  //Moves both motors in the direction to intake when given a positive number
-  //When not inverted, motors turn right
-  public void intakePiece() {
-    m_back.setInverted(false);
-    m_back.set(Constants.ShintakeConstants.INTAKE_SPEED_BACK);
-  }
-
-  //Moves both motors in the direction to shoot when given a positive number
-  public void shootSpeaker() {
-    m_left.setInverted(true);
-    m_right.setInverted(false);
-    m_back.setInverted(false);
-    m_left.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_right.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_back.set(Constants.ShintakeConstants.SHOOT_SPEED_BACK);
-  }
-
-  public void shootAmp() {
-    m_left.setInverted(false);
-    m_right.setInverted(true);
-    m_back.setInverted(true);
-    m_left.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_right.set(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_back.set(Constants.ShintakeConstants.SHOOT_SPEED_BACK);
+    this.m_digital = new DigitalInput(Constants.ShintakeConstants.SHINTAKE_SENSOR_PIN);
+    this.m_counter = new Counter(m_digital);
   }
 
   //Stops both motors
-  public void stop() {
+  public void stopShooter() {
     m_left.set(0.0);
     m_right.set(0.0);
+  }
+
+  public void stopIntake() {
     m_back.set(0.0);
   }
 
-  public void varIntake(int backSpeed) {
+  public void varIntake(Double backSpeed) {
     m_back.setInverted(true);
     m_back.set(backSpeed);
   }
 
+  public void varShootSpeaker(double speed) {
+    m_left.setInverted(true);
+    m_right.setInverted(false);
+    m_back.setInverted(false);
+    m_left.set(speed);
+    m_right.set(speed);
+  }
+
+  public void varIntakeSpeaker(double speed) {
+    m_back.setInverted(true);
+    m_back.set(speed);
+  }
+
+  public void varIntakeAmp(double speed) {
+    m_back.setInverted(false);
+    m_back.set(speed);
+  }
+
+  public void varShootAmp(double speed) {
+    m_left.setInverted(false);
+    m_right.setInverted(true);
+    m_left.set(speed);
+    m_right.set(speed);
+  }
+
+  public void Outake() {
+    m_right.setInverted(true);
+    m_right.set(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
+    m_left.set(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
+    m_back.setInverted(true);
+    m_back.set(Constants.ShintakeConstants.OUTAKE_SPEED_BACK);
+  }
+
   public Boolean getDigitalInput() {
     return m_digital.get();
+  }
+
+  public int getShintakeCount() {
+    return m_counter.get();
   }
 
   @Override

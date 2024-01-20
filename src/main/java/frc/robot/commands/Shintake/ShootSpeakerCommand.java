@@ -4,43 +4,44 @@
 
 package frc.robot.commands.Shintake;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
 
-public class DefaultShintakeCommand extends Command {
+public class ShootSpeakerCommand extends Command {
 
-private ShintakeSubsystem m_intake;
-
-  public DefaultShintakeCommand(ShintakeSubsystem shooter) {
+  private ShintakeSubsystem m_shooter;
+ 
+  public ShootSpeakerCommand(ShintakeSubsystem shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this.m_intake = shooter;
+    this.m_shooter = shooter;
     addRequirements(shooter);
   }
 
   @Override
   public void initialize() {
-    m_intake.stopShooter();
-    m_intake.stopIntake();
+    m_shooter.stopIntake();
+    m_shooter.stopShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.varIntake(Constants.ShintakeConstants.DEFAULT_INTAKE_SPEED);
+    m_shooter.varShootSpeaker(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
+    m_shooter.varIntakeSpeaker(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.stopIntake();
+    m_shooter.stopIntake();
+    m_shooter.stopShooter();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
