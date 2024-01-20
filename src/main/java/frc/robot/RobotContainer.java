@@ -4,11 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.autos.Autos;
 import frc.robot.autos.FetchPath;
 import frc.robot.autos.PathfindAuto;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Shintake.DefaultShintakeCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -42,7 +40,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
 
