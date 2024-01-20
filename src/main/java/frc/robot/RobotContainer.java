@@ -105,9 +105,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    Command pathfindAuto = new PathfindAuto(new Pose2d(12.42, 1.39, new Rotation2d(0.0))).getCommand();
-    Command pathFollowAuto = new FetchPath("New Path").getCommand();
-    return pathfindAuto.andThen(pathFollowAuto);
+    double x = 15.79;
+    double y = 1.70;
+    double r = 120.0;
+    Command pathfindAuto = new PathfindAuto(new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
+    // Command pathFollowAuto = new FetchPath("paths/New Path").getCommand();
+    return pathfindAuto;//.andThen(pathFollowAuto);
     
   }
 

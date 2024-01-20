@@ -1,6 +1,7 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,8 +23,8 @@ public class PathfindAuto {
 
     }
 
-    public Command getCommand() { 
-        return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.0)
+    public Command getCommand() {
+        return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
         .alongWith(new InstantCommand(() -> System.out.println(this.targetPose))); 
     }
 }
