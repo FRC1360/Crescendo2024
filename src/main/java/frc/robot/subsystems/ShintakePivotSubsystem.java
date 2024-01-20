@@ -23,7 +23,6 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private CANSparkMax ShintakePivotMotor;
     private double ShintakePivotOffset;  // Angle offset for the shoulder, should really be called angle 
 
-    public OrbitPID holdPIDController;
     public OrbitPID movePIDController;
     public ArmFeedforward ShintakePivotFeedForward;
     public TrapezoidProfile.Constraints ShintakePivotMotionProfileConstraints;
@@ -45,8 +44,6 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
         
         this.ShintakePivotOffset = 0.0;
-        // kP = 0.0125
-        this.holdPIDController = new OrbitPID(0.04, 0.00005, 0.0); // kI - 0.000005
         this.movePIDController = new OrbitPID(0.025, 0.000000, 0.4);  // TODO - Tune
 
         this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
