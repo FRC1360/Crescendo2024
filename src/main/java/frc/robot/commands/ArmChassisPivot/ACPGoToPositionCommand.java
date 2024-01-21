@@ -34,15 +34,26 @@ public class ACPGoToPositionCommand extends Command {
         this.startState = new TrapezoidProfile.State(this.ACP.getACPAngle(), 0.0);
         this.endState = new TrapezoidProfile.State(this.ACP.getTargetAngle(), 0.0);
 
-        //what do i do with ACPUpMotionProfileConstraints & ACPDownMotionProfileConstraints
+        // Determine the motion profile constraints based on direction
+        TrapezoidProfile.Constraints constraints = determineConstraints();
+
+        this.motionProfile = new TrapezoidProfile(constraints);
 
         this.timer.start();
+    }
 
+    private TrapezoidProfile.Constraints determineConstraints() {
+        // Example constraints, adjust as needed
+        double maxVelocity = 10.0; // TODO Replace with your actual max velocity
+        double maxAcceleration = 5.0; // TODO Replace with your actual max acceleration
+
+        return new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
     }
 
     @Override
     public void execute() {
-        
+        // Rest of your execute method remains unchanged
+
         TrapezoidProfile.State profileTarget;
 
         // prevent arm from hitting chassis
@@ -50,21 +61,15 @@ public class ACPGoToPositionCommand extends Command {
             this.ACP.setTargetAngle(90);
         }
 
-        // why are these both the same? not sure what this should be doing
-        if (this.ACP.getACPAngle() - this.ACP.getTargetAngle() < 0) { 
+        if (this.ACP.getACPAngle() < this.ACP.getTargetAngle()) {
             // Going up
             profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
-                this.endState,
-                this.startState);
-        }
-        else { 
+                this.startState, this.endState);
+        } else {
             // Going down or stationary
             profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
-                this.endState,
-                this.startState);
+                this.startState, this.endState);
         }
-
-        //TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec());
 
         double target = profileTarget.position;
 
@@ -79,7 +84,7 @@ public class ACPGoToPositionCommand extends Command {
                                     .calculate(target, this.ACP.getAngluarVelocity()); 
 
         double speed = pidOutput + feedforwardOutput;
-        
+
         SmartDashboard.putNumber("Shoulder_Move_Output", speed); 
 
         this.ACP.setACPNormalizedVoltage(speed);
@@ -88,6 +93,5 @@ public class ACPGoToPositionCommand extends Command {
     @Override
     public boolean isFinished() {
         return this.motionProfile.isFinished(this.timer.getTimeDeltaSec());
-        
     }
 }

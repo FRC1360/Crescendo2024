@@ -5,9 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.autos.Autos;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
