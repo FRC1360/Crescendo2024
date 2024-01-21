@@ -8,26 +8,26 @@ import frc.robot.subsystems.ArmChassisPivotSubsystem;
 
 public class ACPMoveManual extends Command {
 
-    DoubleSupplier joystick;
-    ArmChassisPivotSubsystem armchassispivot;
+    private final DoubleSupplier joystick;
+    private final ArmChassisPivotSubsystem armChassisPivot;
 
-    public ACPMoveManual(ArmChassisPivotSubsystem armchassispivot, DoubleSupplier joystick) {
-        this.armchassispivot = armchassispivot;
+    public ACPMoveManual(ArmChassisPivotSubsystem armChassisPivot, DoubleSupplier joystick) {
+        this.armChassisPivot = armChassisPivot;
         this.joystick = joystick;
 
-        addRequirements(armchassispivot);
+        addRequirements(armChassisPivot);
     }
 
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-        this.armchassispivot.setACPNormalizedVoltage(joystick.getAsDouble());
-        SmartDashboard.putNumber("ArmChassisPivot_Raw_Output", joystick.getAsDouble() * 0.5);
+        double joystickValue = joystick.getAsDouble();
+        double adjustedAngle = armChassisPivot.getTargetAngle() + joystickValue * 5.0; // Adjust as needed
+        armChassisPivot.setTargetAngle(adjustedAngle);
+        SmartDashboard.putNumber("ArmChassisPivot_Raw_Output", joystickValue * 0.5);
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-    
 }
