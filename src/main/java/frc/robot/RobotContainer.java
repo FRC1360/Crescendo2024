@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ArmChassisPivotSubsystem;
+
+import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
+
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shintake.DefaultShintakeCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
@@ -23,6 +29,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
+
+  //what is this supposed to be :(
+  public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
 
   private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -54,6 +63,7 @@ public class RobotContainer {
 
     left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
