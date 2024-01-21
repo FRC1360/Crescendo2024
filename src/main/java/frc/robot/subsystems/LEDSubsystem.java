@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class LEDSubsystem extends SubsystemBase{
 
+    
     private Spark LEDController;
     private double LEDColour;
     private LEDStates LEDstate;
@@ -15,7 +17,7 @@ public class LEDSubsystem extends SubsystemBase{
     
     
     public LEDSubsystem() {
-        this.LEDController = new Spark(0);  // TODO - Change PWM port
+        this.LEDController = new Spark(Constants.LEDPort); 
         this.LEDColour = 0.0;
         this.LEDstate = LEDStates.ENABLED;
     }
