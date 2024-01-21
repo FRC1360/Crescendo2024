@@ -17,6 +17,9 @@ import frc.robot.Constants;
 import frc.robot.util.OrbitPID;
 
 public class ArmChassisPivotSubsystem extends SubsystemBase {
+
+    private boolean inIntakePosition;
+
     
     private CANSparkMax ACPMotorMaster;
     private CANSparkMax ACPMotorSlave;
