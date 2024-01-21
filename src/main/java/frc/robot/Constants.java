@@ -24,7 +24,7 @@ public final class Constants {
     public static final int ShintakePivot_GEAR_RATIO = 5;
     public static final int ShintakePivot_ENCODER_OFFSET = 6;
 
-    public static final double HOME_POSITION_STP= 170.0; // Originally 175.0
+    public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
     public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
                                                                 // hit the superstructure
     // NOTE_SCORE_AMP_POSITION
