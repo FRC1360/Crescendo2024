@@ -8,7 +8,7 @@ import frc.robot.util.OrbitTimer;
 
 public class ACPGoToPositionCommand extends Command {
     
-    private ArmChassisPivotSubsystem shoulder;
+    private ArmChassisPivotSubsystem ACP;
     private double angle;
 
     private TrapezoidProfile motionProfile;
@@ -17,22 +17,22 @@ public class ACPGoToPositionCommand extends Command {
 
     private OrbitTimer timer;
 
-    public ACPGoToPositionCommand(ArmChassisPivotSubsystem shoulder, double angle) {
-        this.shoulder = shoulder;
+    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle) {
+        this.ACP = ACP;
         this.angle = angle;
         this.timer = new OrbitTimer();
-        addRequirements(shoulder);
+        addRequirements(ACP);
     }
 
     @Override
     public void initialize() {
-        this.shoulder.movePIDController.reset();
-        this.shoulder.setTargetAngle(angle);
+        this.ACP.movePIDController.reset();
+        this.ACP.setTargetAngle(angle);
 
-        System.out.println("Shoulder angle set to: " + this.shoulder.getTargetAngle()); 
+        System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle()); 
         
-        this.startState = new TrapezoidProfile.State(this.shoulder.getACPAngle(), 0.0);
-        this.endState = new TrapezoidProfile.State(this.shoulder.getTargetAngle(), 0.0);
+        this.startState = new TrapezoidProfile.State(this.ACP.getACPAngle(), 0.0);
+        this.endState = new TrapezoidProfile.State(this.ACP.getTargetAngle(), 0.0);
 
         //what do i do with ACPUpMotionProfileConstraints & ACPDownMotionProfileConstraints
 
@@ -45,7 +45,13 @@ public class ACPGoToPositionCommand extends Command {
         
         TrapezoidProfile.State profileTarget;
 
-        if (this.shoulder.getACPAngle() - this.shoulder.getTargetAngle() < 0) { 
+        // prevent arm from hitting chassis
+        if (this.ACP.getTargetAngle() > 180) {
+            this.ACP.setTargetAngle(180);
+        }
+
+        // why are these both the same? not sure what this should be doing
+        if (this.ACP.getACPAngle() - this.ACP.getTargetAngle() < 0) { 
             // Going up
             profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
                 this.endState,
@@ -65,18 +71,18 @@ public class ACPGoToPositionCommand extends Command {
         SmartDashboard.putNumber("Shoulder_Move_Profile_Position", profileTarget.position);
         SmartDashboard.putNumber("Shoulder_Move_Profile_Velocity", profileTarget.velocity);
 
-        double input = this.shoulder.getACPAngle();
+        double input = this.ACP.getACPAngle();
 
-        double pidOutput = this.shoulder.movePIDController.calculate(target, input);
+        double pidOutput = this.ACP.movePIDController.calculate(target, input);
 
-        double feedforwardOutput = this.shoulder.ACPFeedForward
-                                    .calculate(target, this.shoulder.getAngluarVelocity()); 
+        double feedforwardOutput = this.ACP.ACPFeedForward
+                                    .calculate(target, this.ACP.getAngluarVelocity()); 
 
         double speed = pidOutput + feedforwardOutput;
         
         SmartDashboard.putNumber("Shoulder_Move_Output", speed); 
 
-        this.shoulder.setACPNormalizedVoltage(speed);
+        this.ACP.setACPNormalizedVoltage(speed);
     }
 
     @Override

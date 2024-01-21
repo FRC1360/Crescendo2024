@@ -231,9 +231,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("ACP_Angular_Velocity", this.getAngluarVelocity());
 
-        // SmartDashboard.putNumber("ACP_Move_P_Gain", this.movePIDController.getPTerm());
-        // SmartDashboard.putNumber("ACP_Move_I_Gain", this.movePIDController.getITerm());
-        // SmartDashboard.putNumber("ACP_Move_D_Gain", this.movePIDController.getDTerm());
+        SmartDashboard.putNumber("ACP_Move_P_Gain", this.movePIDController.getPTerm());
+        SmartDashboard.putNumber("ACP_Move_I_Gain", this.movePIDController.getITerm());
+        SmartDashboard.putNumber("ACP_Move_D_Gain", this.movePIDController.getDTerm());
 
         // SmartDashboard.putBoolean("ACP_Transition_State", transitioning);
 
@@ -247,5 +247,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         movePIDController.kI = SmartDashboard.getNumber("ACPMoveKi", movePIDController.kI);
         movePIDController.kD = SmartDashboard.getNumber("ACPMoveKd", movePIDController.kD);
         ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
+
+        System.out.println(movePIDController.kP);
     }
 }
