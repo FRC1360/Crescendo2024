@@ -46,8 +46,8 @@ public class ACPGoToPositionCommand extends Command {
         TrapezoidProfile.State profileTarget;
 
         // prevent arm from hitting chassis
-        if (this.ACP.getTargetAngle() > 180) {
-            this.ACP.setTargetAngle(180);
+        if (this.ACP.getTargetAngle() > 90) {
+            this.ACP.setTargetAngle(90);
         }
 
         // why are these both the same? not sure what this should be doing
