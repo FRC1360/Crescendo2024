@@ -2,11 +2,11 @@ package frc.robot.commands.ShintakePivot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.util.OrbitTimer;
 
-public class STPGoToPositionCommand extends CommandBase {
+public class STPGoToPositionCommand extends Command {
     
     private ShintakePivotSubsystem ShintakePivot;
     private double angle;
@@ -39,9 +39,7 @@ public class STPGoToPositionCommand extends CommandBase {
         //this.endState = new TrapezoidProfile.State(this.ShintakePivot.getTargetAngle(), 0.0);
         this.endState = new TrapezoidProfile.State(this.ShintakePivot.getShintakePivotOffset(), 0.0);
 
-        this.motionProfile = new TrapezoidProfile(this.ShintakePivot.ShintakePivotMotionProfileConstraints, 
-            this.endState,
-            this.startState);
+        this.motionProfile = new TrapezoidProfile(this.ShintakePivot.ShintakePivotMotionProfileConstraints);
         
         this.timer.start();
 
@@ -50,7 +48,7 @@ public class STPGoToPositionCommand extends CommandBase {
 
     @Override
     public void execute() {
-        TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec());
+        TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec(), this.endState, this.startState);
 
         double target = profileTarget.position;
         double input = this.ShintakePivot.getShintakePivotAngle();
