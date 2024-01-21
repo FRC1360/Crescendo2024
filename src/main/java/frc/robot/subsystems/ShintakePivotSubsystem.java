@@ -40,19 +40,12 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private Double lastAngle; 
     private Double angularVelocity; // degrees per second
 
-    private double kP;
-    private double kI;
-    private double kD;
-
     public ShintakePivotSubsystem() {
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
         
         this.ShintakePivotOffset = 0.0;
-        this.kP = 0.025;
-        this.kI = 0.0;
-        this.kD = 0.4;
 
-        this.movePIDController = new OrbitPID(this.kP, this.kI, this.kD);  // TODO - Tune
+        this.movePIDController = new OrbitPID(0.025, 0.0, 0.4);  // TODO - Tune
 
         this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
         this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0);  // TODO - Tune
@@ -79,11 +72,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
         
         this.ShintakePivotOffset = 0.0;
-        this.kP = 0.025;
-        this.kI = 0.0;
-        this.kD = 0.4;
 
-        this.movePIDController = new OrbitPID(this.kP, this.kI, this.kD);  // TODO - Tune
+        this.movePIDController = new OrbitPID(0.025, 0.0, 0.4);    // TODO - Tune
 
         this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
         this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0);  // TODO - Tune
@@ -207,9 +197,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("ShintakePivot_Move_D_Gain", this.movePIDController.getDTerm());
 
         // SmartDashboard.putNumber("ShintakePivot_Target_Angle", this.getTargetAngle());
-        SmartDashboard.putNumber("kP", this.kP);
-        SmartDashboard.putNumber("kI", this.kI);
-        SmartDashboard.putNumber("kD", this.kD);
+        // SmartDashboard.putNumber("kP", this.kP);
+        // SmartDashboard.putNumber("kI", this.kI);
+        // SmartDashboard.putNumber("kD", this.kD);
 
         SmartDashboard.putNumber("ShintakePivot_Angle", this.getShintakePivotAngle());
         SmartDashboard.putNumber("ShintakePivot_NEO_Encoder", this.getMotorRotations()); 
