@@ -78,6 +78,7 @@ public class STPGoToPositionCommand extends CommandBase {
         // SmartDashboard.putNumber("ShintakePivot_Move_PID_Output", pidOutput);
         // SmartDashboard.putNumber("ShintakePivot_FF_Output", feedforwardOutput);
         SmartDashboard.putNumber("ShintakePivot_Move_PID_And_FF_Output", speed); 
+        this.ShintakePivot.updateSmartDashboard();
 
         this.ShintakePivot.setShintakePivotNormalizedVoltage(speed);
     }
