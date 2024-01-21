@@ -38,6 +38,26 @@ public final class Constants {
     public static final int LEFT_SHOOTAKE_CAN_ID = 1;
     public static final int BACK_SHOOTAKE_ID = 2;
   }
+  public static class STPConstants{ // random placeholder numbers
+    public static final int ShintakePivot_MOTOR = 1;
+    public static final int ShintakePivot_MAX_ANGLE = 2;
+    public static final int ShintakePivot_MIN_ANGLE = 3;
+    public static final int ShintakePivot_ENCODER = 4;
+    public static final int ShintakePivot_GEAR_RATIO = 5;
+    public static final int ShintakePivot_ENCODER_OFFSET = 6;
+
+    public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
+    public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
+                                                                // hit the superstructure
+    // NOTE_SCORE_AMP_POSITION
+    public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
+
+    // NOTE_SCORE_SPEAKER_POSITION
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
+
+    // SOURCE_POSITION
+    public static final double SOURCE_POSITION_STP = 150.0;
+  }
 
   public static class VisionConstants {
         public static final Transform3d robotToCam =
