@@ -1,4 +1,4 @@
-package frc.robot.commands.DriverAssist;
+package frc.robot.commands.driverAssist;
 import frc.robot.autos.PathfindAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
