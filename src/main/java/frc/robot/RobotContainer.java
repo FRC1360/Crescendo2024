@@ -97,6 +97,11 @@ public class RobotContainer {
         right_controller));
 
     left_controller.button(1).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
+
+    left_controller.button(2).whileTrue(new PathfindAuto(AlignmentConstants.RED_SOURCE).getCommand()); 
+
+    left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
+    
   }
 
 
