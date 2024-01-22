@@ -34,9 +34,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     Pathfinding.setPathfinder(new LocalADStar());
-    // m_robotContainer.loadAllAutos();
+    m_robotContainer.loadAllAutos();
 
-    // m_robotContainer.initalizeAutoChooser();
+    m_robotContainer.initalizeAutoChooser();
   }
 
   /**

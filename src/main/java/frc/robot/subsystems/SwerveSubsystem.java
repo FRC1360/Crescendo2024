@@ -64,6 +64,10 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putData(field);
 
     // Configure the AutoBuilder that handles all the auto path following!!
+    //SwerveAutoConfig.configureAutoBuilder(this);
+  }
+
+  public void configureAutoBuilder() { 
     SwerveAutoConfig.configureAutoBuilder(this);
   }
 

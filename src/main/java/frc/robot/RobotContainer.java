@@ -53,6 +53,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
+    swerveSubsystem.configureAutoBuilder(); // needs to be called everytime robotInits so alliance is updated
+
     m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
