@@ -100,7 +100,10 @@ public class RobotContainer {
 
     left_controller.button(2).whileTrue(new PathfindAuto(AlignmentConstants.RED_SOURCE).getCommand()); 
 
-    left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
+    // left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
+
+    left_controller.button(4).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_SPEAKER).getCommand()); 
+
     
   }
 
@@ -113,8 +116,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     double x = 15.79;
-    double y = 1.70;
-    double r = 120.0;
+    double y = 1.90;
+    double r = 125.0;
     Command pathfindAuto = new PathfindAuto(new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
     // Command pathFollowAuto = new FetchPath("paths/New Path").getCommand();
     return pathfindAuto;//.andThen(pathFollowAuto);

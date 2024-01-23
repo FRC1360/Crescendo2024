@@ -40,9 +40,9 @@ public final class Constants {
   }
 
   public static class VisionConstants {
-        public static final Transform3d robotToCam =
+        public static final Transform3d robotToCam = // Made negative, z prev 0.7366
                 new Transform3d(
-                        new Translation3d(-0.0762, 0.2286, 0.7366), //forward is positive X, left is positive Y, and up is positive Z.
+                        new Translation3d(-0.0762, -0.2286, 0.7366), //forward is positive X, left is positive Y, and up is positive Z.
                         new Rotation3d(
                                 0, Math.toRadians(-28.0),
                                 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
