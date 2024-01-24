@@ -173,6 +173,12 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrivePoseEstimator.getEstimatedPosition();
   }
 
+  public Pose2d currentPoseDebug() {
+    System.out.print("Got pose from swerve subsystem: ");
+    System.out.println(swerveDrivePoseEstimator.getEstimatedPosition());
+    return swerveDrivePoseEstimator.getEstimatedPosition();
+  }
+
   public Translation2d currentTranslation() {
     return currentPose().getTranslation();
   }
