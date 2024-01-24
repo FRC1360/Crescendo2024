@@ -23,6 +23,7 @@ import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
 import frc.lib.util.PIDConstants;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swerve.SwerveAutoConfig;
 import swervelib.math.SwerveModuleState2;
 
@@ -38,7 +39,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Translation2d currentSpeed = new Translation2d(0, 0);
   private PIDConstants anglePID = Constants.Swerve.anglePID; 
 
-  PhotonCameraWrapper pCameraWrapper; 
+  private PhotonCameraWrapper pCameraWrapper; 
+  private boolean lastVisionEstimate = false;
 
   public SwerveSubsystem() {
     // Gyro setup
@@ -229,15 +231,33 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Estimator update
     swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
-
-    Optional<EstimatedRobotPose> result =
-                pCameraWrapper.getEstimatedGlobalPose(swerveDrivePoseEstimator.getEstimatedPosition());
+    Pose2d odoPose = swerveDrivePoseEstimator.getEstimatedPosition();
+    
+    Optional<EstimatedRobotPose> result = pCameraWrapper.getEstimatedGlobalPose(odoPose);
 
     if (result.isPresent()) {
-        EstimatedRobotPose camPose = result.get();
-        swerveDrivePoseEstimator.addVisionMeasurement(
-                camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+        double timestamp = result.get().timestampSeconds;
+        Pose2d camPose = result.get().estimatedPose.toPose2d();
+        boolean update = false;
+        
+        if(lastVisionEstimate) { 
+          // if we had a vision estimate last frame
+          // check if the new one is really far off from the current robot pose
+          // if it is, don't update, it's probably noise
+          if(camPose.minus(odoPose).getTranslation().getNorm() < VisionConstants.maxNoiseError) {
+            update = true;
+          }
+        } 
+        else { 
+          // if we didn't have a vision estimate last time, we need to update from the camera
+          update = true;
+        }
+
+        if(update){
+          swerveDrivePoseEstimator.addVisionMeasurement(camPose, timestamp);
+        }
     }
+    lastVisionEstimate = result.isPresent();
 
 
     field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
