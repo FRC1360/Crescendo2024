@@ -20,15 +20,15 @@ public class ExtendCommand extends Command {
   private final CommandXboxController m_cont;
   private OrbitPID heightPID;
   private double last_err = Double.NaN;
-  private RelativeEncoder m_extendEncoderLead;
-  private CANSparkMax m_climbMotor;
+  // private RelativeEncoder m_extendEncoderLead;
+  // private CANSparkMax m_climbMotor;
 
   public ExtendCommand(ClimberSubsystem climber, CommandXboxController cont) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_climber = climber;
     this.m_cont = cont;
-    this.m_climbMotor = m_climber.getClimbMotor();
-    this.m_extendEncoderLead = m_climber.getRelativeClimbEncoder();
+    //this.m_climbMotor = m_climber.getClimbMotor();
+    //this.m_extendEncoderLead = m_climber.getRelativeClimbEncoder();
     this.heightPID = new OrbitPID(0, 0, 0);
     /*SmartDashboard.putNumber("ki", 0);
     SmartDashboard.putNumber("kp", 0);
@@ -38,7 +38,7 @@ public class ExtendCommand extends Command {
 
   @Override
   public void initialize() {
-    m_extendEncoderLead.setPosition(0);
+    m_climber.setEncoderPosition(0);
     double kI = SmartDashboard.getNumber("ki", 0);
     double kP = SmartDashboard.getNumber("kp", 0);
     double kD = SmartDashboard.getNumber("kd", 0);
@@ -49,21 +49,14 @@ public class ExtendCommand extends Command {
   @Override
   public void execute() {
     // use position to get height and use that instead of value
-    SmartDashboard.putNumber("lead encoder value", m_extendEncoderLead.getPosition());
-    SmartDashboard.putNumber("target height", Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS);
-
-    // We need the actual height from motor roations
-    double output = heightPID.calculate(Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS, m_extendEncoderLead.getPosition());
-    m_climbMotor.set(output);
-
-    //instead of positon, subtract current height
-    last_err = Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS - m_extendEncoderLead.getPosition();
+    
+    last_err = m_climber.setPosition(Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climbMotor.set(0.0);
+    m_climber.stopClimber();
   }
 
   // Returns true when the command should end.
