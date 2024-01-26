@@ -29,7 +29,7 @@ public class AssemblyPodiumPositionCommand extends SequentialCommandGroup {
                 .alongWith(new InstantCommand(() -> SmartDashboard.putString("Podium stage", "STAGE 3"))),
             new InstantCommand(ledSubsystem::setLEDEnable),
             new InstantCommand(() -> SmartDashboard.putString("Podium stage", "DONE")),
-            new InstantCommand(() -> sm.setAtHome(false))
+            new InstantCommand(() -> sm.setAtSpeakerPodiumScore())
         );
     }
 }

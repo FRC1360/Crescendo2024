@@ -29,7 +29,7 @@ public class AssemblySubwooferPositionCommand extends SequentialCommandGroup {
                 .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 3"))),
             new InstantCommand(ledSubsystem::setLEDEnable),
             new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "DONE")),
-            new InstantCommand(() -> sm.setAtHome(true))
+            new InstantCommand(() -> sm.setAtSpeakerSubwooferScore())
         );
     }
 }

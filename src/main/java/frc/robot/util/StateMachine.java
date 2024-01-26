@@ -2,22 +2,41 @@ package frc.robot.util;
 
 public class StateMachine {
 
-    boolean atHome;
-    boolean atSpeakerScore;
-    boolean atAmpScore;
-    boolean atIntake;
-    boolean atClimb;
+    public enum ArmPositionStates{
+    atHome, atSpeakerSubwooferScore, atSpeakerPodiumScore, atSpeakerDefendedScore, atAmpScore, atSource, atClimb
+    }
+    
+    private ArmPositionStates armPosState;
 
     public StateMachine() {
-        atHome = false;
+        this.armPosState = ArmPositionStates.atHome;
     }
 
-    public void setAtHome(boolean atHome) {
-        this.atHome = atHome;
+    public void setAtHome() {
+        this.armPosState = ArmPositionStates.atHome;
     }
 
-    public boolean getAtHome() {
-        return this.atHome;
+    public void setAtSpeakerSubwooferScore() {
+        this.armPosState = ArmPositionStates.atSpeakerSubwooferScore;
+    }
+
+    public void setAtSpeakerPodiumScore() {
+        this.armPosState = ArmPositionStates.atSpeakerPodiumScore;
+    }
+    public void setAtSpeakerDefendedScore(){
+        this.armPosState = ArmPositionStates.atSpeakerDefendedScore;
+    }
+
+    public void setAtAmpScore() {
+        this.armPosState = ArmPositionStates.atAmpScore;
+    }
+
+    public void setAtClimb(){
+        this.armPosState = ArmPositionStates.atClimb;
+    }
+    
+    public void setAtSource(){
+        this.armPosState = ArmPositionStates.atSource;
     }
     
 }

@@ -30,7 +30,7 @@ public class AssemblyHomePositionCommand extends SequentialCommandGroup {
 
             new InstantCommand(ledSubsystem::setLEDEnable),
             new InstantCommand(() -> SmartDashboard.putString("Homing stage", "DONE")),
-            new InstantCommand(() -> sm.setAtHome(true))
+            new InstantCommand(() -> sm.setAtHome())
         );
     }
 }
