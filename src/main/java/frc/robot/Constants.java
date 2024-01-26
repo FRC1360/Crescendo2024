@@ -30,22 +30,21 @@ public final class Constants {
     public static final int LEDPort = 0;
     public static final int kDriverControllerPort = 0;
 
-    
-        // HOME_POSITION
-        public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
-        public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
-        // hit the superstructure
-        // NOTE_SCORE_AMP_POSITION
-        public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
-        public static final double NOTE_SCORE_AMP_POSITION_ACP = 42.0;
+    // HOME_POSITION
+    public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
+    public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
+    // hit the superstructure
+    // NOTE_SCORE_AMP_POSITION
+    public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 42.0;
 
-        // NOTE_SCORE_SPEAKER_POSITION
-        public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
-        public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = -7.5;
+    // NOTE_SCORE_SPEAKER_POSITION
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = -7.5;
 
-        // SOURCE_POSITION
-        public static final double SOURCE_POSITION_STP = 150.0;
-        public static final double SOURCE_POSITION_ACP = -48.0;
+    // SOURCE_POSITION
+    public static final double SOURCE_POSITION_STP = 150.0;
+    public static final double SOURCE_POSITION_ACP = -48.0;
 
     public static class ShintakeConstants {
         public static final int INTAKE_SPEED_BACK = 70;
