@@ -20,17 +20,11 @@ public class GoToHomeCommand extends Command {
   private final CommandXboxController m_cont;
   private OrbitPID heightPID;
   private double last_err = Double.NaN;
-  // private RelativeEncoder m_extendEncoderLead;
-  // private CANSparkMax m_climbMotor;
-  // private CANSparkMax m_climbMotorInverted;
 
   public GoToHomeCommand(ClimberSubsystem climber, CommandXboxController cont) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_climber = climber;
     this.m_cont = cont;
-    /*this.m_climbMotor = m_climber.getClimbMotor();
-    this.m_climbMotorInverted = m_climber.getClimbMotorInverted();
-    this.m_extendEncoderLead = m_climber.getRelativeClimbEncoder();*/
     this.heightPID = new OrbitPID(0, 0, 0);
     /*SmartDashboard.putNumber("ki", 0);
     SmartDashboard.putNumber("kp", 0);
@@ -51,7 +45,8 @@ public class GoToHomeCommand extends Command {
   @Override
   public void execute() {
     // use position to get height and use that instead of value
-    //SmartDashboard.putNumber("lead encoder value", m_extendEncoderLead.getPosition());
+    last_err = m_climber.setPosition(Constants.ClimbConstants.CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS);
+
     
   }
 
