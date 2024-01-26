@@ -27,25 +27,23 @@ import frc.lib.util.PIDConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class ClimbConstants {
-    public static final int CLIMBER_LEAD_CAN_ID = 1;
-    public static final int CLIMBER_SLAVE_CAN_ID = 2;
-    public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
-  }
 
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final int LEDPort = 0;
-    public static final int kDriverControllerPort = 0;
-  } 
-  
-    public static final int LEDPort = 0;
-    public static final int kDriverControllerPort = 0;
+	public static final int LEDPort = 0;
+
+    public static class ClimbConstants {
+        public static final int CLIMBER_LEAD_CAN_ID = 1;
+        public static final int CLIMBER_SLAVE_CAN_ID = 2;
+        public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
+    }
+
+    public static class OperatorConstants {
+        public static final int kDriverControllerPort = 0;
+    }
 
     // HOME_POSITION
-    public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
-    public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
-    // hit the superstructure
+    public static final double HOME_POSITION_STP = 170.0;
+    public static final double HOME_POSITION_ACP = -90.0;
+
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 42.0;
@@ -54,9 +52,21 @@ public final class Constants {
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = -7.5;
 
+	// NOTE_SCORE_DEFENDED_SPEAKER_POSITION
+	public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 130.0;
+	public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = -7.5;
+
+	// NOTE_SCORE_PODIUM_SPEAKER_POSITION
+	public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 130.0;
+	public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = -7.5;
+
     // SOURCE_POSITION
     public static final double SOURCE_POSITION_STP = 150.0;
     public static final double SOURCE_POSITION_ACP = -48.0;
+
+	// CLIMB_POSITION fix this
+		public static final double CLIMB_POSITION_STP = 0.0;
+		public static final double CLIMB_POSITION_ACP = 0.0;
 
     public static class ShintakeConstants {
         public static final int INTAKE_SPEED_BACK = 70;
