@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
-
-import java.util.function.DoubleSupplier;
-import java.util.function.BooleanSupplier;
 
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shintake.DefaultShintakeCommand;
