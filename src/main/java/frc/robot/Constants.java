@@ -27,9 +27,19 @@ import frc.lib.util.PIDConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final int LEDPort = 0;
-  public static final int kDriverControllerPort = 0;
 
+
+  public static class ClimbConstants {
+    public static final int CLIMBER_LEAD_CAN_ID = 1;
+    public static final int CLIMBER_SLAVE_CAN_ID = 2;
+    public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
+  }
+
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final int LEDPort = 0;
+    public static final int kDriverControllerPort = 0;
+  }
   public static class ShintakeConstants{
     public static final int INTAKE_SPEED_BACK = 70;
     public static final int DEFAULT_INTAKE_SPEED = 50;
