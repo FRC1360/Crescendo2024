@@ -1,4 +1,4 @@
-package frc.robot.commands.ArmChassisPivot;
+package frc.robot.commands.armChassisPivot;
 
 import java.util.function.DoubleSupplier;
 
