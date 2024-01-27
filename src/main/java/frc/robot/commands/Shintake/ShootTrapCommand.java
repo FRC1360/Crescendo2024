@@ -24,8 +24,8 @@ public class ShootTrapCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.varShootAmp(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_shooter.varIntakeAmp(Constants.ShintakeConstants.SHOOT_SPEED_BACK_AMP);
+    m_shooter.varShoot(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
+    m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_AMP);
   }
 
   // Called once the command ends or is interrupted.

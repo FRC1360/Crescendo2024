@@ -26,8 +26,8 @@ public class OutakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.UnfeedFront();
-    m_intake.UnfeedBack();
+    m_intake.varShoot(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
+    m_intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
   }
 
   // Called once the command ends or is interrupted.

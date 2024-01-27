@@ -29,7 +29,7 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
     m_intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
-    if (!m_intake.getDigitalInput()) m_intake.UnfeedBack();
+    if (!m_intake.getDigitalInput()) m_intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
       if (m_intake.getDigitalInput()) m_intake.stopIntake();  }
 
   // Called once the command ends or is interrupted.

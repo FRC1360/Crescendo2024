@@ -30,6 +30,10 @@ public class ShintakeSubsystem extends SubsystemBase {
     this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
     this.m_digital = new DigitalInput(Constants.ShintakeConstants.SHINTAKE_SENSOR_PIN);
     this.m_counter = new Counter(m_digital);
+
+    m_left.setInverted(true);
+    m_right.setInverted(false);
+    m_back.setInverted(true);
   }
 
   //Stops both motors
@@ -42,48 +46,16 @@ public class ShintakeSubsystem extends SubsystemBase {
     m_back.set(0.0);
   }
 
-  public void varIntake(Double backSpeed) {
-    m_back.setInverted(true);
+  public void varIntake(double backSpeed) {
     m_back.set(backSpeed);
   }
 
-  public void varShootSpeaker(double speed) {
-    m_left.setInverted(true);
-    m_right.setInverted(false);
-    m_back.setInverted(false);
+  public void varShoot(double speed) {
     m_left.set(speed);
     m_right.set(speed);
   }
 
-  public void varIntakeSpeaker(double speed) {
-    m_back.setInverted(true);
-    m_back.set(speed);
-  }
-
-  public void varIntakeAmp(double speed) {
-    m_back.setInverted(false);
-    m_back.set(speed);
-  }
-
-  public void varShootAmp(double speed) {
-    m_left.setInverted(false);
-    m_right.setInverted(true);
-    m_left.set(speed);
-    m_right.set(speed);
-  }
-
-  public void UnfeedFront() {
-    m_right.setInverted(true);
-    m_right.set(Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
-    m_left.set(Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
-  }
-
-  public void UnfeedBack() {
-    m_back.setInverted(true);
-    m_back.set(Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-  }
-
-  public Boolean getDigitalInput() {
+  public boolean getDigitalInput() {
     return m_digital.get();
   }
 
@@ -93,13 +65,6 @@ public class ShintakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
-    if (m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0) {
-      SmartDashboard.putBoolean("Intake in motion: ", false);
-    }
-    else {
-      SmartDashboard.putBoolean("Intake in motion: ", true);
-    }
+    SmartDashboard.putBoolean("Intake in motion: ", m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0);
   }
 }
