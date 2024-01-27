@@ -31,9 +31,9 @@ public class AlignmentConstants {
     public static final Pose2d RED_AMP = new Pose2d(14.70, 7.30, Rotation2d.fromDegrees(90.0)); // ID 5
 
     // STAGE with respect to red alliance (far is cannot be seen) 
-    public static final Pose2d RED_STAGE_FAR = new Pose2d(6.64, 4.10, Rotation2d.fromDegrees(180.0)); // ID 13
-    public static final Pose2d RED_STAGE_LEFT = new Pose2d(); // ID 11
-    public static final Pose2d RED_STAGE_RIGHT = new Pose2d(); // ID 12
+    public static final Pose2d RED_STAGE_FAR = new Pose2d(9.90, 4.10, Rotation2d.fromDegrees(0.0)); // ID 13
+    public static final Pose2d RED_STAGE_LEFT = new Pose2d(12.63, 2.56, Rotation2d.fromDegrees(125.00)); // ID 11
+    public static final Pose2d RED_STAGE_RIGHT = new Pose2d(12.67, 5.50, Rotation2d.fromDegrees(-125.00)); // ID 12
 
 
 }
