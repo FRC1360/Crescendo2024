@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shintake;
+package frc.robot.commands.Shintake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -29,7 +29,8 @@ public class ShootSpeakerCommand extends Command {
   @Override
   public void execute() {
     m_shooter.varShoot(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+    if ((m_shooter.getVelocityLeft() >= 0.49 || m_shooter.getVelocityLeft() <= 0.51) && (m_shooter.getVelocityRight() >= 0.49 || m_shooter.getVelocityRight() <= 0.51)) m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+
   }
 
   // Called once the command ends or is interrupted.
