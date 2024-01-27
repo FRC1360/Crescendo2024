@@ -26,14 +26,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_shintakeSubsystem);
   private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
-
-  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -55,7 +54,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    left_controller.button(1).onTrue(new IntakeCommand(m_shintakeSubsystem));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
