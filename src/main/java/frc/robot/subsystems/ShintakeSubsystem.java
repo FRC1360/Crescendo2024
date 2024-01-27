@@ -17,16 +17,16 @@ import frc.robot.Constants;
 
 public class ShintakeSubsystem extends SubsystemBase {
 
-  private CANSparkFlex m_left;
-  private CANSparkFlex m_right;
+  private CANSparkMax m_left;
+  private CANSparkMax m_right;
   private CANSparkMax m_back;
   private DigitalInput m_digital;
   private Counter m_counter;
 
   public ShintakeSubsystem() {
     //Using CANSparkFlexes for the two shooter neo vortexes
-    this.m_left = new CANSparkFlex(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
-    this.m_right = new CANSparkFlex(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_left = new CANSparkMax(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+    this.m_right = new CANSparkMax(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
     this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
     this.m_digital = new DigitalInput(Constants.ShintakeConstants.SHINTAKE_SENSOR_PIN);
     this.m_counter = new Counter(m_digital);

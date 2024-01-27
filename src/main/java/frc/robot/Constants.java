@@ -30,19 +30,19 @@ public final class Constants {
   public static final int kDriverControllerPort = 0;
 
   public static class ShintakeConstants{
-    public static final double UNFEED_SPEED_BACK = 40;
-    public static final int INTAKE_SPEED_BACK = 70;
-    public static final double INITIAL_DEFAULT_INTAKE_SPEED = 60;
-    public static final double SECOND_DEFAULT_INTAKE_SPEED = 30;
-    public static final double DEFAULT_INTAKE_SPEED = 10;
-    public static final int SHOOT_SPEED_FRONT = 100;
-    public static final double SHOOT_SPEED_BACK_AMP = 50;
-    public static final double SHOOT_SPEED_BACK_SPEAKER = 50;
-    public static final int RIGHT_SHOOTAKE_CAN_ID = 0;
-    public static final int LEFT_SHOOTAKE_CAN_ID = 1;
-    public static final int BACK_SHOOTAKE_ID = 2;
+    public static final double UNFEED_SPEED_BACK = 0.1;
+    public static final double INTAKE_SPEED_BACK = 0.1;
+    public static final double INITIAL_DEFAULT_INTAKE_SPEED = 0.4;
+    public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.1;
+    public static final double DEFAULT_INTAKE_SPEED = 0.1;
+    public static final double SHOOT_SPEED_FRONT = 0.1;
+    public static final double SHOOT_SPEED_BACK_AMP =0.1;
+    public static final double SHOOT_SPEED_BACK_SPEAKER = 0.1;
+    public static final int RIGHT_SHOOTAKE_CAN_ID = 61;
+    public static final int LEFT_SHOOTAKE_CAN_ID = 42;
+    public static final int BACK_SHOOTAKE_ID = 31;
     public static final int SHINTAKE_SENSOR_PIN = 7;
-    public static final double UNFEED_SPEED_FRONT = 0;
+    public static final double UNFEED_SPEED_FRONT = 0.1;
   }
 
   public static class VisionConstants {

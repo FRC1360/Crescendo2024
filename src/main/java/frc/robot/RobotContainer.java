@@ -26,7 +26,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  //public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   private final IntakeCommand m_intakeCommand = new IntakeCommand(m_shintakeSubsystem);
   private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
@@ -54,7 +54,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    left_controller.button(1).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    left_controller.button(1).whileTrue(new IntakeCommand(m_shintakeSubsystem));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -63,12 +63,12 @@ public class RobotContainer {
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
-        swerveSubsystem,
-        () -> -modifyAxis(left_controller.getY()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
-        () -> -modifyAxis(left_controller.getX()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
-        () -> modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-        right_controller));
+    //swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
+        //swerveSubsystem,
+        //() -> -modifyAxis(left_controller.getY()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
+        //() -> -modifyAxis(left_controller.getX()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
+        //() -> modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+        //right_controller));
   }
 
   /**
