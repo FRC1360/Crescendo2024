@@ -4,11 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.autos.Autos;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shintake.DefaultShintakeCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,12 +22,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  //public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem();
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_shintakeSubsystem);
-  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+  private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
+  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
@@ -37,7 +34,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
+    shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
@@ -54,14 +51,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    left_controller.button(1).whileTrue(new IntakeCommand(m_shintakeSubsystem));
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    left_controller.button(1).onTrue(intakeCommand);
 
     //swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         //swerveSubsystem,
@@ -78,7 +68,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return null;//Autos.exampleAuto(m_exampleSubsystem);
   }
 
   private static double deadband(double value, double deadband) {
