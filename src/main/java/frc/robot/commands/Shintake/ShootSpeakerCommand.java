@@ -29,7 +29,8 @@ public class ShootSpeakerCommand extends Command {
   @Override
   public void execute() {
     m_shooter.varShoot(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+    if ((m_shooter.getVelocityLeft() >= 0.49 || m_shooter.getVelocityLeft() <= 0.51) && (m_shooter.getVelocityRight() >= 0.49 || m_shooter.getVelocityRight() <= 0.51)) m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+
   }
 
   // Called once the command ends or is interrupted.
