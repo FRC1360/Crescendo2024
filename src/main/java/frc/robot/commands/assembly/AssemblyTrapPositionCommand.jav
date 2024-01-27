@@ -9,12 +9,11 @@ import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
-import frc.robot.subsystems.ArmChassisPivotSubsystem.ArmShintakeMessenger;
 import frc.robot.util.StateMachine;
 
 public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
 
-    public AssemblyTrapPositionCommand(ArmChassisPivotSubsystem ACPSubsystem, ArmShintakeMessenger armShintakeMessenger,
+    public AssemblyTrapPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
             new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),

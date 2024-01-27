@@ -56,7 +56,7 @@ public class ACPGoToPositionCommand extends Command {
 
         TrapezoidProfile.State profileTarget;
 
-        // prevent arm from hitting chassis
+        // prevent arm from going past vertical
         if (this.ACP.getTargetAngle() > 90) {
             this.ACP.setTargetAngle(90);
         }
