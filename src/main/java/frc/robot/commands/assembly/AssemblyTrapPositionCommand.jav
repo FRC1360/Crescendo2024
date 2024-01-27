@@ -9,7 +9,6 @@ import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
-import frc.robot.subsystems.ArmChassisPivotSubsystem.ArmShintakeMessenger;
 import frc.robot.util.StateMachine;
 
 public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
