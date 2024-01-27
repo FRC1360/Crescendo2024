@@ -14,7 +14,7 @@ import frc.robot.util.StateMachine;
 
 public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
 
-    public AssemblyTrapPositionCommand(ArmChassisPivotSubsystem ACPSubsystem, ArmShintakeMessenger armShintakeMessenger,
+    public AssemblyTrapPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
             new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),
