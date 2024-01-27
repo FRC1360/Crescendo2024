@@ -8,13 +8,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
+import frc.robot.commands.swerve.AlignToPose;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class PathfindAuto {
 
+    private SwerveSubsystem swerveSubsystem;
     private Pose2d targetPose; 
     private PathConstraints constraints; 
     
-    public PathfindAuto(Pose2d targetPose) { 
+    public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose) { 
         this.targetPose = targetPose; 
 
         this.constraints = new PathConstraints(Constants.Swerve.AutoConstants.maxSpeed, Constants.Swerve.AutoConstants.maxAcceleration,
@@ -25,6 +28,7 @@ public class PathfindAuto {
 
     public Command getCommand() {
         return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
-        .alongWith(new InstantCommand(() -> System.out.println(this.targetPose))); 
+        .alongWith(new InstantCommand(() -> System.out.println(this.targetPose)))
+        .andThen(new AlignToPose(swerveSubsystem, targetPose));
     }
 }

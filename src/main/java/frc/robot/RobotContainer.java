@@ -99,11 +99,11 @@ public class RobotContainer {
 
     left_controller.button(1).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
 
-    left_controller.button(2).whileTrue(new PathfindAuto(AlignmentConstants.RED_SOURCE).getCommand()); 
+    left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
 
     // left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
 
-    left_controller.button(4).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_SPEAKER).getCommand()); 
+    left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand()); 
 
     
   }
@@ -119,7 +119,7 @@ public class RobotContainer {
     double x = 15.79;
     double y = 1.90;
     double r = 125.0;
-    Command pathfindAuto = new PathfindAuto(new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
+    Command pathfindAuto = new PathfindAuto(swerveSubsystem, new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
     // Command pathFollowAuto = new FetchPath("paths/New Path").getCommand();
     return pathfindAuto;//.andThen(pathFollowAuto);
     
