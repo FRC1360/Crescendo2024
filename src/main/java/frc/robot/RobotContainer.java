@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shintake.DefaultShintakeCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.Shintake.ShootSpeakerCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem();
-  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  // public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
   private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(shintakeSubsystem);
@@ -51,7 +52,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    left_controller.button(1).onTrue(intakeCommand);
+    left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
+    right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
 
     //swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         //swerveSubsystem,

@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Shintake;
 
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
@@ -11,7 +13,7 @@ import frc.robot.subsystems.ShintakeSubsystem;
 public class IntakeCommand extends Command {
 
   private ShintakeSubsystem m_intake;
-  private boolean m_detect = false;
+  private int count = 0;
 
   public IntakeCommand(ShintakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,6 +24,7 @@ public class IntakeCommand extends Command {
 
   @Override
   public void initialize() {
+    m_intake.resetShintakeCount();
     m_intake.stopShooter();
     m_intake.stopIntake();
   }
@@ -30,18 +33,17 @@ public class IntakeCommand extends Command {
   @Override
   public void execute() {
     m_intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
-    if (!m_intake.getDigitalInput()) {
-      m_intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-      m_detect = true;
-    }
-    if (m_detect == true && m_intake.getDigitalInput()) m_intake.stopIntake();  
+    count = m_intake.getShintakeCount();
+    if (!m_intake.getDigitalInput()) m_intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
+    if (count >= 2 && m_intake.getDigitalInput()) m_intake.stopIntake(); 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_intake.stopIntake();
-    m_detect = false;
+    count = 0;
+    m_intake.resetShintakeCount();
   }
 
   // Returns true when the command should end.

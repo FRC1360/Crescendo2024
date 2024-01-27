@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 
 public class ShintakeSubsystem extends SubsystemBase {
@@ -31,7 +30,7 @@ public class ShintakeSubsystem extends SubsystemBase {
     this.m_digital = new DigitalInput(Constants.ShintakeConstants.SHINTAKE_SENSOR_PIN);
     this.m_counter = new Counter(m_digital);
 
-    m_left.setInverted(true);
+    m_left.setInverted(false);
     m_right.setInverted(false);
     m_back.setInverted(true);
   }
@@ -51,8 +50,9 @@ public class ShintakeSubsystem extends SubsystemBase {
   }
 
   public void varShoot(double speed) {
+    //Set one to negative to side
     m_left.set(speed);
-    m_right.set(speed);
+    m_right.set(-speed);
   }
 
   public boolean getDigitalInput() {
@@ -63,8 +63,13 @@ public class ShintakeSubsystem extends SubsystemBase {
     return m_counter.get();
   }
 
+  public void resetShintakeCount() {
+    m_counter.reset();
+  }
+
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Intake in motion: ", m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0);
+    SmartDashboard.putBoolean("Intake in motion: ", !(m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0));
+    SmartDashboard.putBoolean("intake sensor state", m_digital.get());
   }
 }
