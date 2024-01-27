@@ -37,7 +37,7 @@ public final class Constants {
     public static final double DEFAULT_INTAKE_SPEED = 0.1;
     public static final double SHOOT_SPEED_FRONT = 0.5;
     public static final double SHOOT_SPEED_BACK_AMP = 0.1;
-    public static final double SHOOT_SPEED_BACK_SPEAKER = 0.2;
+    public static final double SHOOT_SPEED_BACK_SPEAKER = 0.8;
     public static final int RIGHT_SHOOTAKE_CAN_ID = 61;
     public static final int LEFT_SHOOTAKE_CAN_ID = 42;
     public static final int BACK_SHOOTAKE_ID = 31;
