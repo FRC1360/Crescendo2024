@@ -7,8 +7,12 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +28,9 @@ public class ShintakeSubsystem extends SubsystemBase {
   private CANSparkMax m_back;
   private DigitalInput m_digital;
   private Counter m_counter;
+  private SparkPIDController rightWheelPID;
+  private SparkPIDController leftWheelPID;
+  private double leftVelocity, rightVelocity;
 
   public ShintakeSubsystem() {
       //Using CANSparkFlexes for the two shooter neo vortexes
@@ -34,13 +41,33 @@ public class ShintakeSubsystem extends SubsystemBase {
       this.m_counter = new Counter(m_digital);
       this.m_encoderLeft = m_left.getEncoder();
       this.m_encoderRight = m_right.getEncoder();
+
+            
+      this.rightWheelPID = m_right.getPIDController();
+      this.leftWheelPID = m_left.getPIDController();
+
         
-      
 
       m_left.setInverted(false);
       m_right.setInverted(false);
       m_back.setInverted(true);
     }
+
+    public void setVelocity(double rightVelocity, double leftVelocity) {
+        this.leftVelocity = leftVelocity;
+        this.rightVelocity = rightVelocity;
+
+        leftWheelPID.setReference(leftVelocity, ControlType.kVelocity);
+        rightWheelPID.setReference(rightVelocity, ControlType.kVelocity);
+
+    }
+
+    public boolean shooterWheelsReady() {
+      return (this.leftVelocity != 0 && this.rightVelocity != 0)
+          && Math.abs(getVelocityLeft() - this.leftVelocity) <= 100
+          && Math.abs(getVelocityRight() - this.rightVelocity) <= 100;
+  }
+
 
   public double getVelocityLeft() {
     return m_encoderLeft.getVelocity();
@@ -86,5 +113,7 @@ public class ShintakeSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putBoolean("Intake in motion: ", !(m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0));
     SmartDashboard.putBoolean("intake sensor state", m_digital.get());
+    SmartDashboard.putNumber("left velocity", m_encoderLeft.getVelocity());
+    SmartDashboard.putNumber("right velocity", m_encoderRight.getVelocity());
   }
 }
