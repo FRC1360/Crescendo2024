@@ -21,6 +21,8 @@ public class AlignToPose extends Command {
     public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target) {
         this.swerveSubsystem = swerveSubsystem;
         this.target = target;
+
+        addRequirements(swerveSubsystem);
     }
 
     @Override
