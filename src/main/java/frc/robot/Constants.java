@@ -145,7 +145,8 @@ public final class Constants {
             // and ANGLE_PID first
             public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(0.13, 0, 0.0045);
             public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.013, 0.000001, 0);
-            public static final double maxSpeed = 1; //4 * 0.7; // m/s
+            public static final double maxSpeed = 1; 
+                                                    //4 * 0.7; // m/s
             public static final double maxAcceleration = 2 * 0.9; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); 
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); 
