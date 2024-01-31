@@ -5,8 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.shintake.IntakeCommand;
-import frc.robot.commands.shintake.ShootSpeakerCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.Shintake.ShootSpeakerCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
