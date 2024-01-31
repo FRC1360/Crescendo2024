@@ -13,7 +13,7 @@ public class AssemblySchedulerCommand extends Command {
 
     public static enum ASSEMBLY_LEVEL { // the set points that can be set by operator
         SPEAKER,
-        AMP,
+        AMP
     }
 
     private Command assemblyCommand;
