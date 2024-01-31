@@ -6,9 +6,13 @@ package frc.robot;
 
 import frc.robot.autos.FetchPath;
 import frc.robot.autos.PathfindAuto;
+
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.shintake.DefaultShintakeCommand;
-import frc.robot.commands.shintake.IntakeCommand;
+
+import frc.robot.commands.Shintake.DefaultShintakeCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.Shintake.ShootAmp;
+import frc.robot.commands.Shintake.ShootSpeaker;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -41,7 +45,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
-  
+  private final IntakeCommand intakeCommand = new IntakeCommand(m_shintakeSubsystem);
+
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
 
@@ -92,8 +97,8 @@ public class RobotContainer {
 
     swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         swerveSubsystem,
-        () -> -modifyAxis(left_controller.getY()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
-        () -> -modifyAxis(left_controller.getX()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
+        () -> modifyAxis(left_controller.getY()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+        () -> modifyAxis(left_controller.getX()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
         () -> modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
         right_controller));
 

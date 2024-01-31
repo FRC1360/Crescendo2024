@@ -42,9 +42,13 @@ public final class Constants {
   public static class VisionConstants {
         public static final Transform3d robotToCam = // Made negative, z prev 0.7366
                 new Transform3d(
-                        new Translation3d(-0.0762, -0.2286, 0.7366), //forward is positive X, left is positive Y, and up is positive Z.
+                        new Translation3d(
+                            Units.inchesToMeters(2), 
+                            Units.inchesToMeters(2), 
+                            Units.inchesToMeters(16)), //forward is positive X, left is positive Y, and up is positive Z.
                         new Rotation3d(
-                                0, Math.toRadians(-28.0),
+                                0, 
+                                Math.toRadians(27.0),
                                 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final String cameraName = "Camera_Module_v1";
@@ -62,7 +66,7 @@ public final class Constants {
 
         public static int PEAK_CURRENT_LIMIT = 50;
         public static int CONTINUOUS_CURRENT_LIMIT = 40;
-        public static boolean ANGLE_INVERT = true;
+        public static boolean ANGLE_INVERT = false;
         public static boolean DRIVE_INVERT = true;
         public static boolean isGyroInverted = true;
         public static IdleMode IDLE_MODE = IdleMode.kBrake;

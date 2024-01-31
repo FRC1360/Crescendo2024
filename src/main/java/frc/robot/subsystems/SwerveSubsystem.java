@@ -47,7 +47,6 @@ public class SwerveSubsystem extends SubsystemBase {
     navX = new NavX();
     navX.setInverted(Constants.Swerve.isGyroInverted);
 
-
     pCameraWrapper = new PhotonCameraWrapper(); 
     // Swerve module setup
     swerveModules = new SwerveModuleCustom[] {
@@ -62,8 +61,6 @@ public class SwerveSubsystem extends SubsystemBase {
         getPositions(), new Pose2d());
 
     this.anglePID.sendDashboard("angle pid");
-
-    SmartDashboard.putData(field);
 
     // Configure the AutoBuilder that handles all the auto path following!!
     //SwerveAutoConfig.configureAutoBuilder(this);
@@ -229,7 +226,7 @@ public class SwerveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "target speed", module.targetSpeed);
     }
 
-    // Estimator update
+    // Estimator update 
     swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
     Pose2d odoPose = swerveDrivePoseEstimator.getEstimatedPosition();
     
@@ -259,8 +256,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     lastVisionEstimate = result.isPresent();
 
-
     field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
+    SmartDashboard.putData(field);
 
     // get speed
     long currentTime = System.currentTimeMillis();
