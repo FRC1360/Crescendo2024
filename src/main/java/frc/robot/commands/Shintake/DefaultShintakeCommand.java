@@ -8,40 +8,33 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
 
-public class ShootAmpCommand extends Command {
+public class DefaultShintakeCommand extends Command {
 
-  private ShintakeSubsystem m_shooter;
- 
-  public ShootAmpCommand(ShintakeSubsystem shooter) {
+private ShintakeSubsystem m_shooter;
+
+  public DefaultShintakeCommand(ShintakeSubsystem shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.m_shooter = shooter;
-    addRequirements(shooter);
-  }
 
-  @Override
-  public void initialize() {
-    m_shooter.stopIntake();
-    m_shooter.stopShooter();
+    addRequirements(shooter);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.varShoot(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_AMP);
+    m_shooter.varIntake(Constants.ShintakeConstants.DEFAULT_INTAKE_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.stopShooter();
-    m_shooter.stopIntake();
+    m_shooter.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
