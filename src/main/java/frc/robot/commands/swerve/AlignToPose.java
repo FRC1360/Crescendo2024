@@ -14,13 +14,15 @@ public class AlignToPose extends Command {
     
     private SwerveSubsystem swerveSubsystem;
     private Pose2d target;
-    private PIDController drivePid = new PIDController(.5, 0, 0);
+    private PIDController drivePid = new PIDController(0.5, 0, 0);
     private PIDController anglePid = new PIDController(1, 0, 0);
     private boolean done = false;
 
     public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target) {
         this.swerveSubsystem = swerveSubsystem;
         this.target = target;
+
+        addRequirements(swerveSubsystem);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class AlignToPose extends Command {
     public void execute() {
         Transform2d error = swerveSubsystem.currentPose().minus(target);
         double driveOutput = drivePid.calculate(error.getTranslation().getNorm(), 0);
-        double angleOutput = anglePid.calculate(error.getRotation().getDegrees());
+        double angleOutput = anglePid.calculate(error.getRotation().getRadians()); // Drive takes radians per second
         swerveSubsystem.drive(error.getTranslation().times(driveOutput), angleOutput, true, false);
         
         done = error.getRotation().getDegrees() < angleTolerance && error.getTranslation().getNorm() < positionTolerance;

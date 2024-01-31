@@ -20,6 +20,8 @@ public class PathfindAuto {
     public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose) { 
         this.targetPose = targetPose; 
 
+        this.swerveSubsystem = swerveSubsystem; 
+
         this.constraints = new PathConstraints(Constants.Swerve.AutoConstants.maxSpeed, Constants.Swerve.AutoConstants.maxAcceleration,
                                                     Constants.Swerve.AutoConstants.maxAngularVelocity, 
                                                     Constants.Swerve.AutoConstants.maxAngularAcceleration); 
@@ -29,6 +31,6 @@ public class PathfindAuto {
     public Command getCommand() {
         return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
         .alongWith(new InstantCommand(() -> System.out.println(this.targetPose)))
-        .andThen(new AlignToPose(swerveSubsystem, targetPose));
+        .andThen(new AlignToPose(this.swerveSubsystem, targetPose));
     }
 }

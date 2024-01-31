@@ -8,11 +8,8 @@ import frc.robot.autos.FetchPath;
 import frc.robot.autos.PathfindAuto;
 
 import frc.robot.commands.DefaultDriveCommand;
-
-import frc.robot.commands.Shintake.DefaultShintakeCommand;
-import frc.robot.commands.Shintake.IntakeCommand;
-import frc.robot.commands.Shintake.ShootAmp;
-import frc.robot.commands.Shintake.ShootSpeaker;
+// import frc.robot.commands.shintake.DefaultShintakeCommand;
+// import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -41,16 +38,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
+  //private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
-  private final IntakeCommand intakeCommand = new IntakeCommand(m_shintakeSubsystem);
-
+  //private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+  
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
 
-  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  public SwerveSubsystem swerveSubsystem; 
   
   public SendableChooser<Command> autoChooser; 
 
@@ -59,9 +55,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
+    this.swerveSubsystem = new SwerveSubsystem(); 
+
     swerveSubsystem.configureAutoBuilder(); // needs to be called everytime robotInits so alliance is updated
 
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
+    //m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
@@ -93,7 +91,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    //left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
 
     swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         swerveSubsystem,
