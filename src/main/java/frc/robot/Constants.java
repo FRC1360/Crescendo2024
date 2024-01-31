@@ -27,8 +27,19 @@ import frc.lib.util.PIDConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final int kDriverControllerPort = 0;
 
+
+  public static class ClimbConstants {
+    public static final int CLIMBER_LEAD_CAN_ID = 1;
+    public static final int CLIMBER_SLAVE_CAN_ID = 2;
+    public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
+  }
+
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final int LEDPort = 0;
+    public static final int kDriverControllerPort = 0;
+  }
   public static class ShintakeConstants{
     public static final double UNFEED_SPEED_BACK = 0.2;
     public static final double INTAKE_SPEED_BACK = 0.1;
@@ -57,6 +68,60 @@ public final class Constants {
 //     public static final double flyWheelRPMRatio = 0.8;
 //     public static final double flyWheelClosedLoopRampRate = 0.5;
 //   }
+
+  public static class ACPConstants {
+    // SHOULDER
+    public static final int ACP_MOTOR_MASTER = 50;
+    public static final int ACP_MOTOR_SLAVE = 51;
+    public static final int ACP_ENCODER = 0;
+
+    public static final double ACP_ENCODER_OFFSET = 0.472;
+
+    public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (12.0 / 60.0);
+    public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
+    public static final double MAX_ACP_ANGLE = 90.0;
+    public static final double MIN_ACP_ANGLE = -150.0;
+
+  // HOME_POSITION
+  public static final double HOME_POSITION_STP= 170.0; // Originally 175.0
+  public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
+                                                              // hit the superstructure
+  // NOTE_SCORE_AMP_POSITION
+  public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
+  public static final double NOTE_SCORE_AMP_POSITION_ACP = 42.0;
+
+  // NOTE_SCORE_SPEAKER_POSITION
+  public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
+  public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = -7.5;
+
+  // SOURCE_POSITION
+  public static final double SOURCE_POSITION_STP = 150.0;
+  public static final double SOURCE_POSITION_ACP = -48.0;
+  }
+
+public static final int LEAD_INTAKE_MOTOR_ID = 0;
+public static final int FOLLOW_INTAKE_MOTOR_ID = 0;
+
+  public static class STPConstants{ // random placeholder numbers
+    public static final int ShintakePivot_MOTOR = 1;
+    public static final int ShintakePivot_MAX_ANGLE = 2;
+    public static final int ShintakePivot_MIN_ANGLE = 3;
+    public static final int ShintakePivot_ENCODER = 4;
+    public static final int ShintakePivot_GEAR_RATIO = 5;
+    public static final int ShintakePivot_ENCODER_OFFSET = 6;
+
+    public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
+    public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
+                                                                // hit the superstructure
+    // NOTE_SCORE_AMP_POSITION
+    public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
+
+    // NOTE_SCORE_SPEAKER_POSITION
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
+
+    // SOURCE_POSITION
+    public static final double SOURCE_POSITION_STP = 150.0;
+  }
 
   public static class VisionConstants {
         public static final Transform3d robotToCam =
