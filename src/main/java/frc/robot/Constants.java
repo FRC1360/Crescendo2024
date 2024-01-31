@@ -37,13 +37,26 @@ public final class Constants {
     public static final double DEFAULT_INTAKE_SPEED = 0.1;
     public static final double SHOOT_SPEED_FRONT = 0.5;
     public static final double SHOOT_SPEED_BACK_AMP = 0.1;
-    public static final double SHOOT_SPEED_BACK_SPEAKER = 0.8;
+    public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
     public static final int RIGHT_SHOOTAKE_CAN_ID = 61;
     public static final int LEFT_SHOOTAKE_CAN_ID = 42;
     public static final int BACK_SHOOTAKE_ID = 31;
     public static final int SHINTAKE_SENSOR_PIN = 9;
     public static final double UNFEED_SPEED_FRONT = 0.1;
   }
+
+//   public static class Shooter{
+//     public static final double kP_Lower = 0.00015;
+//     public static final double kI_Lower = 0;
+//     public static final double kD_Lower = 0.00012;
+//     public static final double kFF_Lower = 0.0001839;
+//     public static final double kP_Upper = 0.000003;
+//     public static final double kI_Upper = 0;
+//     public static final double kD_Upper = 0.0005;
+//     public static final double kFF_Upper = 0.0001865;
+//     public static final double flyWheelRPMRatio = 0.8;
+//     public static final double flyWheelClosedLoopRampRate = 0.5;
+//   }
 
   public static class VisionConstants {
         public static final Transform3d robotToCam =

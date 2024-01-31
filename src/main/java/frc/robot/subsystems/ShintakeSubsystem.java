@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.TuningTable;
 
 public class ShintakeSubsystem extends SubsystemBase {
 
@@ -32,6 +33,15 @@ public class ShintakeSubsystem extends SubsystemBase {
   private SparkPIDController leftWheelPID;
   private double leftVelocity, rightVelocity;
 
+  private final TuningTable kP_Upper = new TuningTable("P_Upper_Shooter");
+  private final TuningTable kI_Upper = new TuningTable("I_Upper_Shooter");
+  private final TuningTable kD_Upper = new TuningTable("D_Upper_Shooter");
+  private final TuningTable kF_Upper = new TuningTable("F_Upper_Shooter");
+  private final TuningTable kP_Lower = new TuningTable("P_Lower_Shooter");
+  private final TuningTable kI_Lower = new TuningTable("I_Lower_Shooter");
+  private final TuningTable kD_Lower = new TuningTable("D_Lower_Shooter");
+  private final TuningTable kF_Lower = new TuningTable("F_Lower_Shooter");
+
   public ShintakeSubsystem() {
       //Using CANSparkFlexes for the two shooter neo vortexes
       this.m_left = new CANSparkMax(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
@@ -42,14 +52,34 @@ public class ShintakeSubsystem extends SubsystemBase {
       this.m_encoderLeft = m_left.getEncoder();
       this.m_encoderRight = m_right.getEncoder();
 
+      // kP_Upper.setDefault(Constants.Shooter.kP_Upper);
+      // kI_Upper.setDefault(Constants.Shooter.kI_Upper);
+      // kD_Upper.setDefault(Constants.Shooter.kD_Upper);
+      // kF_Upper.setDefault(Constants.Shooter.kFF_Upper);
+
+      // kP_Lower.setDefault(Constants.Shooter.kP_Lower);
+      // kI_Lower.setDefault(Constants.Shooter.kI_Lower);
+      // kD_Lower.setDefault(Constants.Shooter.kD_Lower);
+      // kF_Lower.setDefault(Constants.Shooter.kFF_Lower);
+
             
       this.rightWheelPID = m_right.getPIDController();
       this.leftWheelPID = m_left.getPIDController();
 
-        
+      
+      leftWheelPID.setP(0.0001); // 0.00015 (3 zeros, 1 one, 1 five)
+      // leftWheelPID.setI(kI_Lower.get());
+      // leftWheelPID.setD(0.0005); //0.00012
+      leftWheelPID.setFF(.0002); //0.0001815 (3 zeros, 1 one, 1 eight, 1 one, 1 five)
+
+      rightWheelPID.setP(0.0001); //0.00003 (4 zeros, 1 three)
+      // rightWheelPID.setI(kI_Upper.get());
+      // rightWheelPID.setD(0.0005); // 0.0005 (3 zeros, 1 five)
+      rightWheelPID.setFF(0.0002); //0.0001807 (3 zeros, 1 one, 1 eight, 1 zero, 1 seven)
+
 
       m_left.setInverted(false);
-      m_right.setInverted(false);
+      m_right.setInverted(true);
       m_back.setInverted(true);
     }
 
