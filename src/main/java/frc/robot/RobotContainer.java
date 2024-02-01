@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.ArmChassisPivotSubsystem;
+
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.shintake.DefaultShintakeCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,10 +28,17 @@ public class RobotContainer {
   private final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem();
   // public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+  //what is this supposed to be :(
+  public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
+
+  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+
   private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
+
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -48,8 +58,23 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    //Setting shintake default command
+    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
+
     left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
     right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+
 
     //swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         //swerveSubsystem,
