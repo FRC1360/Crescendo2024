@@ -9,11 +9,13 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.util.StateMachine;
 
-public class AssemblySchedulerCommand extends Command {
+public class AssemblySchedulerCommand extends Command{
 
     public static enum ASSEMBLY_LEVEL { // the set points that can be set by operator
-        SPEAKER,
-        AMP
+        PODIUM,
+        SUBWOOFER,
+        AMP,
+        SOURCE
     }
 
     private Command assemblyCommand;
@@ -37,7 +39,11 @@ public class AssemblySchedulerCommand extends Command {
     public void initialize() {
         SmartDashboard.putNumber("SchedCmdN", n++);
         switch(level.get()) {
-            case SPEAKER:
+            case PODIUM:
+                this.assemblyCommand = new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm);
+                break;
+
+            case SUBWOOFER:
                 this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, sm);
                 break;
             
@@ -45,6 +51,9 @@ public class AssemblySchedulerCommand extends Command {
                 this.assemblyCommand = new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm);
                 break;
 
+            case SOURCE:
+                this.assemblyCommand = new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm);
+                break;
             default:
                 break;
         }
