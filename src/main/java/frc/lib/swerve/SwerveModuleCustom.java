@@ -129,9 +129,9 @@ public class SwerveModuleCustom {
         driveMotor.enableVoltageCompensation(12.0);
         driveEncoder.setPosition(0.0);
 
-        if (/* this.moduleNumber == 0 || */ this.moduleNumber == 2) {  // Noticed that drive motor at swerve 0 is not behaving properly
-            this.driveMotor.setInverted(!Constants.Swerve.DRIVE_INVERT);
-        }
+        // if (/* this.moduleNumber == 0 || */ this.moduleNumber == 2) {  // Noticed that drive motor at swerve 0 is not behaving properly
+        //     this.driveMotor.setInverted(!Constants.Swerve.DRIVE_INVERT);
+        // }
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {

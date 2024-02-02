@@ -15,7 +15,7 @@ public final class SwerveAutoConfig {
 
     public static void configureAutoBuilder(SwerveSubsystem swerve) {  
         AutoBuilder.configureHolonomic(
-            swerve::currentPoseDebug, 
+            swerve::currentPose, 
             swerve::setCurrentPose,
             swerve::getRobotRelativeSpeeds, 
             swerve::driveRobotRelative, 
