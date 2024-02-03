@@ -120,11 +120,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    double x = 15.79;
-    double y = 1.90;
-    double r = 125.0;
-    //Command pathfindAuto = new PathfindAuto(swerveSubsystem, new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
-    // Command pathFollowAuto = new FetchPath("paths/New Path").getCommand();
     return this.autoChooser.getSelected(); 
     
   }

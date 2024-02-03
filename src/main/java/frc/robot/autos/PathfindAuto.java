@@ -5,12 +5,9 @@ import java.lang.reflect.Field;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
@@ -24,7 +21,7 @@ public class PathfindAuto {
     private PathConstraints constraints;
 
     @AutoLogOutput(key = "Swerve/TargetPose")
-    private Pose2d targetPose; 
+    public Pose2d targetPose; 
     
     public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose) { 
         this.targetPose = targetPose;
