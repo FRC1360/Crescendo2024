@@ -4,8 +4,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Swerve.AutoConstants;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -34,12 +32,9 @@ public class AlignToPose extends Command {
 
     @Override
     public void execute() {
-        System.out.print("Aligning to pose: ");
-        System.out.println(target);
-
         Transform2d error = target.minus(swerveSubsystem.currentPose());
         double driveOutput = drivePid.calculate(error.getTranslation().getNorm(), 0);
-        double angleOutput = anglePid.calculate(error.getRotation().getRadians()); // Drive takes radians per second
+        double angleOutput = anglePid.calculate(error.getRotation().getRadians());
         swerveSubsystem.drive(error.getTranslation().times(driveOutput), angleOutput, true, false);
         
         done = error.getRotation().getRadians() < AutoConstants.angleTolerance && error.getTranslation().getNorm() < AutoConstants.positionTolerance;
@@ -52,7 +47,6 @@ public class AlignToPose extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // stop
         swerveSubsystem.drive(new Translation2d(), 0, true, true);
     }
 }

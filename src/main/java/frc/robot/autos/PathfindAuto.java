@@ -2,6 +2,8 @@ package frc.robot.autos;
 
 import java.lang.reflect.Field;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
@@ -19,13 +21,13 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class PathfindAuto {
 
     private SwerveSubsystem swerveSubsystem;
-    private Pose2d targetPose; 
     private PathConstraints constraints;
-    private Field2d target = new Field2d();
+
+    @AutoLogOutput(key = "Swerve/TargetPose")
+    private Pose2d targetPose; 
     
     public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose) { 
-        this.targetPose = targetPose; 
-        target.setRobotPose(targetPose);
+        this.targetPose = targetPose;
 
         this.swerveSubsystem = swerveSubsystem; 
 
@@ -39,8 +41,7 @@ public class PathfindAuto {
         return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
         .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 20, AutoConstants.angleTolerance * 10))
         .alongWith(new InstantCommand(() -> System.out.println(this.targetPose)))
-        .alongWith(new InstantCommand(() -> SmartDashboard.putData("Target pose", this.target)))
         .andThen(new AlignToPose(this.swerveSubsystem, targetPose))
-        .finallyDo(() -> SmartDashboard.putData("Target pose", new Field2d()));
+        .finallyDo(() -> targetPose = new Pose2d()); // dont forget to reset target after ur done
     }
 }

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
@@ -127,6 +128,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
+  @AutoLogOutput(key = "Swerve/ModuleStates")
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModuleCustom mod : swerveModules) {
@@ -170,6 +172,7 @@ public class SwerveSubsystem extends SubsystemBase {
     setCoR(new Translation2d());
   }
 
+  @AutoLogOutput(key = "Swerve/CurrentPose")
   public Pose2d currentPose() {
     return swerveDrivePoseEstimator.getEstimatedPosition();
   }
@@ -204,9 +207,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) { 
-    // System.out.println("driving x: " + speeds.vxMetersPerSecond + " y: " + speeds.vyMetersPerSecond + " omega: " + speeds.omegaRadiansPerSecond); 
-    // make field relative? 
-    // System.out.println("gyro: " +  navX.getYaw() + "pose estimator: " + swerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees()); 
     this.drive(new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond), speeds.omegaRadiansPerSecond, false, false);
   }
 
@@ -226,14 +226,16 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("NavX pitch", navX.getPitch().getDegrees());
     SmartDashboard.putNumber("NavX roll", navX.getRoll().getDegrees());
 
+    Logger.recordOutput("NavX/Yaw", navX.getYaw().getDegrees());
+    Logger.recordOutput("NavX/Pitch", navX.getPitch().getDegrees());
+    Logger.recordOutput("NavX/Roll", navX.getRoll().getDegrees());
+
     for (SwerveModuleCustom module : swerveModules) {
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " angle", module.getCanCoder().getDegrees());
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " target  ", module.targetAngle);
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "speed", module.getSpeed());
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "target speed", module.targetSpeed);
     }
-
-    Logger.recordOutput("Swerve Module States", getStates());
 
     // Estimator update 
     swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());

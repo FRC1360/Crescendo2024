@@ -1,5 +1,7 @@
 package frc.lib.util;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,6 +33,7 @@ public class NavX {
         return inverted;
     }
 
+    @AutoLogOutput(key = "Swerve/NavX/Yaw")
     public Rotation2d getYaw() {
         return Rotation2d.fromDegrees(
                 inverted
@@ -38,10 +41,12 @@ public class NavX {
                         : gyro.getFusedHeading() - yawOffset);
     }
 
+    @AutoLogOutput(key = "Swerve/NavX/Pitch")
     public Rotation2d getPitch() {
         return Rotation2d.fromDegrees(gyro.getPitch() - pitchOffset);
     }
 
+    @AutoLogOutput(key = "Swerve/NavX/Roll")
     public Rotation2d getRoll() {
         return Rotation2d.fromDegrees(gyro.getRoll() - rollOffset);
     }
