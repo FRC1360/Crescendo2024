@@ -58,7 +58,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // This units are deg / second for velocity and deg / sec^2 for acceleration
         this.ACPUpMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 350.0); 
         this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0);
-        this.targetAngle = Constants.ACPConstants.HOME_POSITION_ACP;
+        this.targetAngle = Constants.HOME_POSITION_ACP;
 
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
         this.ACPMotorSlave = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_SLAVE, MotorType.kBrushless); 
@@ -247,7 +247,24 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         movePIDController.kI = SmartDashboard.getNumber("ACPMoveKi", movePIDController.kI);
         movePIDController.kD = SmartDashboard.getNumber("ACPMoveKd", movePIDController.kD);
         ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
-
-        System.out.println(movePIDController.kP);
     }
+
+    public boolean getInIntakePosition() {
+        return this.inIntakePosition;
+    }
+
+    public void setInIntakePosition(boolean inIntakePosition) {
+        this.inIntakePosition = inIntakePosition;
+    }
+
+    public class ArmShintakeMessenger {
+        public double getACPAngle() {
+            return ArmChassisPivotSubsystem.this.getACPAngle();
+        } 
+
+        public double getTargetAngle() {
+            return ArmChassisPivotSubsystem.this.getTargetAngle();
+        }
+    }
+
 }

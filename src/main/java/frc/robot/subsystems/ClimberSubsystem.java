@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +17,6 @@ public class ClimberSubsystem extends SubsystemBase {
 private final CANSparkMax m_climbMotorLead;
 private final CANSparkMax m_climbMotorSlave;
 private OrbitPID heightPID;
-private double targetHeight;
 private Boolean isExtended = false;
 
 public ClimberSubsystem() {
@@ -33,20 +31,6 @@ public ClimberSubsystem() {
 
   m_climbMotorSlave.follow(m_climbMotorLead);
 }
-
-/*public RelativeEncoder getRelativeClimbEncoder() {
-  return m_climbMotorLead.getEncoder();
-}
-
-public CANSparkMax getClimbMotor() {
-  return m_climbMotorLead;
-}
-
-public CANSparkMax getClimbMotorInverted() {
-  final CANSparkMax m_climbMotorInverted = m_climbMotorLead;
-  m_climbMotorInverted.setInverted(true);
-  return m_climbMotorInverted;
-}*/
 
 public void setEncoderPosition(double pos){
   m_climbMotorLead.getEncoder().setPosition(pos);
