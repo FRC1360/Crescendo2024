@@ -14,8 +14,8 @@ public class AlignToPose extends Command {
     
     private SwerveSubsystem swerveSubsystem;
     private Pose2d target;
-    private PIDController drivePid = new PIDController(5, 0, 0);
-    private PIDController anglePid = new PIDController(5, 0, 0);
+    private PIDController drivePid = new PIDController(0.8, 0, 0);
+    private PIDController anglePid = new PIDController(1.5, 0, 0);
     private boolean done = false;   
 
     public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target) {
@@ -37,10 +37,19 @@ public class AlignToPose extends Command {
         System.out.print("Aligning to pose: ");
         System.out.println(target);
 
+        System.out.print("Current: "); 
+
         Transform2d error = target.minus(swerveSubsystem.currentPose());
-        double driveOutput = drivePid.calculate(error.getTranslation().getNorm(), 0);
-        double angleOutput = anglePid.calculate(error.getRotation().getRadians()); // Drive takes radians per second
-        swerveSubsystem.drive(error.getTranslation().times(driveOutput), angleOutput, true, false);
+        double driveOutput = drivePid.calculate(error.getTranslation().getNorm(), 0.0);
+        double angleOutput = anglePid.calculate(error.getRotation().getRadians(), 0.0); // Drive takes radians per second
+        swerveSubsystem.drive(new Translation2d(error.getTranslation().getX()  * (driveOutput), 0
+           // error.getTranslation().getY() * (driveOutput)
+            ),
+             angleOutput, true, false);
+        //System.out.println("Drive" + error.getTranslation().times(driveOutput)); 
+        //System.out.println("Angle" + angleOutput); 
+
+        System.out.println("Current Pose: " + swerveSubsystem.currentPose()); 
         
         done = error.getRotation().getRadians() < AutoConstants.angleTolerance && error.getTranslation().getNorm() < AutoConstants.positionTolerance;
     }
