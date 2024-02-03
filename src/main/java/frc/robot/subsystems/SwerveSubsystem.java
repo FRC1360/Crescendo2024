@@ -263,7 +263,7 @@ public class SwerveSubsystem extends SubsystemBase {
     lastVisionEstimate = result.isPresent();
 
     field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
-    SmartDashboard.putData(field);
+    SmartDashboard.putData("Robot pose", field);
 
     // get speed
     long currentTime = System.currentTimeMillis();

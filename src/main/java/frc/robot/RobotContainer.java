@@ -153,9 +153,9 @@ public class RobotContainer {
     double x = 15.79;
     double y = 1.90;
     double r = 125.0;
-    Command pathfindAuto = new PathfindAuto(swerveSubsystem, new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
+    //Command pathfindAuto = new PathfindAuto(swerveSubsystem, new Pose2d(x, y, Rotation2d.fromDegrees(r))).getCommand();
     // Command pathFollowAuto = new FetchPath("paths/New Path").getCommand();
-    return pathfindAuto;//.andThen(pathFollowAuto);
+    return this.autoChooser.getSelected(); 
     
   }
 
