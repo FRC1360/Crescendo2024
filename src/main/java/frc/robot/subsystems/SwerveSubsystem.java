@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 // import org.photonvision.EstimatedRobotPose;
@@ -231,6 +232,8 @@ public class SwerveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "speed", module.getSpeed());
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "target speed", module.targetSpeed);
     }
+
+    Logger.recordOutput("Swerve Module States", getStates());
 
     // Estimator update 
     swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
