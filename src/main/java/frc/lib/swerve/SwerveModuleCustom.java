@@ -1,5 +1,7 @@
 package frc.lib.swerve;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -42,7 +44,11 @@ public class SwerveModuleCustom {
     public final PIDConstants anglePID;
     public final SimpleMotorFeedforward driveSVA;
     public SimpleMotorFeedforward feedforward;
+
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/TargetSpeed")
     public double targetSpeed = 0;
+
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/TargetAngle")
     public double targetAngle = 0;
 
     public SwerveModuleCustom(int moduleNumber, SwerveModuleConstants moduleConstants) {
@@ -170,10 +176,12 @@ public class SwerveModuleCustom {
         lastAngle = angle.getDegrees() - angle.getDegrees() % 360;
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/AbsAngle")
     public Rotation2d getCanCoder() {
         return Rotation2d.fromDegrees(this.angleEncoder.getAbsolutePosition());
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/Angle")
     public Rotation2d getAngle() {
         return Rotation2d.fromDegrees(this.integratedAngleEncoder.getPosition());
     }
@@ -182,6 +190,7 @@ public class SwerveModuleCustom {
         return new SwerveModuleState(this.getSpeed(), this.getAngle());
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/Speed")
     public double getSpeed() {
         return this.driveEncoder.getVelocity();
     }

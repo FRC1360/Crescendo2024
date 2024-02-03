@@ -221,14 +221,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Data
-    SmartDashboard.putNumber("NavX Yaw", navX.getYaw().getDegrees());
-    SmartDashboard.putNumber("NavX pitch", navX.getPitch().getDegrees());
-    SmartDashboard.putNumber("NavX roll", navX.getRoll().getDegrees());
-
-    Logger.recordOutput("NavX/Yaw", navX.getYaw().getDegrees());
-    Logger.recordOutput("NavX/Pitch", navX.getPitch().getDegrees());
-    Logger.recordOutput("NavX/Roll", navX.getRoll().getDegrees());
 
     for (SwerveModuleCustom module : swerveModules) {
       SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " angle", module.getCanCoder().getDegrees());
