@@ -34,6 +34,8 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
+    loggerInit();
+
     m_robotContainer = new RobotContainer();
     Pathfinding.setPathfinder(new LocalADStar());
     m_robotContainer.loadAllAutos();
