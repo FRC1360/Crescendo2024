@@ -40,6 +40,7 @@ public class PathfindAuto {
         .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 20, AutoConstants.angleTolerance * 10))
         .alongWith(new InstantCommand(() -> System.out.println(this.targetPose)))
         .alongWith(new InstantCommand(() -> SmartDashboard.putData("Target pose", this.target)))
-        .andThen(new AlignToPose(this.swerveSubsystem, targetPose));
+        .andThen(new AlignToPose(this.swerveSubsystem, targetPose))
+        .finallyDo(() -> SmartDashboard.putData("Target pose", new Field2d()));
     }
 }
