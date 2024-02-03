@@ -31,7 +31,7 @@ public class PathfindAuto {
 
     public Command getCommand() {
         return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
-        .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 2, AutoConstants.angleTolerance * 2))
+        .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 20, AutoConstants.angleTolerance * 10))
         .alongWith(new InstantCommand(() -> System.out.println(this.targetPose)))
         .andThen(new AlignToPose(this.swerveSubsystem, targetPose));
     }

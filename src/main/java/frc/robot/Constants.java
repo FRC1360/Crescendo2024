@@ -48,7 +48,7 @@ public final class Constants {
                             Units.inchesToMeters(16)), //forward is positive X, left is positive Y, and up is positive Z.
                         new Rotation3d(
                                 0, 
-                                Math.toRadians(27.0),
+                                Math.toRadians(-32.0),
                                 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final String cameraName = "Camera_Module_v1";
