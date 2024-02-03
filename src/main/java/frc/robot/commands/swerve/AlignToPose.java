@@ -36,8 +36,7 @@ public class AlignToPose extends Command {
         double driveOutput = drivePid.calculate(error.getTranslation().getNorm(), 0);
         double angleOutput = anglePid.calculate(error.getRotation().getRadians());
         swerveSubsystem.drive(error.getTranslation().times(driveOutput), angleOutput, true, false);
-        
-        done = error.getRotation().getRadians() < AutoConstants.angleTolerance && error.getTranslation().getNorm() < AutoConstants.positionTolerance;
+        done = Math.abs(error.getRotation().getRadians()) < AutoConstants.angleTolerance && error.getTranslation().getNorm() < AutoConstants.positionTolerance;
     }
 
     @Override

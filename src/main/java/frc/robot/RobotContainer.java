@@ -102,11 +102,10 @@ public class RobotContainer {
 
     left_controller.button(1).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
 
-    left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
-
-    // left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
-
-    left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand()); 
+    left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand());
+    left_controller.button(3).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand());
+    left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand());
+    left_controller.button(5).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_STAGE_RIGHT).getCommand());
 
     left_controller.button(7).onTrue(new InstantCommand(swerveSubsystem::brake)); 
 

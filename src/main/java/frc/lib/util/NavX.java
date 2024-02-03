@@ -34,21 +34,32 @@ public class NavX {
     }
 
     @AutoLogOutput(key = "Swerve/NavX/Yaw")
-    public Rotation2d getYaw() {
-        return Rotation2d.fromDegrees(
-                inverted
-                        ? 360 - (gyro.getFusedHeading() - yawOffset)
-                        : gyro.getFusedHeading() - yawOffset);
+    public double getYawDegrees() {
+        return inverted
+                ? 360 - (gyro.getFusedHeading() - yawOffset)
+                : gyro.getFusedHeading() - yawOffset;
     }
 
     @AutoLogOutput(key = "Swerve/NavX/Pitch")
-    public Rotation2d getPitch() {
-        return Rotation2d.fromDegrees(gyro.getPitch() - pitchOffset);
+    public double getPitchDegrees() {
+        return gyro.getPitch() - pitchOffset;
     }
 
     @AutoLogOutput(key = "Swerve/NavX/Roll")
+    public double getRollDegrees() {
+        return gyro.getRoll() - rollOffset;
+    }
+
+    public Rotation2d getYaw() {
+        return Rotation2d.fromDegrees(getYawDegrees());
+    }
+
+    public Rotation2d getPitch() {
+        return Rotation2d.fromDegrees(getPitchDegrees());
+    }
+
     public Rotation2d getRoll() {
-        return Rotation2d.fromDegrees(gyro.getRoll() - rollOffset);
+        return Rotation2d.fromDegrees(getRollDegrees());
     }
 
     public void resetGyro() {

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -46,9 +47,11 @@ public class Robot extends LoggedRobot {
   private void loggerInit() {
     Logger.recordMetadata("ProjectName", "Crescendo2024");
     
-    Logger.addDataReceiver(new WPILOGWriter());
+    // Logger.addDataReceiver(new WPILOGWriter());
     Logger.addDataReceiver(new NT4Publisher());
     new PowerDistribution(1, ModuleType.kRev);
+
+    AutoLogOutputManager.addPackage("frc.lib");
 
     Logger.start();
   }
