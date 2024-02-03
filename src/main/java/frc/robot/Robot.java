@@ -34,18 +34,21 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-
-    Logger.addDataReceiver(new WPILOGWriter());
-    Logger.addDataReceiver(new NT4Publisher());
-    new PowerDistribution(1, ModuleType.kRev);
-
     m_robotContainer = new RobotContainer();
     Pathfinding.setPathfinder(new LocalADStar());
     m_robotContainer.loadAllAutos();
 
     m_robotContainer.initalizeAutoChooser();
+  }
+
+  private void loggerInit() {
+    Logger.recordMetadata("ProjectName", "Crescendo2024");
+    
+    Logger.addDataReceiver(new WPILOGWriter());
+    Logger.addDataReceiver(new NT4Publisher());
+    new PowerDistribution(1, ModuleType.kRev);
+
+    Logger.start();
   }
 
   /**
