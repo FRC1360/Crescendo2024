@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,6 +22,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private CANSparkFlex m_left = new CANSparkFlex(37, MotorType.kBrushless);
+  private CANSparkFlex m_right = new CANSparkFlex(38, MotorType.kBrushless);
+  private CANSparkMax m_intake = new CANSparkMax(35, MotorType.kBrushless);
+  private DigitalInput sensor = new DigitalInput(9);
+  private Counter counter = new Counter(sensor);
 
   private RobotContainer m_robotContainer;
 
@@ -77,11 +88,32 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+  
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_right.set(0.9);
+    m_left.set(-0);
+    m_intake.setOpenLoopRampRate(0);
+    
+    int count = counter.get();
+    //counter.reset();
+  
+    if (count == 0){
+        m_intake.set(-0.4);
+    //  }else if(counter.get() >= 5000){
+    //    m_intake.set(0.4);
+    //}else{
+    //  m_intake.set(0);
+      
+    }
+    System.out.println("note: "+ counter.get());
+    
+
+
+  }
 
   @Override
   public void testInit() {
