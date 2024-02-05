@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Lineup"
+            "pathName": "Amp Lineup Amp Line"
           }
         },
         {
@@ -26,6 +26,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Amp",
   "choreoAuto": false
 }

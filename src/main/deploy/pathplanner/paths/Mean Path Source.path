@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.48389798907257386,
-        "y": 7.271980501407812
+        "x": 0.7284778050297884,
+        "y": 2.119661414786453
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7706267327428273,
-        "y": 7.458941088094942
+        "x": 1.7284778050297889,
+        "y": 1.619661414786453
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.7926220958824899,
-        "y": 7.53592485908376
+        "x": 7.731558059400072,
+        "y": 0.8666019043845435
       },
       "prevControl": {
-        "x": 0.9677959781451477,
-        "y": 7.425948043385449
+        "x": 6.841534481920679,
+        "y": 0.6206743369231325
+      },
+      "nextControl": {
+        "x": 8.536880811670137,
+        "y": 1.0891252964591667
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.836955588312106,
+        "y": 7.225586148743903
+      },
+      "prevControl": {
+        "x": 7.586955588312106,
+        "y": 8.725586148743899
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 89.0122396003602,
+    "rotation": 55.12467165587352,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Mean Paths",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

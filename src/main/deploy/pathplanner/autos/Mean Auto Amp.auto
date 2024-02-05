@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5168910337820676,
-      "y": 7.337966590826799
+      "x": 0.4721592269660398,
+      "y": 7.225586148743903
     },
     "rotation": 0
   },
@@ -14,18 +14,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker Lineup"
+            "pathName": "Amp Lineup Amp Line"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to midfield"
+            "pathName": "Mean Path Amp"
           }
         }
       ]
     }
   },
-  "folder": "Speaker",
+  "folder": "Amp",
   "choreoAuto": false
 }
