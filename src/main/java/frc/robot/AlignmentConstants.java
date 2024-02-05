@@ -12,7 +12,7 @@ public class AlignmentConstants {
     // BLUE ALLIANCE!!!
     
     public static final Pose2d BLUE_SOURCE = new Pose2d(15.12, 1.81, Rotation2d.fromDegrees(-60.95)); // ID 1 & 2
-    public static final Pose2d BLUE_AMP = new Pose2d(1.82, 7.30, Rotation2d.fromDegrees(-90.0)); // ID 6
+    public static final Pose2d BLUE_AMP = new Pose2d(1.82, 7.30, Rotation2d.fromDegrees(90.0)); // ID 6
 
     public static final Pose2d BLUE_SPEAKER = new Pose2d(1.82, 5.53, Rotation2d.fromDegrees(-180.0)); // ID 7 & 8
 
