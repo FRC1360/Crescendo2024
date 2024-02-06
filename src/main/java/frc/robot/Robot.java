@@ -85,8 +85,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+	counter.reset();
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    	m_autonomousCommand.cancel();
     }
   
   }
@@ -94,20 +95,19 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_right.set(0.9);
-    m_left.set(-0);
+    m_right.set(0.75);
+    m_left.set(-0.95);
     m_intake.setOpenLoopRampRate(0);
     
     int count = counter.get();
-    //counter.reset();
-  
-    if (count == 0){
-        m_intake.set(-0.4);
-    //  }else if(counter.get() >= 5000){
-    //    m_intake.set(0.4);
-    //}else{
-    //  m_intake.set(0);
-      
+  	System.out.println(count);
+    if (count == 0) {
+        m_intake.set(-0.25);
+    } else if (count >= 600000) {
+       m_intake.set(-1);
+    }
+    else {
+      m_intake.set(0); 
     }
     System.out.println("note: "+ counter.get());
     

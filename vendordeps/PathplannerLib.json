@@ -1,38 +1,57 @@
 {
-    "fileName": "PathplannerLib.json",
-    "name": "PathplannerLib",
-    "version": "2024.1.1",
-    "uuid": "1b42324f-17c6-4875-8e77-1c312bc8c786",
+    "fileName": "photonlib.json",
+    "name": "photonlib",
+    "version": "v2024.2.0",
+    "uuid": "515fe07e-bfc6-11fa-b3de-0242ac130004",
     "frcYear": "2024",
     "mavenUrls": [
-        "https://3015rangerrobotics.github.io/pathplannerlib/repo"
+        "https://maven.photonvision.org/repository/internal",
+        "https://maven.photonvision.org/repository/snapshots"
     ],
-    "jsonUrl": "https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json",
-    "javaDependencies": [
-        {
-            "groupId": "com.pathplanner.lib",
-            "artifactId": "PathplannerLib-java",
-            "version": "2024.1.1"
-        }
-    ],
+    "jsonUrl": "https://maven.photonvision.org/repository/internal/org/photonvision/photonlib-json/1.0/photonlib-json-1.0.json",
     "jniDependencies": [],
     "cppDependencies": [
         {
-            "groupId": "com.pathplanner.lib",
-            "artifactId": "PathplannerLib-cpp",
-            "version": "2024.1.1",
-            "libName": "PathplannerLib",
+            "groupId": "org.photonvision",
+            "artifactId": "photonlib-cpp",
+            "version": "v2024.2.0",
+            "libName": "photonlib",
             "headerClassifier": "headers",
-            "sharedLibrary": false,
+            "sharedLibrary": true,
             "skipInvalidPlatforms": true,
             "binaryPlatforms": [
                 "windowsx86-64",
-                "linuxx86-64",
-                "osxuniversal",
                 "linuxathena",
-                "linuxarm32",
-                "linuxarm64"
+                "linuxx86-64",
+                "osxuniversal"
             ]
+        },
+        {
+            "groupId": "org.photonvision",
+            "artifactId": "photontargeting-cpp",
+            "version": "v2024.2.0",
+            "libName": "photontargeting",
+            "headerClassifier": "headers",
+            "sharedLibrary": true,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "windowsx86-64",
+                "linuxathena",
+                "linuxx86-64",
+                "osxuniversal"
+            ]
+        }
+    ],
+    "javaDependencies": [
+        {
+            "groupId": "org.photonvision",
+            "artifactId": "photonlib-java",
+            "version": "v2024.2.0"
+        },
+        {
+            "groupId": "org.photonvision",
+            "artifactId": "photontargeting-java",
+            "version": "v2024.2.0"
         }
     ]
 }
