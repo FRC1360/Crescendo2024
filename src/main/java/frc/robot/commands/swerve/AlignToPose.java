@@ -44,7 +44,7 @@ public class AlignToPose extends Command {
 
         System.out.println("Current angle: " + currentAngle + " Target Angle: " + targetAngle); 
 
-        // Negated because a positive rotation is perceived as going right CW (for the joysticks)
+        // Negated because a positive rotation is perceived as going CW (for the joysticks)
         // But robot angle is positive rotating CCW
         double angleOutput = -anglePid.calculate(currentAngle, targetAngle); 
 
