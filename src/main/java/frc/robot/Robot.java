@@ -9,10 +9,13 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.units.Power;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,11 +52,13 @@ public class Robot extends LoggedRobot {
     
     // Logger.addDataReceiver(new WPILOGWriter());
     Logger.addDataReceiver(new NT4Publisher());
-    new PowerDistribution(1, ModuleType.kRev);
+    PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
 
     AutoLogOutputManager.addPackage("frc.lib");
 
+    Logger.registerURCL(URCL.startExternal());
     Logger.start();
+    DataLogManager.start();
   }
 
   /**
