@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 // import org.photonvision.EstimatedRobotPose;
@@ -19,14 +17,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
-import frc.lib.util.PIDConstants;
 import frc.robot.Constants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swerve.SwerveAutoConfig;
 import swervelib.math.SwerveModuleState2;
 
@@ -35,16 +29,15 @@ public class SwerveSubsystem extends SubsystemBase {
   private SwerveModuleCustom[] swerveModules;
   private Translation2d centerOfRotation = new Translation2d();
   private final SwerveDrivePoseEstimator swerveDrivePoseEstimator;
-  private final Field2d field = new Field2d();
 
   private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
   private long lastPoseTimestamp = System.currentTimeMillis();
-  public Translation2d currentSpeed = new Translation2d(0, 0);
-  private PIDConstants anglePID = Constants.Swerve.anglePID; 
 
-  private PhotonCameraWrapper pCameraWrapper; 
-  private boolean lastVisionEstimate = false;
+  private PhotonCameraWrapper pCameraWrapper;
 
+  @AutoLogOutput(key = "Swerve/CurrentVelocity")
+  public Translation2d currentVelocity = new Translation2d(0, 0);
+  
   public SwerveSubsystem() {
     // Gyro setup
     navX = new NavX();
@@ -60,10 +53,8 @@ public class SwerveSubsystem extends SubsystemBase {
     };
 
     // Pose estimator
-    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, navX.getYaw(),
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, navX.getYawRadians(),
         getPositions(), new Pose2d());
-
-    this.anglePID.sendDashboard("angle pid");
 
     // Configure the AutoBuilder that handles all the auto path following!!
     //SwerveAutoConfig.configureAutoBuilder(this);
@@ -78,7 +69,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-
     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -87,13 +77,11 @@ public class SwerveSubsystem extends SubsystemBase {
                 swerveDrivePoseEstimator.getEstimatedPosition().getRotation())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation),
         this.centerOfRotation);
-    // Get rid of tiny tiny movements in the wheels to have more consistent driving
-    // experience
+    // Get rid of tiny tiny movements in the wheels to have more consistent driving experience
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
     // set the states for each module
     for (SwerveModuleCustom mod : swerveModules) {
-      // System.out.println("Swerve Module #" + mod.moduleNumber + " angle: " + mod.targetAngle + " speed : " + mod.targetSpeed); 
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
@@ -177,6 +165,8 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrivePoseEstimator.getEstimatedPosition();
   }
 
+  // use this to check if stuff like pathfinding is working properly
+  // this has a log output so you can see if its actually calling the method
   public Pose2d currentPoseDebug() {
     System.out.print("Got pose from swerve subsystem: ");
     System.out.println(swerveDrivePoseEstimator.getEstimatedPosition());
@@ -189,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void setCurrentPose(Pose2d newPose) {
     swerveDrivePoseEstimator.resetPosition(
-        navX.getYaw(),
+        navX.getYawRadians(),
         getPositions(), 
         newPose);
   }
@@ -221,61 +211,24 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    for (SwerveModuleCustom module : swerveModules) {
-      SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " angle", module.getCanCoder().getDegrees());
-      SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + " target  ", module.targetAngle);
-      SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "speed", module.getSpeed());
-      SmartDashboard.putNumber("Swerve Module #" + module.moduleNumber + "target speed", module.targetSpeed);
-    }
-
     // Estimator update 
-    swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
+    swerveDrivePoseEstimator.update(navX.getYawRadians(), getPositions());
     Pose2d odoPose = swerveDrivePoseEstimator.getEstimatedPosition();
     
+    // Vision update
     Optional<EstimatedRobotPose> result = pCameraWrapper.getEstimatedGlobalPose(odoPose);
-
     if (result.isPresent()) {
         double timestamp = result.get().timestampSeconds;
         Pose2d camPose = result.get().estimatedPose.toPose2d();
-        boolean update = false;
-        
-        if(lastVisionEstimate) { 
-          // if we had a vision estimate last frame
-          // check if the new one is really far off from the current robot pose
-          // if it is, don't update, it's probably noise
-          if(camPose.minus(odoPose).getTranslation().getNorm() < VisionConstants.maxNoiseError) {
-            update = true;
-          }
-        } 
-        else { 
-          // if we didn't have a vision estimate last time, we need to update from the camera
-          update = true;
-        }
-
-        if(update){
-          swerveDrivePoseEstimator.addVisionMeasurement(camPose, timestamp);
-        }
+        swerveDrivePoseEstimator.addVisionMeasurement(camPose, timestamp);
     }
-    lastVisionEstimate = result.isPresent();
 
-    field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
-    SmartDashboard.putData("Robot pose", field);
-
-    // get speed
+    // Calculate current speed
     long currentTime = System.currentTimeMillis();
     long deltaTime = currentTime - lastPoseTimestamp;
-    currentSpeed = new Translation2d((currentPose().getX() - lastPose.getX()) / (deltaTime / 1000d),
+    currentVelocity = new Translation2d((currentPose().getX() - lastPose.getX()) / (deltaTime / 1000d),
         (currentPose().getY() - lastPose.getY()) / (deltaTime / 1000d));
     lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
     lastPoseTimestamp = System.currentTimeMillis();
-
-    SmartDashboard.putNumber("Speed X", currentSpeed.getX());
-    SmartDashboard.putNumber("Speed Y", currentSpeed.getY());
-
-    SmartDashboard.putString("Estimated Pose", this.getFormattedPose());
-
-    navX.updateSD();
   }
-
 }

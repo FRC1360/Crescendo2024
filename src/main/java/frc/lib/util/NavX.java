@@ -33,6 +33,11 @@ public class NavX {
         return inverted;
     }
 
+    @AutoLogOutput(key = "Swerve/NavX/RawYaw")
+    public double getRawYawDegrees() {
+        return gyro.getFusedHeading();
+    }
+
     @AutoLogOutput(key = "Swerve/NavX/Yaw")
     public double getYawDegrees() {
         return inverted
@@ -50,15 +55,15 @@ public class NavX {
         return gyro.getRoll() - rollOffset;
     }
 
-    public Rotation2d getYaw() {
+    public Rotation2d getYawRadians() {
         return Rotation2d.fromDegrees(getYawDegrees());
     }
 
-    public Rotation2d getPitch() {
+    public Rotation2d getPitchRadians() {
         return Rotation2d.fromDegrees(getPitchDegrees());
     }
 
-    public Rotation2d getRoll() {
+    public Rotation2d getRollRadians() {
         return Rotation2d.fromDegrees(getRollDegrees());
     }
 
@@ -67,11 +72,6 @@ public class NavX {
         pitchOffset = gyro.getPitch();
         rollOffset = gyro.getRoll();
         System.out.println("NavX Reset"); 
-    }
-
-    public void updateSD() {
-        SmartDashboard.putNumber("NavX raw Yaw", gyro.getFusedHeading());
-        SmartDashboard.putNumber("Yaw offset", yawOffset);
     }
 
 }
