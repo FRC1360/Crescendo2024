@@ -53,7 +53,7 @@ public class SwerveSubsystem extends SubsystemBase {
     };
 
     // Pose estimator
-    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, navX.getYawRadians(),
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, navX.getYaw(),
         getPositions(), new Pose2d());
 
     // Configure the AutoBuilder that handles all the auto path following!!
@@ -125,6 +125,14 @@ public class SwerveSubsystem extends SubsystemBase {
     return states;
   }
 
+  public SwerveModuleState[] getDesiredStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for (SwerveModuleCustom mod : swerveModules) {
+      states[mod.moduleNumber] = mod.getDesiredState();
+    }
+    return states;
+  }
+
   public SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
 
@@ -179,7 +187,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void setCurrentPose(Pose2d newPose) {
     swerveDrivePoseEstimator.resetPosition(
-        navX.getYawRadians(),
+        navX.getYaw(),
         getPositions(), 
         newPose);
   }
@@ -212,7 +220,7 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Estimator update 
-    swerveDrivePoseEstimator.update(navX.getYawRadians(), getPositions());
+    swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
     Pose2d odoPose = swerveDrivePoseEstimator.getEstimatedPosition();
     
     // Vision update

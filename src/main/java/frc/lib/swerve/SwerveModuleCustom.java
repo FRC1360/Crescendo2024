@@ -52,6 +52,8 @@ public class SwerveModuleCustom {
     @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/TargetAngle")
     public double targetAngle = 0;
 
+    private SwerveModuleState targetState;
+
     public SwerveModuleCustom(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
 
@@ -79,7 +81,6 @@ public class SwerveModuleCustom {
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        // this.updateControllerValues();
         desiredState = OnboardModuleState.optimize(
                 desiredState,
                 getState().angle); // Custom optimize command, since default WPILib optimize assumes
@@ -87,11 +88,16 @@ public class SwerveModuleCustom {
 
         this.setSpeed(desiredState, isOpenLoop);
         this.setAngle(desiredState);
+        this.targetState = desiredState;
     }
 
     public void setDesiredState(SwerveModuleState2 desiredState, boolean isOpenLoop) {
         this.setSpeed(desiredState, isOpenLoop);
         this.setAngle(desiredState);
+    }
+
+    public SwerveModuleState getDesiredState() {
+        return targetState;
     }
 
     public void resetToAbsolute() {
