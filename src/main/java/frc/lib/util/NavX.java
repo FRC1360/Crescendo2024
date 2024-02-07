@@ -55,16 +55,31 @@ public class NavX {
         return gyro.getRoll() - rollOffset;
     }
 
-    public Rotation2d getYawRadians() {
+    public Rotation2d getYaw() {
         return Rotation2d.fromDegrees(getYawDegrees());
     }
 
-    public Rotation2d getPitchRadians() {
+    public Rotation2d getPitch() {
         return Rotation2d.fromDegrees(getPitchDegrees());
     }
 
-    public Rotation2d getRollRadians() {
+    public Rotation2d getRoll() {
         return Rotation2d.fromDegrees(getRollDegrees());
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/AccelX")
+    public double getAccelX() {
+        return gyro.getWorldLinearAccelX();
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/AccelY")
+    public double getAccelY() {
+        return gyro.getWorldLinearAccelY();
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/AccelZ")
+    public double getAccelZ() {
+        return gyro.getWorldLinearAccelZ();
     }
 
     public void resetGyro() {
