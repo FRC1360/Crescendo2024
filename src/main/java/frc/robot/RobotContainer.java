@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.ArmChassisPivotSubsystem;
+//Might need this in the future so don't delete it
+//import frc.robot.subsystems.ArmChassisPivotSubsystem;
 
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.shintake.IntakeCommand;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.shintake.DefaultShintakeCommand;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,9 +30,9 @@ public class RobotContainer {
   // public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   //what is this supposed to be :(
-  public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
+  //public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
 
-  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+  //private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
 
   private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -57,13 +58,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-    //Setting shintake default command
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
-
+    
     left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
     right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
-    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    left_controller.button(7).onTrue(new IntakeCommand(shintakeSubsystem));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
