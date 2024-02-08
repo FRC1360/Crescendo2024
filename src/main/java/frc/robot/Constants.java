@@ -41,36 +41,36 @@ public final class Constants {
     }
 
     // HOME_POSITION
-    public static final double HOME_POSITION_STP = 170.0; // TODO: SET ACTUAL VALUES
-    public static final double HOME_POSITION_ACP = -90.0; // TODO: SET ACTUAL VALUES
+    public static final double HOME_POSITION_STP = 0.0; 
+    public static final double HOME_POSITION_ACP = 0.0; 
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5; // TODO: SET ACTUAL VALUES
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 42.0; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0; 
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 90.0; 
 
-    // NOTE_SCORE_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0; // TODO: SET ACTUAL VALUES
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = -7.5; // TODO: SET ACTUAL VALUES
+    // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0; 
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 60.0; 
 
     // NOTE_SCORE_TRAP_POSITION
-    public static final double NOTE_SCORE_TRAP_POSITION_STP = 130.0; // TODO: SET ACTUAL VALUES
-    public static final double NOTE_SCORE_TRAP_POSITION_ACP = -7.5; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 90.0; // TODO: SET ACTUAL VALUES
 
 	// NOTE_SCORE_DEFENDED_SPEAKER_POSITION
-	public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 130.0; // TODO: SET ACTUAL VALUES
-	public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = -7.5; // TODO: SET ACTUAL VALUES
+	public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 30.0; 
+	public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 90.0; 
 
 	// NOTE_SCORE_PODIUM_SPEAKER_POSITION
-	public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 130.0; // TODO: SET ACTUAL VALUES
-	public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = -7.5; // TODO: SET ACTUAL VALUES
+	public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 0; 
+	public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0; 
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 150.0; // TODO: SET ACTUAL VALUES
-    public static final double SOURCE_POSITION_ACP = -48.0; // TODO: SET ACTUAL VALUES
+    public static final double SOURCE_POSITION_STP = 180; 
+    public static final double SOURCE_POSITION_ACP = 50; 
 
 	// CLIMB_POSITION fix this
-		public static final double CLIMB_POSITION_STP = 0.0; // TODO: SET ACTUAL VALUES
-		public static final double CLIMB_POSITION_ACP = 0.0; // TODO: SET ACTUAL VALUES
+		public static final double CLIMB_POSITION_STP = 180.0; 
+		public static final double CLIMB_POSITION_ACP = 90.0; 
 
     public static class ShintakeConstants {
         public static final int INTAKE_SPEED_BACK = 70;
