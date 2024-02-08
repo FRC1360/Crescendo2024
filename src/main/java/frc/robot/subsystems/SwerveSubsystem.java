@@ -125,6 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return states;
   }
 
+  @AutoLogOutput(key = "Swerve/DesiredModuleStates")
   public SwerveModuleState[] getDesiredStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModuleCustom mod : swerveModules) {

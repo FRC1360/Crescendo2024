@@ -52,7 +52,7 @@ public class SwerveModuleCustom {
     @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/TargetAngle")
     public double targetAngle = 0;
 
-    private SwerveModuleState targetState;
+    private SwerveModuleState targetState = new SwerveModuleState();
 
     public SwerveModuleCustom(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;

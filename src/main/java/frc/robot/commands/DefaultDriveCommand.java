@@ -38,9 +38,9 @@ public class DefaultDriveCommand extends Command {
 
         double rotSpeed = -m_rotationSupplier.getAsDouble();
 
-        double curAngle = m_drivetrainSubsystem.navX.getYawRadians().getDegrees() % 360.0;
+        double curAngle = m_drivetrainSubsystem.navX.getYaw().getDegrees() % 360.0;
 
-        double curAngle2 = (m_drivetrainSubsystem.navX.getYawRadians().getDegrees() + 180.0) % 360.0;
+        double curAngle2 = (m_drivetrainSubsystem.navX.getYaw().getDegrees() + 180.0) % 360.0;
 
         SmartDashboard.putNumber("Default_Drive_Command_Cur_Angle", curAngle);
         // 2 -> 0 (180deg in alternative frame of reference)

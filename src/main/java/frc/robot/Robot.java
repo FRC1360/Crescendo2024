@@ -50,7 +50,7 @@ public class Robot extends LoggedRobot {
   private void loggerInit() {
     Logger.recordMetadata("ProjectName", "Crescendo2024");
     
-    // Logger.addDataReceiver(new WPILOGWriter());
+    Logger.addDataReceiver(new WPILOGWriter());
     Logger.addDataReceiver(new NT4Publisher());
     PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
 
