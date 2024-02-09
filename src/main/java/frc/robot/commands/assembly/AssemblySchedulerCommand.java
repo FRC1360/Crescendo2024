@@ -43,9 +43,11 @@ public class AssemblySchedulerCommand extends Command {
 
                 case PODIUM_RIGHT: 
                     this.assemblyCommand = new PathfindAuto(this.swerveSubsystem, AlignmentConstants.BLUE_STAGE_RIGHT).getCommand(); 
+                    break; 
 
                 case PODIUM_FAR: 
                     this.assemblyCommand = new PathfindAuto(this.swerveSubsystem, AlignmentConstants.BLUE_STAGE_FAR).getCommand();
+                    break; 
 
                 case SUBWOOFER:
                     //this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, sm);
@@ -73,10 +75,12 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case PODIUM_RIGHT: 
-                    this.assemblyCommand = new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_RIGHT).getCommand(); 
+                    this.assemblyCommand = new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_RIGHT).getCommand();
+                    break;  
 
                 case PODIUM_FAR: 
                     this.assemblyCommand = new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_FAR).getCommand();
+                    break; 
 
                 case SUBWOOFER:
                     //this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, sm);
@@ -98,6 +102,11 @@ public class AssemblySchedulerCommand extends Command {
         }
 
         this.assemblyCommand.schedule();
+    }
+
+    @Override
+    public void end(boolean interrupted) { 
+        this.assemblyCommand.cancel();
     }
 
     @Override

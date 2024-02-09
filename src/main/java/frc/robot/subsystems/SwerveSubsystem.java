@@ -215,7 +215,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean isInRange(Pose2d target, double positionTolerance, double angleTolerance) {
     Transform2d error = target.minus(currentPose());
-    return error.getTranslation().getNorm() < positionTolerance; // && error.getRotation().getRadians() < angleTolerance;
+    return error.getX() < positionTolerance && error.getY() < positionTolerance; // && error.getRotation().getRadians() < angleTolerance;
   }
 
   @Override

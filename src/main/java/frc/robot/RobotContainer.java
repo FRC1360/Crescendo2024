@@ -60,8 +60,6 @@ public class RobotContainer {
   
   public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER; 
 
-  public ASSEMBLY_LEVEL CLIMB_LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT; 
-
   public final EventLoop loop = new EventLoop(); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -116,10 +114,10 @@ public class RobotContainer {
 
     // Left controller Button 1 (trigger) will become shoot (outake)
     // Right Controller Button 1 (trigger) will be intake 
-    // left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-    //                                       .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+    left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
+                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
 
-    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.CLIMB_LEVEL, swerveSubsystem)); 
+    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
 
     left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand()); //new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
                                                   //.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
@@ -127,7 +125,7 @@ public class RobotContainer {
     left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
                                                   .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
 
-    left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
+    //left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
 
     // left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
 
@@ -137,9 +135,9 @@ public class RobotContainer {
     right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro)); 
 
     // Debounce makes for more stability
-    new BooleanEvent(loop, operator_controller::getYButton).debounce(0.2).ifHigh(() -> this.CLIMB_LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR);
-    new BooleanEvent(loop, operator_controller::getXButton).debounce(0.2).ifHigh(() -> this.CLIMB_LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT);
-    new BooleanEvent(loop, operator_controller::getBButton).debounce(0.2).ifHigh(() -> this.CLIMB_LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT);
+    new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1).ifHigh(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR);
+    new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1).ifHigh(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT);
+    new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1).ifHigh(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT);
 
   }
 

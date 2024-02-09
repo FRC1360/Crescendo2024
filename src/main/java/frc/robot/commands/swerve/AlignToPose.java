@@ -10,9 +10,9 @@ public class AlignToPose extends Command {
     
     private SwerveSubsystem swerveSubsystem;
     private Pose2d target;
-    private PIDController driveXPid = new PIDController(1.5, 0, 0);
-    private PIDController driveYPid = new PIDController(1.5, 0, 0);
-    private PIDController anglePid = new PIDController(1.5, 0, 0);  
+    private PIDController driveXPid = new PIDController(1.25, 0, 0);
+    private PIDController driveYPid = new PIDController(1.25, 0, 0);
+    private PIDController anglePid = new PIDController(1.25, 0, 0);  
 
     public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target) {
         this.swerveSubsystem = swerveSubsystem;
