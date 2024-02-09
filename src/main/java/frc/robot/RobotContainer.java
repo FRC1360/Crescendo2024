@@ -28,25 +28,26 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem();
+  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   // public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   //what is this supposed to be :(
   //public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
 
-  //private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+  private final ShootSpeakerCommand m_defaultShintakeCommand = new ShootSpeakerCommand(m_shintakeSubsystem);
 
-  private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
-  private final FixCommand fixCommand = new FixCommand(shintakeSubsystem);
+  // private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
+  // private final FixCommand fixCommand = new FixCommand(shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
   private final CommandXboxController xbox_controller = new CommandXboxController(0);
 
-  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  //public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
@@ -63,12 +64,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
     
-    left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
-    xbox_controller.a().whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
-    xbox_controller.b().whileTrue(new FeedCommand(shintakeSubsystem));
-    xbox_controller.x().whileTrue(new IntakeCommand(shintakeSubsystem));
-    xbox_controller.y().whileTrue(new FixCommand(shintakeSubsystem));
-    left_controller.button(7).onTrue(new IntakeCommand(shintakeSubsystem));
+    // left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
+    // xbox_controller.a().whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+    // xbox_controller.b().whileTrue(new FeedCommand(shintakeSubsystem));
+    // xbox_controller.x().whileTrue(new IntakeCommand(shintakeSubsystem));
+    // xbox_controller.y().whileTrue(new FixCommand(shintakeSubsystem));
+    // left_controller.button(7).onTrue(new IntakeCommand(shintakeSubsystem));
+    
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 

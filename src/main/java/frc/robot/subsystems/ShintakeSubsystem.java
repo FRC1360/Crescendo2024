@@ -67,12 +67,12 @@ public class ShintakeSubsystem extends SubsystemBase {
       this.leftWheelPID = m_left.getPIDController();
 
       
-      leftWheelPID.setP(0.0003); // 0.00015 (3 zeros, 1 one, 1 five)
+      leftWheelPID.setP(0.0011); // 0.00015 (3 zeros, 1 one, 1 five)
       // leftWheelPID.setI(kI_Lower.get());
       // leftWheelPID.setD(0.0005); //0.00012
       leftWheelPID.setFF(.0002); //0.0001815 (3 zeros, 1 one, 1 eight, 1 one, 1 five)
 
-      rightWheelPID.setP(0.0003); //0.00003 (4 zeros, 1 three)
+      rightWheelPID.setP(0.0009); //0.00003 (4 zeros, 1 three)
       // rightWheelPID.setI(kI_Upper.get());
       // rightWheelPID.setD(0.0005); // 0.0005 (3 zeros, 1 five)
       rightWheelPID.setFF(0.0002); //0.0001807 (3 zeros, 1 one, 1 eight, 1 zero, 1 seven)
@@ -128,7 +128,7 @@ public class ShintakeSubsystem extends SubsystemBase {
   public void varShoot(double speed) {
     //Set one to negative to side
     m_left.set(speed);
-    m_right.set(-speed);
+    m_right.set(speed);
   }
 
   public boolean getDigitalInput() {
