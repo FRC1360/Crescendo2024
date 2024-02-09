@@ -2,27 +2,36 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shintake;
+package frc.robot.commands.Shintake;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
 
 public class ShootSpeakerCommand extends Command {
 
-  private ShintakeSubsystem m_shooter;
+  private ShintakeSubsystem shooter;
+  private double leftVelo;
+  private double rightVelo;
  
   public ShootSpeakerCommand(ShintakeSubsystem shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this.m_shooter = shooter;
+    this.shooter = shooter;
     addRequirements(shooter);
   }
 
   @Override
   public void initialize() {
-    m_shooter.stopIntake();
-    m_shooter.stopShooter();
+    shooter.stopIntake();
+    shooter.stopShooter();
+
+    SmartDashboard.putNumber("left encoder value", shooter.getVelocityLeft());
+    SmartDashboard.putNumber("right encoder value", shooter.getVelocityRight());
+    SmartDashboard.putNumber("target encoder value", 5676);
+    leftVelo = 5676;
+    rightVelo = 5676;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,17 +40,20 @@ public class ShootSpeakerCommand extends Command {
     //m_shooter.varShoot(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
     //if ((m_shooter.getVelocityLeft() >= 0.49 && m_shooter.getVelocityLeft() <= 0.51) && (m_shooter.getVelocityRight() >= 0.49 && m_shooter.getVelocityRight() <= 0.51)) m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
 
+    shooter.setVelocity(Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_RIGHT_BACK_SPEAKER,Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_LEFT_BACK_SPEAKER);
 
-    m_shooter.setVelocity(2838, 2838);
+    //if (shooter.shooterWheelsReady()) shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+    leftVelo = SmartDashboard.getNumber("Left Velocity", leftVelo);
+    rightVelo = SmartDashboard.getNumber("Right Velocity", rightVelo);
 
-    if (m_shooter.shooterWheelsReady()) m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.stopIntake();
-    m_shooter.stopShooter();
+    shooter.stopIntake();
+    shooter.stopShooter();
   }
 
   // Returns true when the command should end.

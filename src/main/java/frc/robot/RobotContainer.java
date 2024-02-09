@@ -8,8 +8,10 @@ package frc.robot;
 //import frc.robot.subsystems.ArmChassisPivotSubsystem;
 
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.shintake.IntakeCommand;
-import frc.robot.commands.shintake.ShootSpeakerCommand;
+import frc.robot.commands.Shintake.FeedCommand;
+import frc.robot.commands.Shintake.FixCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.Shintake.ShootSpeakerCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,9 +37,11 @@ public class RobotContainer {
   //private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
 
   private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
+  private final FixCommand fixCommand = new FixCommand(shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
+  private final CommandXboxController xbox_controller = new CommandXboxController(0);
 
   public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
@@ -60,7 +64,10 @@ public class RobotContainer {
   private void configureBindings() {
     
     left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
-    right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+    xbox_controller.a().whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+    xbox_controller.b().whileTrue(new FeedCommand(shintakeSubsystem));
+    xbox_controller.x().whileTrue(new IntakeCommand(shintakeSubsystem));
+    xbox_controller.y().whileTrue(new FixCommand(shintakeSubsystem));
     left_controller.button(7).onTrue(new IntakeCommand(shintakeSubsystem));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`

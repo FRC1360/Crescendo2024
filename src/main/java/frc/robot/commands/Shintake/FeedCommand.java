@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
 
-public class IntakeCommand extends Command {
+public class FeedCommand extends Command {
 
   private ShintakeSubsystem m_intake;
   private int count = 0;
 
-  public IntakeCommand(ShintakeSubsystem intake) {
+  public FeedCommand(ShintakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.m_intake = intake;
@@ -32,7 +32,7 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
+    m_intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_FEED_SPEED);
     count = m_intake.getShintakeCount();
     //if (!m_intake.getDigitalInput()) m_intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
     if (!m_intake.getDigitalInput()) m_intake.stopIntake(); 
