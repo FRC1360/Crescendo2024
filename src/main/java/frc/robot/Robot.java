@@ -5,9 +5,11 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.AutoLogOutputManager;
+import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
@@ -48,11 +50,38 @@ public class Robot extends LoggedRobot {
   }
 
   private void loggerInit() {
-    Logger.recordMetadata("ProjectName", "Crescendo2024");
-    
-    Logger.addDataReceiver(new WPILOGWriter());
-    Logger.addDataReceiver(new NT4Publisher());
-    PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        Logger.recordMetadata("GitDirty", "All changes committed");
+        break;
+      case 1:
+        Logger.recordMetadata("GitDirty", "Uncomitted changes");
+        break;
+      default:
+        Logger.recordMetadata("GitDirty", "Unknown");
+        break;
+    }
+
+    if(isReal()) { // real bot
+      Logger.addDataReceiver(new WPILOGWriter());
+      Logger.addDataReceiver(new NT4Publisher());
+      PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
+    }
+    else if(!Constants.isReplay){ // regular sim
+      Logger.addDataReceiver(new NT4Publisher());
+    }
+    else { // replay
+      setUseTiming(false); // Run as fast as possible
+      String logPath = LogFileUtil.findReplayLog();
+      Logger.setReplaySource(new WPILOGReader(logPath));
+      Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+    }
 
     AutoLogOutputManager.addPackage("frc.lib");
 

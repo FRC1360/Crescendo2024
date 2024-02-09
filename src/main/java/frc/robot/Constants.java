@@ -27,9 +27,11 @@ import frc.lib.util.PIDConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final boolean isReplay = true; // only used if sim
+
   public static final int kDriverControllerPort = 0;
 
-  public static class ShintakeConstants{
+  public static class ShintakeConstants {
     public static final int INTAKE_SPEED_BACK = 70;
     public static final int DEFAULT_INTAKE_SPEED = 50;
     public static final int SHOOT_SPEED_FRONT = 100;
