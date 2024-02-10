@@ -83,6 +83,14 @@ public class ShintakeSubsystem extends SubsystemBase {
       m_back.setInverted(false);
     }
 
+    public boolean isSwitchSet() {
+        return m_counter.get() > 0;
+    }
+
+    public void initializeCounter() {
+        m_counter.reset();
+    }
+
     public void setVelocity(double rightVelocity, double leftVelocity) {
         this.leftVelocity = leftVelocity;
         this.rightVelocity = rightVelocity;

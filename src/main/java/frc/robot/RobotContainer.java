@@ -28,13 +28,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
+  //private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   // public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   //what is this supposed to be :(
   //public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
 
-  private final ShootSpeakerCommand m_defaultShintakeCommand = new ShootSpeakerCommand(m_shintakeSubsystem);
+  //private final ShootSpeakerCommand m_defaultShintakeCommand = new ShootSpeakerCommand(m_shintakeSubsystem);
 
   // private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
   // private final FixCommand fixCommand = new FixCommand(shintakeSubsystem);
@@ -47,7 +47,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
+    //m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
