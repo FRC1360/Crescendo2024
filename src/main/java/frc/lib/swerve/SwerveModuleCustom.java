@@ -1,5 +1,7 @@
 package frc.lib.swerve;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -33,8 +35,9 @@ public class SwerveModuleCustom {
     private RelativeEncoder integratedAngleEncoder;
     //public MagEncoder angleEncoder;
     public CANCoderSwerve angleEncoder; 
+
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/LastAngle")
     private double lastAngle;
-    private double angleOffset;
 
     /* Controllers */
     public final SparkPIDController driveController;
@@ -42,13 +45,18 @@ public class SwerveModuleCustom {
     public final PIDConstants anglePID;
     public final SimpleMotorFeedforward driveSVA;
     public SimpleMotorFeedforward feedforward;
+
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/TargetSpeed")
     public double targetSpeed = 0;
+
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/TargetAngle")
     public double targetAngle = 0;
+
+    private SwerveModuleState targetState = new SwerveModuleState();
 
     public SwerveModuleCustom(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
 
-        angleOffset = moduleConstants.angleOffset;
         this.anglePID = moduleConstants.anglePID;
         this.driveSVA = moduleConstants.driveSVA;
 
@@ -72,18 +80,7 @@ public class SwerveModuleCustom {
         lastAngle = getState().angle.getDegrees();
     }
 
-    public void updateDashboardValues() {
-        SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Integrated Encoder",
-                this.getState().angle.getDegrees());
-        SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Mag Encoder",
-                this.getCanCoder().getDegrees());
-        SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Set Point", this.lastAngle);
-        SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + " Drive Encoder Velocity",
-                this.driveEncoder.getVelocity());
-    }
-
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        // this.updateControllerValues();
         desiredState = OnboardModuleState.optimize(
                 desiredState,
                 getState().angle); // Custom optimize command, since default WPILib optimize assumes
@@ -91,11 +88,16 @@ public class SwerveModuleCustom {
 
         this.setSpeed(desiredState, isOpenLoop);
         this.setAngle(desiredState);
+        this.targetState = desiredState;
     }
 
     public void setDesiredState(SwerveModuleState2 desiredState, boolean isOpenLoop) {
         this.setSpeed(desiredState, isOpenLoop);
         this.setAngle(desiredState);
+    }
+
+    public SwerveModuleState getDesiredState() {
+        return targetState;
     }
 
     public void resetToAbsolute() {
@@ -128,10 +130,6 @@ public class SwerveModuleCustom {
         this.feedforward = driveSVA;
         driveMotor.enableVoltageCompensation(12.0);
         driveEncoder.setPosition(0.0);
-
-        // if (/* this.moduleNumber == 0 || */ this.moduleNumber == 2) {  // Noticed that drive motor at swerve 0 is not behaving properly
-        //     this.driveMotor.setInverted(!Constants.Swerve.DRIVE_INVERT);
-        // }
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -145,9 +143,6 @@ public class SwerveModuleCustom {
                     ControlType.kVelocity,
                     0,
                     feedforward.calculate(desiredState.speedMetersPerSecond));
-            // SmartDashboard.putNumber(Constants.Swerve.MODULE_NAMES[this.moduleNumber] + "
-            // Drive Set Velocity",
-            // desiredState.speedMetersPerSecond);
         }
     }
 
@@ -170,10 +165,12 @@ public class SwerveModuleCustom {
         lastAngle = angle.getDegrees() - angle.getDegrees() % 360;
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/AbsAngle")
     public Rotation2d getCanCoder() {
         return Rotation2d.fromDegrees(this.angleEncoder.getAbsolutePosition());
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/Angle")
     public Rotation2d getAngle() {
         return Rotation2d.fromDegrees(this.integratedAngleEncoder.getPosition());
     }
@@ -182,10 +179,12 @@ public class SwerveModuleCustom {
         return new SwerveModuleState(this.getSpeed(), this.getAngle());
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/DriveSpeed")
     public double getSpeed() {
         return this.driveEncoder.getVelocity();
     }
 
+    @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/DriveDistance")
     public double getDistance() {
         return this.driveEncoder.getPosition();
     }
