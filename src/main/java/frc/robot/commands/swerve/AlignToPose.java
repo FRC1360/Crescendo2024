@@ -66,7 +66,6 @@ public class AlignToPose extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // stop
         swerveSubsystem.drive(new Translation2d(), 0, true, true);
     }
 }
