@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 // import org.photonvision.EstimatedRobotPose;
@@ -237,6 +238,7 @@ public class SwerveSubsystem extends SubsystemBase {
     long deltaTime = currentTime - lastPoseTimestamp;
     currentVelocity = new Translation2d((currentPose().getX() - lastPose.getX()) / (deltaTime / 1000d),
         (currentPose().getY() - lastPose.getY()) / (deltaTime / 1000d));
+    Logger.recordOutput("Swerve/Speed", currentVelocity.getNorm());
     lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
     lastPoseTimestamp = System.currentTimeMillis();
   }
