@@ -2,6 +2,16 @@
   "version": "3.0.1",
   "layout": [
     {
+      "type": 2,
+      "fields": [
+        "NT:/SmartDashboard/SCHEDULER GOING TO",
+        "NT:/SmartDashboard/PODIUM_LEFT_SCH",
+        "NT:/SmartDashboard/PODIUM_FAR_SCH",
+        "NT:/SmartDashboard/PODIUM_RIGHT_SCH"
+      ],
+      "title": "Scheduling"
+    },
+    {
       "type": 1,
       "legends": {
         "left": {
@@ -112,6 +122,31 @@
       "title": "Power"
     },
     {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Line Graph"
+    },
+    {
       "type": 5,
       "fields": [],
       "listFields": [
@@ -119,6 +154,12 @@
           {
             "type": "Robot",
             "key": "NT:/AdvantageKit/RealOutputs/Swerve/CurrentPose",
+            "sourceTypeIndex": 1,
+            "sourceType": "Pose2d"
+          },
+          {
+            "type": "Ghost",
+            "key": "NT:/AdvantageKit/RealOutputs/Swerve/TargetPose",
             "sourceTypeIndex": 1,
             "sourceType": "Pose2d"
           }
@@ -136,6 +177,38 @@
       },
       "configHidden": false,
       "title": "Odometry"
+    },
+    {
+      "type": 6,
+      "fields": [],
+      "listFields": [
+        [],
+        [
+          {
+            "type": "Robot",
+            "key": "NT:/AdvantageKit/RealOutputs/Swerve/CurrentPose",
+            "sourceTypeIndex": 1,
+            "sourceType": "Pose2d"
+          },
+          {
+            "type": "Green Ghost",
+            "key": "NT:/AdvantageKit/RealOutputs/Swerve/TargetPose",
+            "sourceTypeIndex": 1,
+            "sourceType": "Pose2d"
+          }
+        ]
+      ],
+      "options": {
+        "field": "2024 Field",
+        "alliance": "blue",
+        "robot": "2024 KitBot",
+        "unitDistance": "meters",
+        "unitRotation": "radians",
+        "cameraIndex": -1,
+        "fov": 50
+      },
+      "configHidden": false,
+      "title": "3D Field"
     },
     {
       "type": 9,
@@ -167,32 +240,6 @@
       },
       "configHidden": false,
       "title": "Swerve"
-    },
-    {
-      "type": 6,
-      "fields": [],
-      "listFields": [
-        [],
-        [
-          {
-            "type": "Robot",
-            "key": "NT:/AdvantageKit/RealOutputs/Swerve/CurrentPose",
-            "sourceTypeIndex": 1,
-            "sourceType": "Pose2d"
-          }
-        ]
-      ],
-      "options": {
-        "field": "2024 Field",
-        "alliance": "blue",
-        "robot": "2024 KitBot",
-        "unitDistance": "meters",
-        "unitRotation": "radians",
-        "cameraIndex": -1,
-        "fov": 50
-      },
-      "configHidden": false,
-      "title": "3D Field"
     }
   ]
 }
