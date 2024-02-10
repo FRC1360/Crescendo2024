@@ -7,11 +7,14 @@ package frc.robot;
 import frc.robot.autos.Autos;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.Shintake.DefaultShintakeCommand;
-import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.LED.ColourChooseCommand;
+import frc.robot.commands.shintake.DefaultShintakeCommand;
+import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -32,8 +35,11 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
+  private final CommandXboxController XboxController = new CommandXboxController(2);
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
 
   public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -56,7 +62,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    leftController.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    XboxController.a().whileTrue( new ColourChooseCommand(ledSubsystem, 0));
+    XboxController.b().whileTrue( new ColourChooseCommand(ledSubsystem, 1));
+    XboxController.x().whileTrue( new ColourChooseCommand(ledSubsystem, 2));
+    XboxController.y().whileTrue( new ColourChooseCommand(ledSubsystem, 3));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
