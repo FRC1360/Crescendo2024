@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
@@ -32,6 +33,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
   private long lastPoseTimestamp = System.currentTimeMillis();
+
+  public boolean manualDrive = false; 
 
   private PhotonCameraWrapper pCameraWrapper;
 
@@ -64,6 +67,10 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveAutoConfig.configureAutoBuilder(this);
   }
 
+  public void toggleManualDrive() { 
+    manualDrive = !manualDrive; 
+  }
+
   public void zeroGyro() { 
     this.navX.resetGyro();
   }
@@ -74,7 +81,7 @@ public class SwerveSubsystem extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 translation.getX(), translation.getY(),
                 -rotation,
-                swerveDrivePoseEstimator.getEstimatedPosition().getRotation())
+                manualDrive ? navX.getYaw() : swerveDrivePoseEstimator.getEstimatedPosition().getRotation())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation),
         this.centerOfRotation);
     // Get rid of tiny tiny movements in the wheels to have more consistent driving experience
@@ -240,5 +247,7 @@ public class SwerveSubsystem extends SubsystemBase {
         (currentPose().getY() - lastPose.getY()) / (deltaTime / 1000d));
     lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
     lastPoseTimestamp = System.currentTimeMillis();
+
+    SmartDashboard.putBoolean("Manual Drive Active", manualDrive); 
   }
 }

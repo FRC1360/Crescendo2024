@@ -117,6 +117,7 @@ public class RobotContainer {
 
     left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem)); 
     right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro)); 
+    right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive)); 
 
     // Debounce makes for more stability
     new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
