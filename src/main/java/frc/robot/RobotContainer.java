@@ -10,6 +10,7 @@ import frc.robot.autos.PathfindAuto;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
+import frc.robot.commands.swerve.LockWheels;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -113,7 +115,7 @@ public class RobotContainer {
 
     //left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand()); 
 
-    left_controller.button(7).onTrue(new InstantCommand(swerveSubsystem::brake)); 
+    left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem)); 
     right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro)); 
 
     // Debounce makes for more stability

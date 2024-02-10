@@ -145,6 +145,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void brake() {
+    System.out.println("Braking"); 
     SwerveModuleState2[] states = new SwerveModuleState2[4];
 
     for (int i = 0; i < 4; i++) {

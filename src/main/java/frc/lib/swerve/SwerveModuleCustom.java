@@ -148,11 +148,14 @@ public class SwerveModuleCustom {
 
     private void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents jittering.
-        double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))
-                ? lastAngle
-                : desiredState.angle
-                        .getDegrees();
 
+        double angle = desiredState.angle.getDegrees();
+        if (desiredState.speedMetersPerSecond != 0.0 
+                && (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))) { 
+                    angle = lastAngle; 
+        }
+
+        //System.out.println("Desired angle: " + angle); 
         angleController.setReference(angle, ControlType.kPosition);
         lastAngle = angle;
         this.targetAngle = angle;
