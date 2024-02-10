@@ -12,6 +12,7 @@ import frc.robot.commands.Shintake.FeedCommand;
 import frc.robot.commands.Shintake.FixCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
 import frc.robot.commands.Shintake.ShootSpeakerCommand;
+import frc.robot.commands.Shintake.testingCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,13 +29,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
+  private final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem();
   // public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   //what is this supposed to be :(
   //public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
 
-  private final ShootSpeakerCommand m_defaultShintakeCommand = new ShootSpeakerCommand(m_shintakeSubsystem);
+  private final ShootSpeakerCommand m_defaultShintakeCommand = new ShootSpeakerCommand(shintakeSubsystem);
 
   // private final IntakeCommand intakeCommand = new IntakeCommand(shintakeSubsystem);
   // private final FixCommand fixCommand = new FixCommand(shintakeSubsystem);
@@ -43,11 +44,13 @@ public class RobotContainer {
   private final CommandJoystick right_controller = new CommandJoystick(1);
   private final CommandXboxController xbox_controller = new CommandXboxController(0);
 
+  private final testingCommand testCmd = new testingCommand(shintakeSubsystem, xbox_controller)
+
   //public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
+    shintakeSubsystem.setDefaultCommand(testCmd);
 
     // Configure the trigger bindings
     configureBindings();

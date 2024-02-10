@@ -7,32 +7,35 @@ package frc.robot.commands.Shintake;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
 
-public class FeedCommand extends Command {
+public class testingCommand extends Command {
 
-  private ShintakeSubsystem m_intake;
+  private ShintakeSubsystem intake;
+  private CommandXboxController xbox;
   private int count = 0;
 
-  public FeedCommand(ShintakeSubsystem intake) {
+  public testingCommand(ShintakeSubsystem intake, CommandXboxController xbox) {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    this.m_intake = intake;
+    this.xbox = xbox;
+    this.intake = intake;
     addRequirements(intake);
   }
 
   @Override
   public void initialize() {
-    m_intake.resetShintakeCount();
-    m_intake.stopShooter();
-    m_intake.stopIntake();
+    intake.resetShintakeCount();
+    intake.stopShooter();
+    intake.stopIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_FEED_SPEED);
+    xbox.x().whileTrue(new FeedCommand(intake));
+    xbox.a().whileTrue(new ShootSpeakerCommand(intake));
     //count = m_intake.getShintakeCount();
     //if (!m_intake.getDigitalInput()) m_intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
     //if (!m_intake.getDigitalInput()) m_intake.stopIntake(); 
@@ -41,14 +44,15 @@ public class FeedCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.stopIntake();
+    intake.stopIntake();
+    intake.stopShooter();
     count = 0;
-    m_intake.resetShintakeCount();
+    intake.resetShintakeCount();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
