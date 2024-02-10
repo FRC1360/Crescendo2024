@@ -8,7 +8,7 @@ package frc.robot;
 //import frc.robot.subsystems.ArmChassisPivotSubsystem;
 
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.shintake.IntakeCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
