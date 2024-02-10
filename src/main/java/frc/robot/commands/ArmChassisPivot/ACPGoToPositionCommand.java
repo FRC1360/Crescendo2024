@@ -88,6 +88,7 @@ public class ACPGoToPositionCommand extends Command {
         SmartDashboard.putNumber("Shoulder_Move_Output", speed); 
 
         this.ACP.setACPNormalizedVoltage(speed);
+
     }
 
     @Override

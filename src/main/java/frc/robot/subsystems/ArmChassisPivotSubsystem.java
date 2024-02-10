@@ -213,6 +213,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         updateAngularVelocity();
+        updateSmartDashboard();
 
         if(!transitioning)
             checkTransitioning();
@@ -221,6 +222,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             transitioning = false;
             this.setScheduledAngle(Double.NaN);
         }
+            //SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
+            //SmartDashboard.putNumber("Target Angle: ", true);
+
     }
 
     public void updateSmartDashboard() {

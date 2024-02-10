@@ -10,13 +10,17 @@ import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
 
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
+import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
 import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
+  //private final ArmChassisPivotSubsystem m_armChassisPivotSubsystem = new ArmChassisPivotSubsystem(null, null);
 
   //what is this supposed to be :(
   public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
@@ -34,13 +39,15 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
-
+  private final CommandXboxController XboxController = new CommandXboxController(2); 
   public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
+    ACPSubsystem.setDefaultCommand(new ACPMoveManual(ACPSubsystem, ()-> XboxController.getLeftY()));
+    
     // Configure the trigger bindings
     configureBindings();
   }
@@ -57,6 +64,10 @@ public class RobotContainer {
   private void configureBindings() {
 
     left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+    XboxController.b().onTrue(new ACPGoToPositionCommand(ACPSubsystem, Constants.ACPConstants.HOME_POSITION_ACP));
+    XboxController.a().onTrue(new ACPGoToPositionCommand(ACPSubsystem, Constants.ACPConstants.NOTE_SCORE_AMP_POSITION_ACP));
+    XboxController.x().onTrue(new ACPGoToPositionCommand(ACPSubsystem, Constants.ACPConstants.NOTE_SCORE_SPEAKER_POSITION_ACP));
+    XboxController.y().onTrue(new ACPGoToPositionCommand(ACPSubsystem, Constants.ACPConstants.SOURCE_POSITION_ACP));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     // new Trigger(m_exampleSubsystem::exampleCondition)
@@ -64,7 +75,7 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    //XboxController.kB.whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         swerveSubsystem,
