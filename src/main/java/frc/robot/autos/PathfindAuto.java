@@ -1,8 +1,5 @@
 package frc.robot.autos;
 
-import java.lang.reflect.Field;
-
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -39,7 +36,7 @@ public class PathfindAuto {
         .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 20.0, AutoConstants.angleTolerance * 10))
         .alongWith(new InstantCommand(() -> System.out.println("Pathfinding to: " + this.targetPose)))
         .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", this.targetPose)))
-        .andThen(new AlignToPose(this.swerveSubsystem, targetPose))
+        .andThen(new AlignToPose(this.swerveSubsystem, targetPose)) 
         .andThen(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", new Pose2d())));
     }
 }
