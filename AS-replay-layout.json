@@ -1,0 +1,208 @@
+{
+  "version": "3.0.1",
+  "layout": [
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/RealOutputs/Swerve/NavX/AccelX",
+              "color": "#c0b487",
+              "show": true
+            },
+            {
+              "key": "/RealOutputs/Swerve/NavX/AccelY",
+              "color": "#858584",
+              "show": true
+            },
+            {
+              "key": "/RealOutputs/Swerve/NavX/AccelZ",
+              "color": "#3b875a",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/RealOutputs/Swerve/NavX/Pitch",
+              "color": "#d993aa",
+              "show": true
+            },
+            {
+              "key": "/RealOutputs/Swerve/NavX/Roll",
+              "color": "#eb987e",
+              "show": true
+            },
+            {
+              "key": "/RealOutputs/Swerve/NavX/Yaw",
+              "color": "#5d4f92",
+              "show": true
+            }
+          ]
+        }
+      },
+      "title": "Accel"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/SystemStats/BatteryVoltage",
+              "color": "#aacaee",
+              "show": true
+            },
+            {
+              "key": "/PowerDistribution/Voltage",
+              "color": "#3b875a",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": [
+            {
+              "key": "/SystemStats/BrownedOut",
+              "color": "#d993aa",
+              "show": true
+            }
+          ]
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/SystemStats/BatteryCurrent",
+              "color": "#c0b487",
+              "show": true
+            },
+            {
+              "key": "/PowerDistribution/TotalCurrent",
+              "color": "#858584",
+              "show": true
+            }
+          ]
+        }
+      },
+      "title": "Power"
+    },
+    {
+      "type": 5,
+      "fields": [],
+      "listFields": [
+        [
+          {
+            "type": "Robot",
+            "key": "/RealOutputs/Swerve/CurrentPose",
+            "sourceTypeIndex": 1,
+            "sourceType": "Pose2d"
+          },
+          {
+            "type": "Heatmap",
+            "key": "/RealOutputs/Swerve/CurrentPose",
+            "sourceTypeIndex": 1,
+            "sourceType": "Pose2d"
+          }
+        ]
+      ],
+      "options": {
+        "game": "2024 Field",
+        "unitDistance": "meters",
+        "unitRotation": "degrees",
+        "origin": "right",
+        "size": 0.75,
+        "allianceBumpers": "auto",
+        "allianceOrigin": "blue",
+        "orientation": "blue left, red right"
+      },
+      "configHidden": false,
+      "title": "Odometry"
+    },
+    {
+      "type": 9,
+      "fields": [
+        {
+          "key": "/RealOutputs/Swerve/DesiredModuleStates",
+          "sourceTypeIndex": 1,
+          "sourceType": "SwerveModuleState[]"
+        },
+        {
+          "key": "/RealOutputs/Swerve/ModuleStates",
+          "sourceTypeIndex": 1,
+          "sourceType": "SwerveModuleState[]"
+        },
+        {
+          "key": "/RealOutputs/Swerve/CurrentPose/rotation",
+          "sourceTypeIndex": 1,
+          "sourceType": "Rotation2d"
+        }
+      ],
+      "listFields": [],
+      "options": {
+        "maxSpeed": 4.5,
+        "rotationUnits": "degrees",
+        "arrangement": "0,1,2,3",
+        "sizeLeftRight": 0.65,
+        "sizeFrontBack": 0.65,
+        "forwardDirection": "up"
+      },
+      "configHidden": false,
+      "title": "Swerve"
+    },
+    {
+      "type": 6,
+      "fields": [],
+      "listFields": [
+        [],
+        [
+          {
+            "type": "Robot",
+            "key": "/RealOutputs/Swerve/CurrentPose",
+            "sourceTypeIndex": 1,
+            "sourceType": "Pose2d"
+          }
+        ]
+      ],
+      "options": {
+        "field": "2024 Field",
+        "alliance": "blue",
+        "robot": "2024 KitBot",
+        "unitDistance": "meters",
+        "unitRotation": "radians",
+        "cameraIndex": -1,
+        "fov": 50
+      },
+      "configHidden": false,
+      "title": "3D Field"
+    },
+    {
+      "type": 12,
+      "title": "Metadata"
+    }
+  ]
+}
