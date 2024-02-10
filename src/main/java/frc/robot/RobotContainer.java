@@ -3,16 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
 
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.Shintake.DefaultShintakeCommand;
-import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,7 +31,6 @@ public class RobotContainer {
   //what is this supposed to be :(
   public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
 
-  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
@@ -43,8 +40,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
