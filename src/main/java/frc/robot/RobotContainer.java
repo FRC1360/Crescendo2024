@@ -87,8 +87,8 @@ public class RobotContainer {
   private void configureBindings() {
     swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         swerveSubsystem,
-        () -> -modifyAxis(left_controller.getY()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
-        () -> -modifyAxis(left_controller.getX()) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
+        () -> -modifyAlliance(modifyAxis(left_controller.getY())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+        () -> -modifyAlliance(modifyAxis(left_controller.getX())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
         () -> -modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
         right_controller));
 
@@ -117,10 +117,15 @@ public class RobotContainer {
     right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro)); 
 
     // Debounce makes for more stability
-    new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1).ifHigh(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR);
-    new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1).ifHigh(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT);
-    new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1).ifHigh(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT);
-
+    new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
+                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR;
+                                          });
+    new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1)
+                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT;
+                                          });
+    new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
+                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
+                                          });
   }
 
   /**
@@ -146,17 +151,20 @@ public class RobotContainer {
     }
   }
 
+  private static double modifyAlliance(double value) { 
+     // Change for based on alliance
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) { 
+      value *= -1; 
+    }
+    return value; 
+  }
+
   private static double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.05);
 
     // Square the axis
     value = Math.copySign(value * value, value);
-    
-    // Change for based on alliance
-    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) { 
-      value *= -1; 
-    }
 
     return value;
   }

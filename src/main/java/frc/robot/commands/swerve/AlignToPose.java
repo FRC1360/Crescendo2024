@@ -42,6 +42,12 @@ public class AlignToPose extends Command {
         double currentAngle = (currentPose.getRotation().getRadians() + 2 * Math.PI) % (2 * Math.PI); 
         double targetAngle = (target.getRotation().getRadians() + 2 * Math.PI) % (2 * Math.PI); 
 
+        if (Math.abs(target.getRotation().getDegrees()) < 20) { 
+            // If aligning near 0, use the -180 to 180 alignment (built in Rotation2d) to prevent rollover
+            currentAngle = currentPose.getRotation().getRadians(); 
+            targetAngle = target.getRotation().getRadians(); 
+        }
+
         System.out.println("Current angle: " + currentAngle + " Target Angle: " + targetAngle); 
 
         // Negated because a positive rotation is perceived as going CW (for the joysticks)

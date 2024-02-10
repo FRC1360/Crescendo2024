@@ -33,6 +33,7 @@ public class AssemblySchedulerCommand extends Command {
 
     @Override
     public void initialize() {
+        SmartDashboard.putString("SCHEDULER GOING TO", level.get().name()); 
         //SmartDashboard.putNumber("SchedCmdN", n++);
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
             switch(level.get()) {

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.sql.Driver;
+
 import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -18,10 +20,13 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.units.Power;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -41,12 +46,17 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     loggerInit();
-
+ 
     m_robotContainer = new RobotContainer();
     Pathfinding.setPathfinder(new LocalADStar());
     m_robotContainer.loadAllAutos();
 
     m_robotContainer.initalizeAutoChooser();
+    SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
+                                                DriverStation.getAlliance().get().toString() : "NOT AVAIL");
+    SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
+    SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
+    SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
   }
 
   private void loggerInit() {
@@ -140,11 +150,17 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().get().toString());
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putBoolean("PODIUM_FAR_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_FAR); 
+    SmartDashboard.putBoolean("PODIUM_LEFT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT); 
+    SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT); 
+
+  }
 
   @Override
   public void testInit() {

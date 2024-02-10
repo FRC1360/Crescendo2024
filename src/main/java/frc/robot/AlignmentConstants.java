@@ -24,7 +24,7 @@ public class AlignmentConstants {
 
     /// RED ALLIANCE!!!
 
-    public static final Pose2d RED_SOURCE = new Pose2d(2.2, 1.89, Rotation2d.fromDegrees(-129.0)); // ID 9 & 10
+    public static final Pose2d RED_SOURCE = new Pose2d(1.16, 1.49, Rotation2d.fromDegrees(-115.49)); // ID 9 & 10
 
     public static final Pose2d RED_SPEAKER = new Pose2d(14.92, 5.56, Rotation2d.fromDegrees(0.0)); // ID 3 & 4
 
