@@ -119,8 +119,8 @@ public class RobotContainer {
 
     left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
 
-    left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand()); //new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-                                                  //.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+    left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
 
     left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
                                                   .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
