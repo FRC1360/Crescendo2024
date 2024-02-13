@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.Shintake.FeedCommand;
-import frc.robot.commands.Shintake.IntakeCommand;
-import frc.robot.commands.Shintake.ShootSpeakerCommand;
+import frc.robot.commands.shintake.FeedCommand;
+import frc.robot.commands.shintake.IntakeCommand;
+import frc.robot.commands.shintake.ShootSpeakerCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 
 /**
@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   private ShintakeSubsystem shintakeSubsystem;
   private DigitalInput sensor;
   private Counter counter;
+  private double velocity;
+  private double count;
   
 
   /**
@@ -91,6 +93,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    velocity = 0.2;
+    count = -1;
+    shintakeSubsystem.initializeCounter();
+    shintakeSubsystem.setVelocity(500, 500);
   }
 
   
@@ -99,35 +105,46 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //Intake
-      shintakeSubsystem.varIntake(0.2);
-      shintakeSubsystem.setVelocity(3500, 3500);
+      shintakeSubsystem.varIntake(velocity);
+      
+      //shintakeSubsystem.setVelocity(5500, 5500);
       
     // Pause when optical sensor is tripped
-    if (shintakeSubsystem.isSwitchSet()) {
-      shintakeSubsystem.varIntake(0.0);
+    if (count == shintakeSubsystem.getShintakeCount() && (count != 0)){
+      velocity = 0.2;
+      shintakeSubsystem.resetShintakeCount();
+    }else if (shintakeSubsystem.getShintakeCount() >30000){
+      //velocity = 1.0;
+      velocity = 0.2; 
+    }else if (shintakeSubsystem.isSwitchSet()) {
+      velocity = 0.0;
+    }
+
+    count = shintakeSubsystem.getShintakeCount();
       
     
+    System.out.println("counter:"+shintakeSubsystem.getShintakeCount());
     
       // Wait
-      try {
-        TimeUnit.SECONDS.sleep(2);
-      } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+      // try {
+      //   TimeUnit.SECONDS.sleep(2);
+      // } catch (InterruptedException e) {
+      //   // TODO Auto-generated catch block
+      //   e.printStackTrace();
+      // }
 
-      // Shoot
-      shintakeSubsystem.varIntake(0.0);
-      try {
-        TimeUnit.SECONDS.sleep(2);
-      } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      //shintakeSubsystem.setVelocity(0, 30);
-      shintakeSubsystem.initializeCounter();
-    }
-    
+      // // Shoot
+      // shintakeSubsystem.varIntake(0.0);
+      // try {
+      //   TimeUnit.SECONDS.sleep(2);
+      // } catch (InterruptedException e) {
+      //   // TODO Auto-generated catch block
+      //   e.printStackTrace();
+      // }
+      //shintakeSubsystem.setVelocity(0, 30);}
+      //shintakeSubsystem.initializeCounter();
+}
+  
 
 
 
@@ -135,7 +152,7 @@ public class Robot extends TimedRobot {
     //ShootSpeakerCommand continuousShoot = new ShootSpeakerCommand(new ShintakeSubsystem());
     //FeedCommand continuousFeed = new FeedCommand(shintakeSubsystem);
     
-  }
+  
 
   @Override
   public void testInit() {

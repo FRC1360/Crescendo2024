@@ -159,6 +159,7 @@ public class ShintakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("right velocity", m_encoderRight.getVelocity());
     SmartDashboard.putNumber("Target left Wheel Velocity", Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_LEFT_BACK_SPEAKER);
     SmartDashboard.putNumber("Target right Wheel Velocity", Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_RIGHT_BACK_SPEAKER);
-
+    //SmartDashboard.putNumber("left Wheel kp", kp);
+    //leftWheelPID.setP()
   }
 }

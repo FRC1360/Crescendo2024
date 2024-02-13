@@ -1,4 +1,4 @@
-package frc.robot.commands.Shintake;
+package frc.robot.commands.shintake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
