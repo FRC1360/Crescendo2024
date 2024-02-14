@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
     velocity = 0.2;
     count = -1;
     shintakeSubsystem.initializeCounter();
-    shintakeSubsystem.setVelocity(500, 500);
+    shintakeSubsystem.setVelocity(Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_RIGHT_BACK_SPEAKER, Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_LEFT_BACK_SPEAKER);
   }
 
   
@@ -114,8 +114,8 @@ public class Robot extends TimedRobot {
       velocity = 0.2;
       shintakeSubsystem.resetShintakeCount();
     }else if (shintakeSubsystem.getShintakeCount() >30000){
-      //velocity = 1.0;
-      velocity = 0.2; 
+      velocity = 1.0;
+      //velocity = 0.2; 
     }else if (shintakeSubsystem.isSwitchSet()) {
       velocity = 0.0;
     }
