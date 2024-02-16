@@ -66,7 +66,7 @@ public final class Constants {
                                                                                                                 // #0,
         // #1, #2, #3
 
-        public static int PEAK_CURRENT_LIMIT = 50;
+        public static int PEAK_CURRENT_LIMIT = 40;
         public static int CONTINUOUS_CURRENT_LIMIT = 40;
         public static boolean ANGLE_INVERT = true;
         public static boolean DRIVE_INVERT = true;
@@ -152,7 +152,7 @@ public final class Constants {
             public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(1, 0, 0.0045);
             public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.05, 0.000001, 0);
             public static final double maxSpeed = 4; // m/s
-            public static final double maxAcceleration = 4; // m/s^2
+            public static final double maxAcceleration = 16; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
             public static final double maxAngularAcceleration = Units.degreesToRadians(720);  // deg/s^2
             public static final double positionTolerance = 0.025;
