@@ -42,8 +42,8 @@ public final class Constants {
 
   public static class ACPConstants {
     // SHOULDER
-    public static final int ACP_MOTOR_MASTER = 50;
-    public static final int ACP_MOTOR_SLAVE = 51;
+    public static final int ACP_MOTOR_MASTER = 40;
+    public static final int ACP_MOTOR_SLAVE = 41;
     public static final int ACP_ENCODER = 0;
 
     public static final double ACP_ENCODER_OFFSET = 0.472;
