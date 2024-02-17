@@ -44,8 +44,8 @@ public class ACPGoToPositionCommand extends Command {
 
     private TrapezoidProfile.Constraints determineConstraints() {
         // Example constraints, adjust as needed
-        double maxVelocity = 180.0; // TODO Replace with your actual max velocity
-        double maxAcceleration = 300.0; // TODO Replace with your actual max acceleration
+        double maxVelocity = 200.0; // TODO Replace with your actual max velocity
+        double maxAcceleration = 225.0; // TODO Replace with your actual max acceleration
 
         return new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
     }
@@ -60,7 +60,6 @@ public class ACPGoToPositionCommand extends Command {
         //if (this.ACP.getTargetAngle() > 90) {
         //    this.ACP.setTargetAngle(90);
         //}
-
 	
         profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
                 	this.startState, this.endState);
@@ -93,6 +92,7 @@ public class ACPGoToPositionCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+	SmartDashboard.putNumber("Shoulder_Move_Time", this.timer.getTimeDeltaSec());
 	this.ACP.setACPSpeed(0);
     }
 }
