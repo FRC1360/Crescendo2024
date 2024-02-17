@@ -17,7 +17,7 @@ import frc.robot.Constants;
 import frc.robot.util.OrbitPID;
 
 public class ArmChassisPivotSubsystem extends SubsystemBase {
-    
+
     private CANSparkMax ACPMotorMaster;
     private CANSparkMax ACPMotorSlave;
     private double targetAngle;
@@ -49,7 +49,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public ArmChassisPivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
         //this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
-        this.movePIDController = new OrbitPID(0.0632, 0.0, 0.0);  // kP = 0.02
+        this.movePIDController = new OrbitPID(0.06, 0.0, 0.0125);  // kP = 0.02
 
         SmartDashboard.putNumber("ACPMoveKp", movePIDController.kP);
         SmartDashboard.putNumber("ACPMoveKi", movePIDController.kI);
@@ -107,12 +107,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setACPSpeed(double speed) {
-        if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
+        /*
+	if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
              || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) 
                 speed = 0.0; 
-        
-        this.ACPMotorMaster.set(-speed);
-        this.ACPMotorSlave.set(-speed);
+	*/ 
+        this.ACPMotorMaster.set(speed);
+        this.ACPMotorSlave.set(speed);
     }
 
     public void resetMotorRotations() {
@@ -135,9 +136,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
      * Sets arm voltage based off 0.0 - 12.0
      */
     public void setACPVoltage(double voltage) {
-        if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
-             || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) 
-                voltage = 0.0;
+        //if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
+        //     || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) 
+        //        voltage = 0.0;
         
         this.ACPMotorMaster.setVoltage(voltage);
         this.ACPMotorSlave.setVoltage(voltage);
