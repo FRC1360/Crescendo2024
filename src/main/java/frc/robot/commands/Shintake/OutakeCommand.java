@@ -1,5 +1,6 @@
 package frc.robot.commands.Shintake;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
@@ -21,6 +22,7 @@ public class OutakeCommand extends Command {
     //m_count = 0;
     intake.stopShooter();
     intake.stopIntake();
+    SmartDashboard.putNumber("Starting rotation encoder", this.intake.getBackEncoder()); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -28,6 +30,7 @@ public class OutakeCommand extends Command {
   public void execute() {
     //intake.varShoot(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
     intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
+    SmartDashboard.putNumber("Cur Rotation Encoder", this.intake.getBackEncoder()); 
   }
 
   // Called once the command ends or is interrupted.
