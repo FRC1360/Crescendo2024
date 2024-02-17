@@ -9,6 +9,7 @@ package frc.robot;
 
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.Shintake.OutakeCommand;
 import frc.robot.commands.Shintake.ShootSpeakerCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -40,6 +41,7 @@ public class RobotContainer {
   private final CommandJoystick right_controller = new CommandJoystick(1);
 
   public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  CommandXboxController xbox = new CommandXboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -62,6 +64,9 @@ public class RobotContainer {
     left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem));
     right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
     left_controller.button(7).onTrue(new IntakeCommand(shintakeSubsystem));
+    xbox.a().whileTrue(new IntakeCommand(shintakeSubsystem));
+    xbox.b().whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+    xbox.x().whileTrue(new OutakeCommand(shintakeSubsystem));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 

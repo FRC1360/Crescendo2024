@@ -32,10 +32,14 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
+    count = intake.getShintakeCount(); 
+    intake.resetShintakeCount();
+    if (count == 0) intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
     //count = intake.getShintakeCount();
-    if (!intake.getDigitalInput()) intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-    if (intake.getDigitalInput()) intake.stopIntake(); 
+    // if (!intake.getDigitalInput()) {
+    //   intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
+    //   } 
+    else if (count >= 1) intake.varIntake(0.05);
   }
 
   // Called once the command ends or is interrupted.
