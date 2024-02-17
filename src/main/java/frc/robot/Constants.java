@@ -48,7 +48,7 @@ public final class Constants {
 
     public static final double ACP_ENCODER_OFFSET = 0.472;
 
-    public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (12.0 / 60.0);
+    public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (20.0 / 1.0);
     public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
     public static final double MAX_ACP_ANGLE = 90.0;
     public static final double MIN_ACP_ANGLE = -150.0;
