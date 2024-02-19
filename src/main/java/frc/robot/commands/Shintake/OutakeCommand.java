@@ -22,15 +22,14 @@ public class OutakeCommand extends Command {
     //m_count = 0;
     intake.stopShooter();
     intake.stopIntake();
-    SmartDashboard.putNumber("Starting rotation encoder", this.intake.getBackEncoder()); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //intake.varShoot(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-    intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_FRONT);
-    SmartDashboard.putNumber("Cur Rotation Encoder", this.intake.getBackEncoder()); 
+    intake.varIntake(Constants.ShintakeConstants.OUTAKE_SPEED_BACK);
+    intake.varShoot(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
   }
 
   // Called once the command ends or is interrupted.

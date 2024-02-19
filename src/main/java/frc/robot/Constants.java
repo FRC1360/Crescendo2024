@@ -45,6 +45,8 @@ public final class Constants {
     public static final int BACK_SHOOTAKE_ID = 35;
     public static final int SHINTAKE_SENSOR_PIN = 9;
     public static final double UNFEED_SPEED_FRONT = 0.05;
+    public static final double OUTAKE_SPEED_BACK = 0.5;
+    public static final double OUTAKE_SPEED_FRONT = 0.5;
   }
 
 //   public static class Shooter{
