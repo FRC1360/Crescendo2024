@@ -1,4 +1,4 @@
-package frc.robot.commands.armChassisPivot;
+package frc.robot.commands.ArmChassisPivot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
