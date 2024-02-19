@@ -112,7 +112,10 @@ public class ShintakeSubsystem extends SubsystemBase {
 
     public boolean getShooterReady(double prev) {
       varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-      if (-(getBackEncoder() - prev) > (58.095-57.548)) return true;
+      if (-(getBackEncoder() - prev) > (58.095-57.548)) {
+        stopIntake();
+        return true;
+      }
       return false;
     }
 

@@ -233,6 +233,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; // FIXME Set back right steer encoder ID
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -(54.767 + 180.0 + 90.0); // FIXME Measure and set back
                                                                                           // right steer offset
+    public static final double HOME_POSITION_ACP = 0;
 
     public static final class Drivetrain {
         public static final double DRIVE_MOTION_PROFILE_MAX_VELOCITY = 4.000;
