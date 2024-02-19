@@ -41,23 +41,12 @@ public class ShootSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //m_shooter.varShoot(Constants.ShintakeConstants.SHOOT_SPEED_FRONT);
-    //if ((m_shooter.getVelocityLeft() >= 0.49 && m_shooter.getVelocityLeft() <= 0.51) && (m_shooter.getVelocityRight() >= 0.49 && m_shooter.getVelocityRight() <= 0.51)) m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
-
-    if (!ready) m_shooter.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-    
-    if (-(this.m_shooter.getBackEncoder() - prev) > (58.095-57.548)) ready = true;
-    // SmartDashboard.putNumber("Shooter Digital", m_shooter.getDigitalInput() ? 1 : 0); 
-    if (ready) {
-        m_shooter.stopIntake();
-        // m_shooter.setVelocity(Constants.ShintakeConstants.SHOOT_VELOCITY_FRONT,Constants.ShintakeConstants.SHOOT_VELOCITY_FRONT);
         if (m_shooter.shooterWheelsReady()  && !ready2){
           ready2 = true;
           time.start();
         } 
         if (time.getTimeDeltaMillis() >= 250 && ready2) m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
         }
-    }
 
   // Called once the command ends or is interrupted.
   @Override
