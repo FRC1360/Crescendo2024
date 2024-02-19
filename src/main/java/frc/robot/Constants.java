@@ -16,6 +16,7 @@ import frc.lib.util.SwerveModuleConstants;
 import frc.robot.util.OrbitPID;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AnalogInput;
 import frc.lib.util.PIDConstants;
 
 /**
@@ -47,6 +48,17 @@ public final class Constants {
     public static final double UNFEED_SPEED_FRONT = 0.05;
     public static final double OUTAKE_SPEED_BACK = 0.5;
     public static final double OUTAKE_SPEED_FRONT = 0.5;
+  }
+
+  public static class ACPConstants {
+    public static final int ACP_MOTOR_MASTER = 40;
+    public static final int ACP_MOTOR_SLAVE = 41;
+    public static final double HOME_POSITION_ACP = 0;
+    public static final AnalogInput ACP_ENCODER = null;
+    public static final double MAX_ACP_ANGLE = 0;
+    public static final double MIN_ACP_ANGLE = 0;
+    public static final double ACP_ENCODER_OFFSET = 0;
+    public static final double ACP_GEAR_RATIO = 0;
   }
 
 //   public static class Shooter{
@@ -233,7 +245,17 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; // FIXME Set back right steer encoder ID
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -(54.767 + 180.0 + 90.0); // FIXME Measure and set back
                                                                                           // right steer offset
-    public static final double HOME_POSITION_ACP = 0;
+    public static class STPConstants {
+
+        public static final int ShintakePivot_MOTOR = 0;
+        public static final AnalogInput ShintakePivot_ENCODER = null;
+        public static final double ShintakePivot_GEAR_RATIO = 0;
+        public static final double ShintakePivot_MAX_ANGLE = 0;
+        public static final double ShintakePivot_MIN_ANGLE = 0;
+        public static double ShintakePivot_ENCODER_OFFSET;
+
+    }
+
 
     public static final class Drivetrain {
         public static final double DRIVE_MOTION_PROFILE_MAX_VELOCITY = 4.000;
