@@ -51,7 +51,6 @@ public class ShootSpeakerCommand extends Command {
     if (ready) {
         m_shooter.stopIntake();
         // m_shooter.setVelocity(Constants.ShintakeConstants.SHOOT_VELOCITY_FRONT,Constants.ShintakeConstants.SHOOT_VELOCITY_FRONT);
-        m_shooter.setVelocity(6250, 6250);
         if (m_shooter.shooterWheelsReady()  && !ready2){
           ready2 = true;
           time.start();

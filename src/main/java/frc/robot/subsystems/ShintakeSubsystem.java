@@ -110,6 +110,12 @@ public class ShintakeSubsystem extends SubsystemBase {
       return m_back.getEncoder().getPosition(); 
     }
 
+    public boolean getShooterReady(double prev) {
+      varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
+      if (-(getBackEncoder() - prev) > (58.095-57.548)) return true;
+      return false;
+    }
+
     public void initializeCounter() {
         m_counter.reset();
     }

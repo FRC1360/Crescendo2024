@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Shintake;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -18,9 +19,7 @@ public class ShootSpeakerFullCommand extends SequentialCommandGroup {
   public ShootSpeakerFullCommand(ShintakeSubsystem shooter) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootSpeakerCommand(shooter), 
-    new InstantCommand(() -> shooter.setVelocity(Constants.ShintakeConstants.SHOOT_VELOCITY_FRONT, Constants.ShintakeConstants.SHOOT_VELOCITY_FRONT)),
-    );
+    addCommands(new InstantCommand( () -> shooter.setVelocity(Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER , Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER)).alongWith(new OutakeCommand(shooter) /*REPLACE OUTAKE COMMAND WITH GO TO POSITION COMMAND*/).onlyIf(() -> shooter.getShooterReady(shooter.getBackEncoder())));
   }
 
 

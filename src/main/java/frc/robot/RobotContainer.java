@@ -11,6 +11,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shintake.IntakeCommand;
 import frc.robot.commands.Shintake.OutakeCommand;
 import frc.robot.commands.Shintake.ShootSpeakerCommand;
+import frc.robot.commands.Shintake.ShootSpeakerFullCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,7 +66,7 @@ public class RobotContainer {
     right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
     left_controller.button(7).onTrue(new IntakeCommand(shintakeSubsystem));
     xbox.a().whileTrue(new IntakeCommand(shintakeSubsystem));
-    xbox.b().whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+    xbox.b().whileTrue(new ShootSpeakerFullCommand(shintakeSubsystem));
     xbox.x().whileTrue(new OutakeCommand(shintakeSubsystem));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
