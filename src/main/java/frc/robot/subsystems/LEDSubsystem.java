@@ -9,7 +9,7 @@ public class LEDSubsystem extends SubsystemBase{
     
     private Spark LEDController;
     private double LEDColour;
-    private LEDStates LEDstate;
+    public LEDStates LEDstate;
 
     public enum LEDStates {
         DISABLED, ENABLED, SCORING, SOURCE, NOTE
@@ -46,23 +46,23 @@ public class LEDSubsystem extends SubsystemBase{
     public void periodic() {
         switch(this.LEDstate) {
             case ENABLED:
-                this.LEDColour = 0.87; // BLUE
+                this.LEDColour = Constants.LED.ENABLED_COLOR;
                 break;
 
             case DISABLED: 
-                this.LEDColour = 0.77; // GREEN
+                this.LEDColour = Constants.LED.DISABLED_COLOR;
                 break;
 
             case NOTE:
-                this.LEDColour = 0.6; // ORANGE
+                this.LEDColour = Constants.LED.NOTE_COLOR;
                 break;
 
             case SOURCE:
-                this.LEDColour = 0.93; // WHITE 
+                this.LEDColour = Constants.LED.SOURCE_COLOR;
                 break;
 
             case SCORING:
-                this.LEDColour = 0.61; // RED
+                this.LEDColour = Constants.LED.SCORING_COLOR;
                 break;
                 
         }

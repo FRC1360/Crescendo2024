@@ -27,6 +27,14 @@ import frc.lib.util.PIDConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static class LED {
+        public static final int LEDPort = 0;
+        public static final float ENABLED_COLOR = 0.87f; // BLUE
+        public static final float DISABLED_COLOR = 0.77f; // GREEN
+        public static final float NOTE_COLOR = 0.6f; // ORANGE
+        public static final float SOURCE_COLOR = 0.93f; // WHITE
+        public static final float SCORING_COLOR = 0.61f; // RED
+    }
   public static final int LEDPort = 0;
   public static final int kDriverControllerPort = 0;
 
