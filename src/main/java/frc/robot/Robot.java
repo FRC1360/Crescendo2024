@@ -22,8 +22,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private LEDSubsystem ledSubsystem;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -33,7 +31,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    ledSubsystem = new LEDSubsystem();
     
   }
 
@@ -56,7 +53,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    new LEDColorSelect(ledSubsystem, LEDSubsystem.LEDStates.DISABLED);
+    new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
   }
 
   @Override

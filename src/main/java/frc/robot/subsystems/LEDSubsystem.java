@@ -17,7 +17,7 @@ public class LEDSubsystem extends SubsystemBase{
     
     
     public LEDSubsystem() {
-        this.LEDController = new Spark(Constants.LEDPort); 
+        this.LEDController = new Spark(Constants.LED.LEDPort); 
         this.LEDColour = 0.0;
         this.LEDstate = LEDStates.ENABLED;
     }
@@ -41,6 +41,8 @@ public class LEDSubsystem extends SubsystemBase{
     public void setLEDNote() {
         this.LEDstate = LEDStates.NOTE;
     }
+
+    
 
     @Override
     public void periodic() {
