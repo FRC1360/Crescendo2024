@@ -60,10 +60,11 @@ public class DefaultDriveCommand extends Command {
         }
 
         m_drivetrainSubsystem.drive(
-                new Translation2d(m_translationXSupplier.getAsDouble(),
-                        m_translationYSupplier.getAsDouble()),
-                rotSpeed,
-                true, false);
+                new Translation2d(
+                    m_translationXSupplier.getAsDouble(),
+                    m_translationYSupplier.getAsDouble()),
+                    rotSpeed,
+                    true, false);
     }
 
     @Override

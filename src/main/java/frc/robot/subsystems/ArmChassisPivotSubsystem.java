@@ -247,8 +247,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         movePIDController.kI = SmartDashboard.getNumber("ACPMoveKi", movePIDController.kI);
         movePIDController.kD = SmartDashboard.getNumber("ACPMoveKd", movePIDController.kD);
         ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
-
-        System.out.println(movePIDController.kP);
     }
 
     public boolean getInIntakePosition() {

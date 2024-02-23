@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase.IdleMode;
-//import com.revrobotics.CANSparkLowLevel;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-//import frc.robot.subsystems.ShoulderSubsystem.ShoulderShintakePivotMessenger;
 import frc.robot.util.OrbitPID;
 
 public class ShintakePivotSubsystem extends SubsystemBase {
@@ -188,18 +186,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public void updateSmartDashboard() {
-        // SmartDashboard.putNumber("ShintakePivot_Hold_P_Gain", this.holdPIDController.getPTerm());
-        // SmartDashboard.putNumber("ShintakePivot_Hold_I_Gain", this.holdPIDController.getITerm());
-        // SmartDashboard.putNumber("ShintakePivot_Hold_D_Gain", this.holdPIDController.getDTerm());
-
-        // SmartDashboard.putNumber("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
-        // SmartDashboard.putNumber("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());
-        // SmartDashboard.putNumber("ShintakePivot_Move_D_Gain", this.movePIDController.getDTerm());
-
-        // SmartDashboard.putNumber("ShintakePivot_Target_Angle", this.getTargetAngle());
-        // SmartDashboard.putNumber("kP", this.kP);
-        // SmartDashboard.putNumber("kI", this.kI);
-        // SmartDashboard.putNumber("kD", this.kD);
+        SmartDashboard.putNumber("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
+        SmartDashboard.putNumber("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());
+        SmartDashboard.putNumber("ShintakePivot_Move_D_Gain", this.movePIDController.getDTerm());
 
         SmartDashboard.putNumber("ShintakePivot_Angle", this.getShintakePivotAngle());
         SmartDashboard.putNumber("ShintakePivot_NEO_Encoder", this.getMotorRotations()); 
@@ -209,6 +198,10 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("ShintakePivot_Offset", this.getShintakePivotOffset());
         SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
         SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
+
+        movePIDController.kP = SmartDashboard.getNumber("STPMoveKp", movePIDController.kP);
+        movePIDController.kI = SmartDashboard.getNumber("STPMoveKi", movePIDController.kI);
+        movePIDController.kD = SmartDashboard.getNumber("STPMoveKd", movePIDController.kD);
 
         SmartDashboard.putNumber("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue()); 
     }
