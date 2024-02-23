@@ -16,7 +16,6 @@ public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
     public AssemblyTrapPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),
             new InstantCommand(ledSubsystem::setLEDDisable),
 
             // Command 1

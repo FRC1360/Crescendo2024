@@ -16,7 +16,7 @@ public class AssemblySourcePositionCommand extends SequentialCommandGroup {
     public AssemblySourcePositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(true)),
+            new InstantCommand(() -> sm.setAtSource()),
             new InstantCommand(ledSubsystem::setLEDDisable),
 
             // Command 1

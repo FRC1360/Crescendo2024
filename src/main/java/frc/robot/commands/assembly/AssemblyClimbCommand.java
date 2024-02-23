@@ -15,7 +15,7 @@ public class AssemblyClimbCommand extends SequentialCommandGroup{
     public AssemblyClimbCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),
+            new InstantCommand(() -> sm.setAtClimb()),
             new InstantCommand(ledSubsystem::setLEDDisable),
 
             // Command 1

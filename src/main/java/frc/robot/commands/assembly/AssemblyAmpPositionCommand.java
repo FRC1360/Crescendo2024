@@ -16,7 +16,7 @@ public class AssemblyAmpPositionCommand extends SequentialCommandGroup {
     public AssemblyAmpPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),
+            new InstantCommand(() -> sm.setAtAmpScore()),
             new InstantCommand(ledSubsystem::setLEDDisable),
 
             // Command 1

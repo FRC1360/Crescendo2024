@@ -44,7 +44,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     public ArmFeedforward ACPFeedForward;  
     
     // try handling states using an enum, its more readable and effective
-    private boolean inIntakePosition;
     private boolean isSafe;
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
@@ -92,14 +91,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         this.absoluteEncoder = new AnalogEncoder(Constants.ACPConstants.ACP_ENCODER);
 
-        this.inIntakePosition = false;
         this.isSafe = true; 
 
         resetMotorRotations();   
-    }
-
-    public void checkSafety() { 
-        this.isSafe = true; 
     }
 
     public double getMotorRotations() {
@@ -207,15 +201,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         transitioning = !(Math.abs(this.getACPAngle()) < 2) && (this.getScheduledAngle() > 0.0 && this.getACPAngle() < 0.0) || (this.getScheduledAngle() < 0.0 && this.getACPAngle() > 0.0);
     }
 
-    // the shintake isnt part of this subsystem
-    public boolean getIntakePosition() {
-        return this.inIntakePosition;
-    }
-
-    public void setIntakePosition(boolean inIntakePosition) {
-        this.inIntakePosition = inIntakePosition;
-    }
-
     public void resetEncoderOffset() {
 	    this.absoluteEncoderOffset = this.absoluteEncoder.getAbsolutePosition();
     }
@@ -265,13 +250,5 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         movePIDController.kD = SmartDashboard.getNumber("ACPMoveKd", movePIDController.kD);
         */
 	ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
-    }
-
-    public boolean getInIntakePosition() {
-        return this.inIntakePosition;
-    }
-
-    public void setInIntakePosition(boolean inIntakePosition) {
-        this.inIntakePosition = inIntakePosition;
     }
 }

@@ -16,7 +16,7 @@ public class AssemblyDefendedPositionCommand extends SequentialCommandGroup {
     public AssemblyDefendedPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),
+            new InstantCommand(() -> sm.setAtSpeakerDefendedScore()),
             new InstantCommand(ledSubsystem::setLEDDisable),
 
             // Command 1

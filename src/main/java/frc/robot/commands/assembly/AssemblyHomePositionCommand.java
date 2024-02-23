@@ -16,7 +16,7 @@ public class AssemblyHomePositionCommand extends SequentialCommandGroup {
     public AssemblyHomePositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(false)),
+            new InstantCommand(() -> sm.setAtHome()),
             new InstantCommand(ledSubsystem::setLEDDisable),
 
             // Command 1
