@@ -17,7 +17,7 @@ import frc.robot.Constants;
 import frc.robot.util.OrbitPID;
 
 public class ArmChassisPivotSubsystem extends SubsystemBase {
-    
+
     private CANSparkMax ACPMotorMaster;
     private CANSparkMax ACPMotorSlave;
     private double targetAngle;
@@ -45,11 +45,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     
     // try handling states using an enum, its more readable and effective
     private boolean inIntakePosition;
-    private boolean isSafe; 
+    private boolean isSafe;
+
+    private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
     public ArmChassisPivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
         //this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
-        this.movePIDController = new OrbitPID(0.0632, 0.0, 0.0);  // kP = 0.02
+        this.movePIDController = new OrbitPID(0.14, 0.0, 0.0);  // kP = 0.02
 
         SmartDashboard.putNumber("ACPMoveKp", movePIDController.kP);
         SmartDashboard.putNumber("ACPMoveKi", movePIDController.kI);
@@ -75,7 +77,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorMaster.setSmartCurrentLimit(80);
         this.ACPMotorSlave.setSmartCurrentLimit(80);
 
-        //this.ACPMotorSlave.follow(this.ACPMotorMaster);
+        this.ACPMotorSlave.follow(this.ACPMotorMaster);
+	
+	this.ACPMotorMaster.setInverted(false);
+	this.ACPMotorSlave.setInverted(false);
+
+	this.ACPMotorMaster.getEncoder().setPositionConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
 
         this.transitioning = false;
         this.scheduledAngle = Double.NaN;
@@ -104,17 +111,17 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setACPSpeed(double speed) {
-        if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
+        /*
+	if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
              || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) 
                 speed = 0.0; 
-        
-        this.ACPMotorMaster.set(-speed);
-        this.ACPMotorSlave.set(-speed);
+	*/ 
+        this.ACPMotorMaster.set(speed);
     }
 
     public void resetMotorRotations() {
         // 
-        double newPos = -((absoluteEncoder.getAbsolutePosition() - Constants.ACPConstants.ACP_ENCODER_OFFSET) / Constants.ACPConstants.ACP_GEAR_RATIO);  
+        double newPos = -(absoluteEncoder.getAbsolutePosition() - this.absoluteEncoderOffset);  
         
         SmartDashboard.putNumber("New_Pos", newPos);
 
@@ -132,9 +139,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
      * Sets arm voltage based off 0.0 - 12.0
      */
     public void setACPVoltage(double voltage) {
-        if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
-             || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) 
-                voltage = 0.0;
+        //if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
+        //     || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) 
+        //        voltage = 0.0;
         
         this.ACPMotorMaster.setVoltage(voltage);
         this.ACPMotorSlave.setVoltage(voltage);
@@ -162,7 +169,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // encoderPosition * 360.0 = angle of motor rotation
         // angle of motor rotation * GEAR_RATIO = ACP angle
         // ACP angle % 360 = keep range between 0-360
-        return (encoderPosition * 360.0 * Constants.ACPConstants.ACP_GEAR_RATIO);
+        return (encoderPosition * 360.0) % 360;
     }
 
     private void updateAngularVelocity() {
@@ -186,7 +193,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     public BooleanSupplier inTransitionState() {
         return () -> this.transitioning;
     }
-
     public void setScheduledAngle(double angle) {
         this.scheduledAngle = angle;
     }
@@ -210,9 +216,14 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.inIntakePosition = inIntakePosition;
     }
 
+    public void resetEncoderOffset() {
+	    this.absoluteEncoderOffset = this.absoluteEncoder.getAbsolutePosition();
+    }
+
     @Override
     public void periodic() {
         updateAngularVelocity();
+        updateSmartDashboard();
 
         if(!transitioning)
             checkTransitioning();
@@ -221,15 +232,21 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             transitioning = false;
             this.setScheduledAngle(Double.NaN);
         }
+            //SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
+            //SmartDashboard.putNumber("Target Angle: ", true);
+
     }
 
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
         SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());
-        // SmartDashboard.putNumber("ACP_Manual_Offset", this.manualOffset.getAsDouble());
-        // SmartDashboard.putNumber("ACP_Scheduled_Angle", this.getScheduledAngle());
+        SmartDashboard.putNumber("ACP_Manual_Offset", this.manualOffset.getAsDouble());
+        SmartDashboard.putNumber("ACP_Scheduled_Angle", this.getScheduledAngle());
 
-        SmartDashboard.putNumber("ACP_Angular_Velocity", this.getAngluarVelocity());
+	SmartDashboard.putNumber("ACP_Output_Master", this.ACPMotorMaster.get());
+	SmartDashboard.putNumber("ACP_Output_Slave", this.ACPMotorSlave.get());
+        
+	SmartDashboard.putNumber("ACP_Angular_Velocity", this.getAngluarVelocity());
 
         SmartDashboard.putNumber("ACP_Move_P_Gain", this.movePIDController.getPTerm());
         SmartDashboard.putNumber("ACP_Move_I_Gain", this.movePIDController.getITerm());
@@ -242,29 +259,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
 
         SmartDashboard.putNumber("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
-
+	/*
         movePIDController.kP = SmartDashboard.getNumber("ACPMoveKp", movePIDController.kP);
         movePIDController.kI = SmartDashboard.getNumber("ACPMoveKi", movePIDController.kI);
         movePIDController.kD = SmartDashboard.getNumber("ACPMoveKd", movePIDController.kD);
-        ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
+        */
+	ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
     }
-
-    public boolean getInIntakePosition() {
-        return this.inIntakePosition;
-    }
-
-    public void setInIntakePosition(boolean inIntakePosition) {
-        this.inIntakePosition = inIntakePosition;
-    }
-
-    public class ArmShintakeMessenger {
-        public double getACPAngle() {
-            return ArmChassisPivotSubsystem.this.getACPAngle();
-        } 
-
-        public double getTargetAngle() {
-            return ArmChassisPivotSubsystem.this.getTargetAngle();
-        }
-    }
-
 }
