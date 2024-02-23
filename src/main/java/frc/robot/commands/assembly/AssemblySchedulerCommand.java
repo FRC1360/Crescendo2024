@@ -1,6 +1,5 @@
 package frc.robot.commands.assembly;
 
-import java.sql.Driver;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,6 +9,10 @@ import frc.robot.AlignmentConstants;
 import frc.robot.Constants.Swerve;
 import frc.robot.autos.PathfindAuto;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ArmChassisPivotSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.ShintakePivotSubsystem;
+import frc.robot.util.StateMachine;
 
 public class AssemblySchedulerCommand extends Command {
 
@@ -23,12 +26,22 @@ public class AssemblySchedulerCommand extends Command {
     }
 
     private Command assemblyCommand;
+
     private SwerveSubsystem swerveSubsystem; 
     private Supplier<ASSEMBLY_LEVEL> level;
+    private ArmChassisPivotSubsystem chassisPivot;
+    private ShintakePivotSubsystem shintakePivot;
+    private LEDSubsystem led;
+    private StateMachine sm;
+    private int n = 0;
 
-    public AssemblySchedulerCommand(Supplier<ASSEMBLY_LEVEL> level, SwerveSubsystem swerveSubsystem) {
+    public AssemblySchedulerCommand(Supplier<ASSEMBLY_LEVEL> level, SwerveSubsystem swerveSubsystem, ArmChassisPivotSubsystem chassisPivot, ShintakePivotSubsystem shintakePivot, LEDSubsystem led, StateMachine sm) {
         this.level = level;
         this.swerveSubsystem = swerveSubsystem; 
+        this.chassisPivot = chassisPivot;
+        this.shintakePivot = shintakePivot;
+        this.led = led;
+        this.sm = sm;
     }
 
     @Override

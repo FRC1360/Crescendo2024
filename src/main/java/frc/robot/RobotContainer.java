@@ -26,9 +26,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import frc.robot.subsystems.ArmChassisPivotSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.ShintakePivotSubsystem;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.assembly.AssemblySchedulerCommand;
+import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
+import frc.robot.commands.Shintake.DefaultShintakeCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
+import frc.robot.subsystems.ShintakeSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.StateMachine;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,7 +54,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
   // The robot's subsystems and commands are defined here...
+  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem();
+  private final StateMachine sm = new StateMachine();
+  public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
+  public final ShintakePivotSubsystem SPSubsystem = new ShintakePivotSubsystem(()->0.0, () -> false);
+  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
   private final XboxController operator_controller = new XboxController(2); 
@@ -139,7 +165,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return this.autoChooser.getSelected(); 
-    
   }
 
   private static double deadband(double value, double deadband) {
