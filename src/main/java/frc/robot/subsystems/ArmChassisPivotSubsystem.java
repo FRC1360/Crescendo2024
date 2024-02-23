@@ -266,4 +266,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         */
 	ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
     }
+
+    public boolean getInIntakePosition() {
+        return this.inIntakePosition;
+    }
+
+    public void setInIntakePosition(boolean inIntakePosition) {
+        this.inIntakePosition = inIntakePosition;
+    }
 }
