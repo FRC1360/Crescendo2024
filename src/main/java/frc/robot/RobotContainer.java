@@ -46,7 +46,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
   // The robot's subsystems and commands are defined here...
   private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   private final XboxController operatorController = new XboxController(0);
