@@ -42,8 +42,6 @@ public class LEDSubsystem extends SubsystemBase{
         this.LEDstate = LEDStates.NOTE;
     }
 
-    
-
     @Override
     public void periodic() {
         switch(this.LEDstate) {

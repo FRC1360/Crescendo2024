@@ -26,7 +26,7 @@ public class AssemblyDefendedPositionCommand extends SequentialCommandGroup {
 
             new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP)
                 .alongWith(new InstantCommand(() -> SmartDashboard.putString("Defended stage", "STAGE 3"))),
-            new InstantCommand(ledSubsystem::setLEDEnable),
+            new InstantCommand(ledSubsystem::setLEDScoring),
             new InstantCommand(() -> SmartDashboard.putString("Defended stage", "DONE")),
             new InstantCommand(() -> sm.setAtSpeakerDefendedScore())
         );

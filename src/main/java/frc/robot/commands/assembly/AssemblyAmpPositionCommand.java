@@ -26,7 +26,7 @@ public class AssemblyAmpPositionCommand extends SequentialCommandGroup {
 
             new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_AMP_POSITION_STP)
                 .alongWith(new InstantCommand(() -> SmartDashboard.putString("Amp stage", "STAGE 3"))),
-            new InstantCommand(ledSubsystem::setLEDEnable),
+            new InstantCommand(ledSubsystem::setLEDScoring),
             new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
             new InstantCommand(() -> sm.setAtAmpScore())
         );
