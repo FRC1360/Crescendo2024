@@ -19,6 +19,7 @@ import frc.robot.util.OrbitPID;
 public class ShintakePivotSubsystem extends SubsystemBase {
 
     private CANSparkMax ShintakePivotMotor;
+    private CANSparkMax ShintakePivotFollowingMotor;
     private double ShintakePivotOffset;  // Angle offset for the shoulder, should really be called angle 
 
     public OrbitPID movePIDController;
@@ -40,9 +41,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public ShintakePivotSubsystem() {
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
-        
+        this.ShintakePivotFollowingMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_FOLLOW_MOTOR, MotorType.kBrushless);
         this.ShintakePivotOffset = 0.0;
-
+        this.ShintakePivotFollowingMotor.follow(ShintakePivotMotor);
         this.movePIDController = new OrbitPID(0.025, 0.0, 0.4);  // TODO - Tune
 
         this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
@@ -68,7 +69,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public ShintakePivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
-        
+        this.ShintakePivotFollowingMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_FOLLOW_MOTOR, MotorType.kBrushless);
+        this.ShintakePivotFollowingMotor.follow(ShintakePivotMotor);
         this.ShintakePivotOffset = 0.0;
 
         this.movePIDController = new OrbitPID(0.025, 0.0, 0.4);    // TODO - Tune

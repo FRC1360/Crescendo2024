@@ -28,7 +28,7 @@ import frc.lib.util.PIDConstants;
  */
 public final class Constants {
 
-	public static final int LEDPort = 0;
+    public static final int LEDPort = 0;
 
     public static class ClimbConstants {
         public static final int CLIMBER_LEAD_CAN_ID = 1;
@@ -42,7 +42,26 @@ public final class Constants {
 
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0; 
-    public static final double HOME_POSITION_ACP = 0.0; 
+    public static final double HOME_POSITION_ACP = 0.0;
+
+  public static class ShintakeConstants{
+    public static final int INTAKE_SPEED_BACK = 70;
+    public static final int DEFAULT_INTAKE_SPEED = 50;
+    public static final int SHOOT_SPEED_FRONT = 100;
+    public static final int SHOOT_SPEED_BACK = 50;
+    public static final int RIGHT_SHOOTAKE_CAN_ID = 0;
+    public static final int LEFT_SHOOTAKE_CAN_ID = 1;
+    public static final int BACK_SHOOTAKE_ID = 2;
+  }
+  public static class STPConstants{ // random placeholder numbers
+    public static final int ShintakePivot_MOTOR = 42;
+    public static final int ShintakePivot_FOLLOW_MOTOR = 43;
+    public static final int ShintakePivot_MAX_ANGLE = 2;
+    public static final int ShintakePivot_MIN_ANGLE = 3;
+    public static final int ShintakePivot_ENCODER = 4;
+    public static final int ShintakePivot_GEAR_RATIO = 5;
+    public static final int ShintakePivot_ENCODER_OFFSET = 6;
+  }
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0; 
@@ -69,18 +88,9 @@ public final class Constants {
     public static final double SOURCE_POSITION_ACP = 50; 
 
 	// CLIMB_POSITION fix this
-		public static final double CLIMB_POSITION_STP = 180.0; 
-		public static final double CLIMB_POSITION_ACP = 90.0; 
+	public static final double CLIMB_POSITION_STP = 180.0; 
+	public static final double CLIMB_POSITION_ACP = 90.0; 
 
-    public static class ShintakeConstants {
-        public static final int INTAKE_SPEED_BACK = 70;
-        public static final int DEFAULT_INTAKE_SPEED = 50;
-        public static final int SHOOT_SPEED_FRONT = 100;
-        public static final int SHOOT_SPEED_BACK = 50;
-        public static final int RIGHT_SHOOTAKE_CAN_ID = 0;
-        public static final int LEFT_SHOOTAKE_CAN_ID = 1;
-        public static final int BACK_SHOOTAKE_ID = 2;
-    }
 
     public static class ACPConstants {
         // SHOULDER
@@ -94,15 +104,6 @@ public final class Constants {
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 90.0;
         public static final double MIN_ACP_ANGLE = -150.0;
-    }
-
-    public static class STPConstants { // random placeholder numbers
-        public static final int ShintakePivot_MOTOR = 1;
-        public static final int ShintakePivot_MAX_ANGLE = 2;
-        public static final int ShintakePivot_MIN_ANGLE = 3;
-        public static final int ShintakePivot_ENCODER = 4;
-        public static final int ShintakePivot_GEAR_RATIO = 5;
-        public static final int ShintakePivot_ENCODER_OFFSET = 6;
     }
 
     public static class VisionConstants {

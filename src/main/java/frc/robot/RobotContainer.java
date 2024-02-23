@@ -10,8 +10,8 @@ import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
-import frc.robot.commands.Shintake.DefaultShintakeCommand;
-import frc.robot.commands.Shintake.IntakeCommand;
+import frc.robot.commands.shintake.DefaultShintakeCommand;
+import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -50,7 +50,6 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
