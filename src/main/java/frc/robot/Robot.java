@@ -26,6 +26,10 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDStates;
+import frc.robot.commands.LEDColorSelect;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 
 /**
@@ -38,7 +42,6 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -48,15 +51,6 @@ public class Robot extends LoggedRobot {
     loggerInit();
  
     m_robotContainer = new RobotContainer();
-    Pathfinding.setPathfinder(new LocalADStar());
-    m_robotContainer.loadAllAutos();
-
-    m_robotContainer.initalizeAutoChooser();
-    SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
-                                                DriverStation.getAlliance().get().toString() : "NOT AVAIL");
-    SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
-    SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
-    SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
   }
 
   private void loggerInit() {
@@ -120,7 +114,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
+  }
 
   @Override
   public void disabledPeriodic() {}

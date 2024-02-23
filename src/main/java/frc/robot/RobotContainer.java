@@ -4,57 +4,33 @@
 
 package frc.robot;
 
-import frc.robot.autos.FetchPath;
-import frc.robot.autos.PathfindAuto;
-
-import frc.robot.subsystems.ArmChassisPivotSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShintakePivotSubsystem;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
-import frc.robot.commands.shintake.IntakeCommand;
-import frc.robot.commands.assembly.AssemblySchedulerCommand;
-import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
-import frc.robot.commands.swerve.LockWheels;
-import frc.robot.commands.shintake.DefaultShintakeCommand;
-import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
-import frc.robot.subsystems.ShintakeSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-
-import java.util.ArrayList;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.util.StateMachine;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import frc.robot.autos.FetchPath;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.assembly.AssemblySchedulerCommand;
+import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
+import frc.robot.commands.swerve.LockWheels;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
-
-import java.util.function.DoubleSupplier;
-import java.util.function.BooleanSupplier;
-
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.subsystems.ShintakeSubsystem;
-//import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.StateMachine;
-import edu.wpi.first.wpilibj.XboxController;
-//import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.util.ArrayList;
+import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
+
 
 
 /**
@@ -64,18 +40,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
-  private final XboxController operatorController = new XboxController(0);
+   private final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
+  public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
+
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private final StateMachine sm = new StateMachine();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
-  //private final XboxController operator_controller = new XboxController(2); 
-  private final CommandXboxController xboxController= new CommandXboxController(2); 
+  private final XboxController operator_controller = new XboxController(2); 
 
+
+  private final LEDSubsystem LED = new LEDSubsystem();
+  
 
   public SwerveSubsystem swerveSubsystem; 
   
@@ -132,15 +112,15 @@ public class RobotContainer {
     // Left controller Button 1 (trigger) will become shoot (outake)
     // Right Controller Button 1 (trigger) will be intake 
     left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm)));
+                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)));
 
-    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
+    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
 
     left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm)));
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)));
 
     left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm)));
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)));
 
     //left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
 
@@ -163,9 +143,9 @@ public class RobotContainer {
     //                       .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
     //                                       });
 
-    xboxController.y().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR)); 
-    xboxController.x().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT));
-    xboxController.b().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT)); 
+    // operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR)); 
+    // operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT));
+    // operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT)); 
  
 
     //left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
@@ -223,5 +203,9 @@ public class RobotContainer {
     value = Math.copySign(value * value, value);
 
     return value;
+  }
+
+  public LEDSubsystem getLedSubsystem() {
+    return LED;
   }
 }
