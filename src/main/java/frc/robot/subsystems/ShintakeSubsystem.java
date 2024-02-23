@@ -58,7 +58,7 @@ public class ShintakeSubsystem extends SubsystemBase {
   }
 
   public void varIntake(int backSpeed) {
-    m_back.setInverted(true);
+    // m_back.setInverted(true);
     m_back.set(backSpeed);
   }
 

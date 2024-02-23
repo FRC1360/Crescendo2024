@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.4721592269660398,
+      "y": 7.225586148743903
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mean Path Source"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Mean",
+  "choreoAuto": false
+}

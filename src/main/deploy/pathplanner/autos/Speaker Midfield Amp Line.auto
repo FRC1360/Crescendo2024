@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.49489567064240514,
+      "y": 2.125065526726797
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker Lineup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker to midfield"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Speaker",
+  "choreoAuto": false
+}
