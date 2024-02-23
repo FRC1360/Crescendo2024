@@ -64,14 +64,25 @@ public final class Constants {
     public static final double HOME_POSITION_ACP = 0.0;
 
   public static class ShintakeConstants{
-    public static final int INTAKE_SPEED_BACK = 70;
-    public static final int DEFAULT_INTAKE_SPEED = 50;
-    public static final int SHOOT_SPEED_FRONT = 100;
-    public static final int SHOOT_SPEED_BACK = 50;
-    public static final int RIGHT_SHOOTAKE_CAN_ID = 0;
-    public static final int LEFT_SHOOTAKE_CAN_ID = 1;
-    public static final int BACK_SHOOTAKE_ID = 2;
+    public static final double UNFEED_SPEED_BACK = 0.1;
+    public static final double INTAKE_SPEED_BACK = 0.1;
+    public static final double INITIAL_DEFAULT_INTAKE_SPEED = 0.1;
+    public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
+    public static final double DEFAULT_INTAKE_SPEED = 0.1;
+    public static final double SHOOT_SPEED_FRONT = 0.5;
+    public static final double SHOOT_VELOCITY_FRONT = 6250;
+    public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6250; 
+    public static final double SHOOT_SPEED_BACK_AMP = 0.1;
+    public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
+    public static final int RIGHT_SHOOTAKE_CAN_ID = 37;
+    public static final int LEFT_SHOOTAKE_CAN_ID = 38;
+    public static final int BACK_SHOOTAKE_ID = 35;
+    public static final int SHINTAKE_SENSOR_PIN = 9;
+    public static final double UNFEED_SPEED_FRONT = 0.05;
+    public static final double OUTAKE_SPEED_BACK = 0.5;
+    public static final double OUTAKE_SPEED_FRONT = 0.5;
   }
+
   public static class STPConstants{ // random placeholder numbers
     public static final int ShintakePivot_MOTOR = 42;
     public static final int ShintakePivot_FOLLOW_MOTOR = 43;
