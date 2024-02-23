@@ -1,21 +1,16 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.Shintake;
 
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShintakeSubsystem;
 
-public class IntakeCommand extends Command {
+public class OutakeCommand extends Command {
 
   private ShintakeSubsystem intake;
-  private int count = 0;
+  //private int m_count;
 
-  public IntakeCommand(ShintakeSubsystem intake) {
+  public OutakeCommand(ShintakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.intake = intake;
@@ -24,7 +19,7 @@ public class IntakeCommand extends Command {
 
   @Override
   public void initialize() {
-    intake.resetShintakeCount();
+    //m_count = 0;
     intake.stopShooter();
     intake.stopIntake();
   }
@@ -32,22 +27,16 @@ public class IntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    count = intake.getShintakeCount(); 
-    intake.resetShintakeCount();
-    if (count == 0) intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
-    //count = intake.getShintakeCount();
-    // if (!intake.getDigitalInput()) {
-    //   intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-    //   } 
-    else if (count >= 1) intake.varIntake(0.05);
+    //intake.varShoot(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
+    intake.varIntake(Constants.ShintakeConstants.OUTAKE_SPEED_BACK);
+    intake.varShoot(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
-    count = 0;
-    intake.resetShintakeCount();
+    intake.stopShooter();
   }
 
   // Returns true when the command should end.
@@ -56,3 +45,4 @@ public class IntakeCommand extends Command {
     return false;
   }
 }
+
