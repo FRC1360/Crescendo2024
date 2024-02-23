@@ -27,6 +27,19 @@ import frc.lib.util.PIDConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final boolean isReplay = true; // only used if sim
+
+  public static final int kDriverControllerPort = 0;
+
+  public static class ShintakeConstants {
+    public static final int INTAKE_SPEED_BACK = 70;
+    public static final int DEFAULT_INTAKE_SPEED = 50;
+    public static final int SHOOT_SPEED_FRONT = 100;
+    public static final int SHOOT_SPEED_BACK = 50;
+    public static final int RIGHT_SHOOTAKE_CAN_ID = 0;
+    public static final int LEFT_SHOOTAKE_CAN_ID = 1;
+    public static final int BACK_SHOOTAKE_ID = 2;
+  }
 
 	public static final int LEDPort = 0;
 
@@ -106,14 +119,19 @@ public final class Constants {
     }
 
     public static class VisionConstants {
-        public static final Transform3d robotToCam =
+        public static final Transform3d robotToCam = // Made negative, z prev 0.7366
             new Transform3d(
-                new Translation3d(-0.0762, 0.2286, 0.70485), //forward is positive X, left is positive Y, and up is positive Z.
+                new Translation3d(
+                            Units.inchesToMeters(2), 
+                            Units.inchesToMeters(2), 
+                            Units.inchesToMeters(16)), //forward is positive X, left is positive Y, and up is positive Z.
                 new Rotation3d(
-                    0, 0,
+                    0, 
+                                Math.toRadians(-32.0),
                     0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
-        public static final String cameraName = "OV5647";
+        public static final String cameraName = "Camera_Module_v1";
+        public static final double maxNoiseError = 0.25; // meters
     }
 
     /*
@@ -130,10 +148,10 @@ public final class Constants {
         // #0,
         // #1, #2, #3
 
-        public static int PEAK_CURRENT_LIMIT = 50;
+        public static int PEAK_CURRENT_LIMIT = 40;
         public static int CONTINUOUS_CURRENT_LIMIT = 40;
         public static boolean ANGLE_INVERT = true;
-        public static boolean DRIVE_INVERT = false;
+        public static boolean DRIVE_INVERT = true;
         public static boolean isGyroInverted = true;
         public static IdleMode IDLE_MODE = IdleMode.kBrake;
 
@@ -173,7 +191,7 @@ public final class Constants {
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
-            public static final double angleOffset = 360.0 - 38.14; //130.0;
+            public static final double angleOffset = 360.0-38.14; //130.0;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
@@ -183,7 +201,7 @@ public final class Constants {
             public static final int driveMotorID = 20;
             public static final int angleMotorID = 21;
             public static final int canCoderID = 22;
-            public static final double angleOffset = 360.0 - 193.36; //40.3;
+            public static final double angleOffset = 360.0-193.36; //40.3;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -194,7 +212,7 @@ public final class Constants {
             public static final int driveMotorID = 30;
             public static final int angleMotorID = 31;
             public static final int canCoderID = 32;
-            public static final double angleOffset = 360.0 - 338.37; //252.2;
+            public static final double angleOffset = 360.0-338.37; //252.2;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
@@ -204,7 +222,7 @@ public final class Constants {
             public static final int driveMotorID = 40;
             public static final int angleMotorID = 41;
             public static final int canCoderID = 42;
-            public static final double angleOffset = 360.0 - 51.32; //326.85;
+            public static final double angleOffset = 360.0-51.32; //326.85;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -213,10 +231,14 @@ public final class Constants {
         public static final class AutoConstants {
             // PID values to follow paths. NOT *DIRECTLY* FOR MODULE SPEED, try DRIVE_PID
             // and ANGLE_PID first
-            public static PIDConstants translation = new PIDConstants(0.13, 0, 0.0045);
-            public static PIDConstants rotation = new PIDConstants(0.013, 0.000001, 0);
-            public static double maxSpeed = 4 * 0.7; // meters
-            public static double maxAcceleration = 2 * 0.9; // m/s^2
+            public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(1, 0, 0.0045);
+            public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.05, 0.000001, 0);
+            public static final double maxSpeed = 4; // m/s
+            public static final double maxAcceleration = 16; // m/s^2
+            public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
+            public static final double maxAngularAcceleration = Units.degreesToRadians(720);  // deg/s^2
+            public static final double positionTolerance = 0.025;
+            public static final double angleTolerance = Math.toRadians(1);
         }
 
     }

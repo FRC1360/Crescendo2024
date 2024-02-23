@@ -4,9 +4,29 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import java.sql.Driver;
+
+import org.littletonrobotics.junction.AutoLogOutputManager;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
+
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
+import edu.wpi.first.units.Power;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -14,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -25,9 +45,59 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
+    loggerInit();
+ 
     m_robotContainer = new RobotContainer();
+    Pathfinding.setPathfinder(new LocalADStar());
+    m_robotContainer.loadAllAutos();
+
+    m_robotContainer.initalizeAutoChooser();
+    SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
+                                                DriverStation.getAlliance().get().toString() : "NOT AVAIL");
+    SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
+    SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
+    SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
+  }
+
+  private void loggerInit() {
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        Logger.recordMetadata("GitDirty", "All changes committed");
+        break;
+      case 1:
+        Logger.recordMetadata("GitDirty", "Uncomitted changes");
+        break;
+      default:
+        Logger.recordMetadata("GitDirty", "Unknown");
+        break;
+    }
+
+    if(isReal()) { // real bot
+      Logger.addDataReceiver(new WPILOGWriter());
+      Logger.addDataReceiver(new NT4Publisher());
+      PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
+    }
+    else if(!Constants.isReplay){ // regular sim
+      Logger.addDataReceiver(new NT4Publisher());
+    }
+    else { // replay
+      setUseTiming(false); // Run as fast as possible
+      String logPath = LogFileUtil.findReplayLog();
+      Logger.setReplaySource(new WPILOGReader(logPath));
+      Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+    }
+
+    AutoLogOutputManager.addPackage("frc.lib");
+
+    Logger.registerURCL(URCL.startExternal());
+    Logger.start();
+    DataLogManager.start();
   }
 
   /**
@@ -44,6 +114,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.loop.poll();
+    //System.out.println("Podium scheduled: " + m_robotContainer.LEVEL);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -57,7 +129,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
+    //m_robotContainer.swerveSubsystem.setCurrentPose(new Pose2d(12.5, 3.5, Rotation2d.fromDegrees(90.0)));
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -77,13 +150,12 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().get().toString());
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
