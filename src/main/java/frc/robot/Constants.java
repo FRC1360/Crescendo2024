@@ -19,11 +19,15 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.PIDConstants;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -37,6 +41,7 @@ public final class Constants {
         public static final float SOURCE_COLOR = 0.93f; // WHITE
         public static final float SCORING_COLOR = 0.61f; // RED
     }
+
     public static final int kDriverControllerPort = 0;
 
     public static class ClimbConstants {
@@ -52,15 +57,16 @@ public final class Constants {
 
     public static class VisionConstants {
         public static final Transform3d robotToCam = // Made negative, z prev 0.7366
-            new Transform3d(
-                new Translation3d(
-                    Units.inchesToMeters(2),
-                    Units.inchesToMeters(2),
-                    Units.inchesToMeters(16)), //forward is positive X, left is positive Y, and up is positive Z.
-                new Rotation3d(
-                    0,
-                    Math.toRadians(-32.0),
-                    0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+                new Transform3d(
+                        new Translation3d(
+                                Units.inchesToMeters(2),
+                                Units.inchesToMeters(2),
+                                Units.inchesToMeters(16)), // forward is positive X, left is positive Y, and up is
+                                                           // positive Z.
+                        new Rotation3d(
+                                0,
+                                Math.toRadians(-32.0),
+                                0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final String cameraName = "Camera_Module_v1";
         public static final double maxNoiseError = 0.25; // meters
@@ -151,15 +157,16 @@ public final class Constants {
 
         public static class VisionConstants {
             public static final Transform3d robotToCam = // Made negative, z prev 0.7366
-                new Transform3d(
-                    new Translation3d(
-                        Units.inchesToMeters(2),
-                        Units.inchesToMeters(2),
-                        Units.inchesToMeters(16)), //forward is positive X, left is positive Y, and up is positive Z.
-                    new Rotation3d(
-                        0,
-                        Math.toRadians(-32.0),
-                        0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+                    new Transform3d(
+                            new Translation3d(
+                                    Units.inchesToMeters(2),
+                                    Units.inchesToMeters(2),
+                                    Units.inchesToMeters(16)), // forward is positive X, left is positive Y, and up is
+                                                               // positive Z.
+                            new Rotation3d(
+                                    0,
+                                    Math.toRadians(-32.0),
+                                    0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
             // from center.
             public static final String cameraName = "Camera_Module_v1";
             public static final double maxNoiseError = 0.25; // meters
@@ -177,22 +184,19 @@ public final class Constants {
     public static final int LEAD_INTAKE_MOTOR_ID = 0;
     public static final int FOLLOW_INTAKE_MOTOR_ID = 0;
 
-
-
-
     /*
      * Swerve Constants (newly added ones)
      */
     public static final class Swerve {
         /* Module Specific Constants */
         public static final String[] MODULE_NAMES = {
-            "Front Left",
-            "Front Right",
-            "Back Left",
-            "Back Right"
+                "Front Left",
+                "Front Right",
+                "Back Left",
+                "Back Right"
         }; // module
-        // #0,
-        // #1, #2, #3
+           // #0,
+           // #1, #2, #3
 
         public static int PEAK_CURRENT_LIMIT = 40;
         public static int CONTINUOUS_CURRENT_LIMIT = 40;
@@ -207,10 +211,10 @@ public final class Constants {
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
         public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-            new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-            new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+                new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+                new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
 
         /* Drive Motor Conversion Factors */
         public static final double DRIVE_GEAR_RATIO = (6.75 / 1.0); // 6.75:1
@@ -238,9 +242,10 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
 
-            public static final double angleOffset = 360.0 - 218.93 + 180.0; //130.0; // Always reversed direction, add 180
+            public static final double angleOffset = 360.0 - 218.93 + 180.0; // 130.0; // Always reversed direction, add
+                                                                             // 180
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Front Right Module - Module 1 */
@@ -249,10 +254,10 @@ public final class Constants {
             public static final int angleMotorID = 21;
             public static final int canCoderID = 22;
 
-            public static final double angleOffset = 360.0 - 195.46; //40.3;
+            public static final double angleOffset = 360.0 - 195.46; // 40.3;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Back Left Module - Module 2 */
@@ -260,9 +265,9 @@ public final class Constants {
             public static final int driveMotorID = 30;
             public static final int angleMotorID = 31;
             public static final int canCoderID = 32;
-            public static final double angleOffset = 360.0 - 158.73; //252.2;
+            public static final double angleOffset = 360.0 - 158.73; // 252.2;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Back Right Module - Module 3 */
@@ -270,17 +275,19 @@ public final class Constants {
             public static final int driveMotorID = 40;
             public static final int angleMotorID = 41;
             public static final int canCoderID = 42;
-            public static final double angleOffset = 360.0 - 50.18; //326.85;
+            public static final double angleOffset = 360.0 - 50.18; // 326.85;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         public static final class AutoConstants {
             // PID values to follow paths. NOT *DIRECTLY* FOR MODULE SPEED, try DRIVE_PID
             // and ANGLE_PID first
-            public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(1, 0, 0.0045);
-            public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.05, 0.000001, 0);
+            public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(
+                    1, 0, 0.0045);
+            public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(
+                    0.05, 0.000001, 0);
             public static final double maxSpeed = 4; // m/s
             public static final double maxAcceleration = 16; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
@@ -315,7 +322,7 @@ public final class Constants {
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 1 /
-        Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
+            Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
     // SDS Module Configurations
     public static final double SWERVE_WHEEL_DIAMETER = 0.10033; // in meters

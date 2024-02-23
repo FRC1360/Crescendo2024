@@ -16,19 +16,18 @@ public class AssemblyAmpPositionCommand extends SequentialCommandGroup {
     public AssemblyAmpPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> sm.setAtAmpScore()),
-            new InstantCommand(ledSubsystem::setLEDDisable),
+                new InstantCommand(() -> sm.setAtAmpScore()),
+                new InstantCommand(ledSubsystem::setLEDDisable),
 
-            // Command 1
-            new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_AMP_POSITION_ACP)
-                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Amp stage", "STAGE 2"))),
-            // Command 2
+                // Command 1
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_AMP_POSITION_ACP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Amp stage", "STAGE 2"))),
+                // Command 2
 
-            new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_AMP_POSITION_STP)
-                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Amp stage", "STAGE 3"))),
-            new InstantCommand(ledSubsystem::setLEDScoring),
-            new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
-            new InstantCommand(() -> sm.setAtAmpScore())
-        );
+                new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_AMP_POSITION_STP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Amp stage", "STAGE 3"))),
+                new InstantCommand(ledSubsystem::setLEDScoring),
+                new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
+                new InstantCommand(() -> sm.setAtAmpScore()));
     }
 }

@@ -5,17 +5,17 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class LockWheels extends Command {
 
-    SwerveSubsystem swerveSubsystem; 
+    SwerveSubsystem swerveSubsystem;
 
-    public LockWheels(SwerveSubsystem swerveSubsystem) { 
-        this.swerveSubsystem = swerveSubsystem; 
+    public LockWheels(SwerveSubsystem swerveSubsystem) {
+        this.swerveSubsystem = swerveSubsystem;
 
         addRequirements(swerveSubsystem);
     }
 
     @Override
-    public void initialize() { 
+    public void initialize() {
         swerveSubsystem.brake();
     }
-    
+
 }

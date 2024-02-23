@@ -17,19 +17,18 @@ public class AssemblyPodiumPositionCommand extends SequentialCommandGroup {
     public AssemblyPodiumPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> sm.setAtSpeakerPodiumScore()),
-            new InstantCommand(ledSubsystem::setLEDDisable),
+                new InstantCommand(() -> sm.setAtSpeakerPodiumScore()),
+                new InstantCommand(ledSubsystem::setLEDDisable),
 
-            // Command 1
-            new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP)
-                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Podium stage", "STAGE 2"))),
-            // Command 2
+                // Command 1
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Podium stage", "STAGE 2"))),
+                // Command 2
 
-            new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP)
-                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Podium stage", "STAGE 3"))),
-            new InstantCommand(ledSubsystem::setLEDScoring),
-            new InstantCommand(() -> SmartDashboard.putString("Podium stage", "DONE")),
-            new InstantCommand(() -> sm.setAtSpeakerPodiumScore())
-        );
+                new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Podium stage", "STAGE 3"))),
+                new InstantCommand(ledSubsystem::setLEDScoring),
+                new InstantCommand(() -> SmartDashboard.putString("Podium stage", "DONE")),
+                new InstantCommand(() -> sm.setAtSpeakerPodiumScore()));
     }
 }

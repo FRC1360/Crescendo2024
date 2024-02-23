@@ -14,20 +14,19 @@ import frc.robot.util.StateMachine;
 public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
 
     public AssemblyTrapPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
-        ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
+            ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(ledSubsystem::setLEDDisable),
+                new InstantCommand(ledSubsystem::setLEDDisable),
 
-            // Command 1
-            new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_ACP)
-            .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 2"))),
-            // Command 2
+                // Command 1
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_ACP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 2"))),
+                // Command 2
 
-            new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_STP)
-            .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 3"))),
-            new InstantCommand(ledSubsystem::setLEDEnable),
-            new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
-            new InstantCommand(() -> sm.setAtClimb())
-        );
+                new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_STP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 3"))),
+                new InstantCommand(ledSubsystem::setLEDEnable),
+                new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
+                new InstantCommand(() -> sm.setAtClimb()));
     }
 }

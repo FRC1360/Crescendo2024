@@ -22,5 +22,5 @@ public class OrbitTimer {
         double deltaT = (System.currentTimeMillis() - this.startTime) / 1000.0;
         return deltaT;
     }
-    
+
 }

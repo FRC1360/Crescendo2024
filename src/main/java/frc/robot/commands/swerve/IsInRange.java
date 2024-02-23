@@ -10,6 +10,7 @@ public class IsInRange extends Command {
     private Pose2d target;
     private Supplier<Pose2d> position;
     private double positionTolerance, angleTolerance;
+
     public IsInRange(Supplier<Pose2d> position, Pose2d target, double positionTolerance, double angleTolerance) {
         this.position = position;
         this.target = target;
@@ -20,6 +21,7 @@ public class IsInRange extends Command {
     @Override
     public boolean isFinished() {
         Transform2d error = target.minus(position.get());
-        return error.getTranslation().getNorm() < positionTolerance && error.getRotation().getRadians() < angleTolerance;
+        return error.getTranslation().getNorm() < positionTolerance
+                && error.getRotation().getRadians() < angleTolerance;
     }
 }

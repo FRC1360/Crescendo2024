@@ -7,7 +7,7 @@ import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.util.OrbitTimer;
 
 public class STPGoToPositionCommand extends Command {
-    
+
     private ShintakePivotSubsystem ShintakePivot;
     private double angle;
 
@@ -31,16 +31,17 @@ public class STPGoToPositionCommand extends Command {
 
         double startVelocity = 0.0;
 
-        if (!this.ShintakePivot.getAngularVelocity().isNaN()) { 
-            startVelocity = this.ShintakePivot.getAngularVelocity().doubleValue(); 
-        } 
+        if (!this.ShintakePivot.getAngularVelocity().isNaN()) {
+            startVelocity = this.ShintakePivot.getAngularVelocity().doubleValue();
+        }
 
         this.startState = new TrapezoidProfile.State(this.ShintakePivot.getShintakePivotAngle(), startVelocity);
-        //this.endState = new TrapezoidProfile.State(this.ShintakePivot.getTargetAngle(), 0.0);
+        // this.endState = new
+        // TrapezoidProfile.State(this.ShintakePivot.getTargetAngle(), 0.0);
         this.endState = new TrapezoidProfile.State(this.ShintakePivot.getShintakePivotOffset(), 0.0);
 
         this.motionProfile = new TrapezoidProfile(this.ShintakePivot.ShintakePivotMotionProfileConstraints);
-        
+
         this.timer.start();
 
         System.out.println("Set ShintakePivot Offset = " + this.angle);
@@ -48,7 +49,8 @@ public class STPGoToPositionCommand extends Command {
 
     @Override
     public void execute() {
-        TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec(), this.endState, this.startState);
+        TrapezoidProfile.State profileTarget = this.motionProfile.calculate(this.timer.getTimeDeltaSec(), this.endState,
+                this.startState);
 
         double target = profileTarget.position;
         double input = this.ShintakePivot.getShintakePivotAngle();
@@ -57,25 +59,26 @@ public class STPGoToPositionCommand extends Command {
         SmartDashboard.putNumber("ShintakePivot_Move_Profile_Velocity", profileTarget.velocity);
 
         double pidOutput = this.ShintakePivot.movePIDController.calculate(target, input);
-        //SmartDashboard.putNumber("ShintakePivot_Motion_Profile_Ouput", pidOutput);
+        // SmartDashboard.putNumber("ShintakePivot_Motion_Profile_Ouput", pidOutput);
 
-        //if (Math.abs(speed) > 0.50) speed =  Math.copySign(0.5, speed); 
+        // if (Math.abs(speed) > 0.50) speed = Math.copySign(0.5, speed);
         double feedforwardOutput = 0.0;
-        
-        if (!this.ShintakePivot.getAngularVelocity().isNaN()) { 
-            feedforwardOutput = this.ShintakePivot.ShintakePivotFeedForward.calculate(Math.toRadians(profileTarget.position), 
-                                                                        Math.toRadians(this.ShintakePivot.getAngularVelocity())); 
-        } 
 
-        double speed = pidOutput + feedforwardOutput; 
+        if (!this.ShintakePivot.getAngularVelocity().isNaN()) {
+            feedforwardOutput = this.ShintakePivot.ShintakePivotFeedForward.calculate(
+                    Math.toRadians(profileTarget.position),
+                    Math.toRadians(this.ShintakePivot.getAngularVelocity()));
+        }
 
-        if(Math.abs(speed) > 0.4) {
-            speed = Math.copySign(0.4, speed);  // Clamping speed to prevent motor stall
+        double speed = pidOutput + feedforwardOutput;
+
+        if (Math.abs(speed) > 0.4) {
+            speed = Math.copySign(0.4, speed); // Clamping speed to prevent motor stall
         }
 
         // SmartDashboard.putNumber("ShintakePivot_Move_PID_Output", pidOutput);
         // SmartDashboard.putNumber("ShintakePivot_FF_Output", feedforwardOutput);
-        SmartDashboard.putNumber("ShintakePivot_Move_PID_And_FF_Output", speed); 
+        SmartDashboard.putNumber("ShintakePivot_Move_PID_And_FF_Output", speed);
         this.ShintakePivot.updateSmartDashboard();
 
         this.ShintakePivot.setShintakePivotNormalizedVoltage(speed);
@@ -83,7 +86,10 @@ public class STPGoToPositionCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return this.motionProfile.isFinished(this.timer.getTimeDeltaSec())  
-            /*&& Math.abs(this.ShintakePivot.getShintakePivotAngle() - this.ShintakePivot.getTargetAngle()) < 3.0*/;
+        return this.motionProfile.isFinished(this.timer.getTimeDeltaSec())
+        /*
+         * && Math.abs(this.ShintakePivot.getShintakePivotAngle() -
+         * this.ShintakePivot.getTargetAngle()) < 3.0
+         */;
     }
 }

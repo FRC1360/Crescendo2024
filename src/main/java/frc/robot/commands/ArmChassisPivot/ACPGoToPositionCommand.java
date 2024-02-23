@@ -7,7 +7,7 @@ import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.util.OrbitTimer;
 
 public class ACPGoToPositionCommand extends Command {
-    
+
     private ArmChassisPivotSubsystem ACP;
     private double angle;
 
@@ -29,8 +29,8 @@ public class ACPGoToPositionCommand extends Command {
         this.ACP.movePIDController.reset();
         this.ACP.setTargetAngle(angle);
 
-        System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle()); 
-        
+        System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle());
+
         this.startState = new TrapezoidProfile.State(this.ACP.getACPAngle(), 0.0);
         this.endState = new TrapezoidProfile.State(this.ACP.getTargetAngle(), 0.0);
 
@@ -57,13 +57,13 @@ public class ACPGoToPositionCommand extends Command {
         TrapezoidProfile.State profileTarget;
 
         // prevent arm from going past vertical
-        //if (this.ACP.getTargetAngle() > 90) {
-        //    this.ACP.setTargetAngle(90);
-        //}
-	
+        // if (this.ACP.getTargetAngle() > 90) {
+        // this.ACP.setTargetAngle(90);
+        // }
+
         profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
-                	this.startState, this.endState);
-	
+                this.startState, this.endState);
+
         double target = profileTarget.position;
 
         SmartDashboard.putNumber("Shoulder_Move_Profile_Position", profileTarget.position);
@@ -73,15 +73,14 @@ public class ACPGoToPositionCommand extends Command {
 
         double pidOutput = this.ACP.movePIDController.calculate(target, input);
 
-        //double feedforwardOutput = this.ACP.ACPFeedForward
-        //                            .calculate(target, this.ACP.getAngluarVelocity()); 
+        // double feedforwardOutput = this.ACP.ACPFeedForward
+        // .calculate(target, this.ACP.getAngluarVelocity());
 
-        double speed = pidOutput; //+ feedforwardOutput;
+        double speed = pidOutput; // + feedforwardOutput;
 
-        SmartDashboard.putNumber("Shoulder_Move_Output", speed); 
+        SmartDashboard.putNumber("Shoulder_Move_Output", speed);
 
         this.ACP.setACPNormalizedVoltage(speed);
-	
 
     }
 
@@ -92,8 +91,7 @@ public class ACPGoToPositionCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-	SmartDashboard.putNumber("Shoulder_Move_Time", this.timer.getTimeDeltaSec());
-	this.ACP.setACPSpeed(0);
+        SmartDashboard.putNumber("Shoulder_Move_Time", this.timer.getTimeDeltaSec());
+        this.ACP.setACPSpeed(0);
     }
 }
-
