@@ -39,7 +39,8 @@ public final class Constants {
     public static final int BACK_SHOOTAKE_ID = 2;
   }
   public static class STPConstants{ // random placeholder numbers
-    public static final int ShintakePivot_MOTOR = 1;
+    public static final int ShintakePivot_MOTOR = 42;
+    public static final int ShintakePivot_FOLLOW_MOTOR = 43;
     public static final int ShintakePivot_MAX_ANGLE = 2;
     public static final int ShintakePivot_MIN_ANGLE = 3;
     public static final int ShintakePivot_ENCODER = 4;
