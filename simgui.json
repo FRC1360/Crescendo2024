@@ -21,11 +21,28 @@
         "open": true
       },
       "SmartDashboard": {
-        "open": true
-      }
+      "/FMSInfo": "FMSInfo"
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "shuffleboard@1": {
+      "open": true
+    },
     "visible": true
   }
 }

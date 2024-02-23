@@ -114,7 +114,7 @@ public class Robot extends LoggedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.loop.poll();
+    //m_robotContainer.loop.poll();
     //System.out.println("Podium scheduled: " + m_robotContainer.LEVEL);
   }
 
@@ -155,7 +155,12 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putBoolean("PODIUM_FAR_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_FAR); 
+    SmartDashboard.putBoolean("PODIUM_LEFT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT); 
+    SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT); 
+
+  }
 
   @Override
   public void testInit() {

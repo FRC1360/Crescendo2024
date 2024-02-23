@@ -11,6 +11,8 @@ import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
+import frc.robot.commands.Shintake.IntakeCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.swerve.LockWheels;
@@ -34,6 +36,23 @@ import frc.robot.util.StateMachine;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import frc.robot.subsystems.ArmChassisPivotSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.ShintakePivotSubsystem;
+
+import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
+
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.subsystems.ShintakeSubsystem;
+//import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.StateMachine;
+import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -51,29 +70,27 @@ public class RobotContainer {
   private final XboxController operatorController = new XboxController(0);
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private final StateMachine sm = new StateMachine();
-  public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
-  public final ShintakePivotSubsystem SPSubsystem = new ShintakePivotSubsystem(()->0.0, () -> false);
-  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
   // Replace with CommandPS4Controller or CommandJoystick if needed
+
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
-  private final XboxController operator_controller = new XboxController(2); 
+  //private final XboxController operator_controller = new XboxController(2); 
+  private final CommandXboxController xboxController= new CommandXboxController(2); 
+
 
   public SwerveSubsystem swerveSubsystem; 
   
   public SendableChooser<Command> autoChooser; 
 
   public ArrayList<Command> tempInitAutos;
-  
-  public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER; 
 
-  public final EventLoop loop = new EventLoop(); 
+  //public final EventLoop loop = new EventLoop(); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     this.swerveSubsystem = new SwerveSubsystem(); 
 
-    swerveSubsystem.configureAutoBuilder(); // needs to be called everytime robotInits so alliance is updated
+    //m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
     // Configure the trigger bindings
     configureBindings();
@@ -104,16 +121,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-    left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
     swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         swerveSubsystem,
         () -> -modifyAlliance(modifyAxis(left_controller.getY())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
@@ -126,15 +133,15 @@ public class RobotContainer {
     // Left controller Button 1 (trigger) will become shoot (outake)
     // Right Controller Button 1 (trigger) will be intake 
     left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm)));
 
-    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
+    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
 
     left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm)));
 
     left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, m_shintakeSubsystem, ledSubsystem, sm)));
 
     //left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
 
@@ -147,15 +154,35 @@ public class RobotContainer {
     right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive)); 
 
     // Debounce makes for more stability
-    new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
-                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR;
-                                          });
-    new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1)
-                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT;
-                                          });
-    new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
-                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
-                                          });
+    // new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
+    //                       .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR;
+    //                                       });
+    // new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1)
+    //                       .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT;
+    //                                       });
+    // new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
+    //                       .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
+    //                                       });
+
+    xboxController.y().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR)); 
+    xboxController.x().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT));
+    xboxController.b().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT)); 
+ 
+
+    //left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+
+    // xboxController.b().whileTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, Constants.ACPConstants.HOME_POSITION_ACP));
+    // xboxController.a().whileTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, Constants.ACPConstants.NOTE_SCORE_AMP_POSITION_ACP));
+    // xboxController.x().whileTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, Constants.ACPConstants.NOTE_SCORE_SPEAKER_POSITION_ACP));
+    // xboxController.y().whileTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, Constants.ACPConstants.SOURCE_POSITION_ACP));
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    //XboxController.kB.whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
