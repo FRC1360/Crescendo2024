@@ -29,7 +29,19 @@ import frc.lib.util.PIDConstants;
 public final class Constants {
     public static final boolean isReplay = true; // only used if sim
 
-  public static final int kDriverControllerPort = 0;
+  public static class ClimbConstants {
+    public static final int CLIMBER_LEAD_CAN_ID = 1;
+    public static final int CLIMBER_SLAVE_CAN_ID = 2;
+    public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
+  }
+
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final int LEDPort = 0;
+  } 
+  
+    public static final int LEDPort = 0;
+    public static final int kDriverControllerPort = 0;
 
   public static class ShintakeConstants {
     public static final int INTAKE_SPEED_BACK = 70;
@@ -56,18 +68,6 @@ public final class Constants {
           public static final String cameraName = "Camera_Module_v1";
           public static final double maxNoiseError = 0.25; // meters
       }
-
-	public static final int LEDPort = 0;
-
-    public static class ClimbConstants {
-        public static final int CLIMBER_LEAD_CAN_ID = 1;
-        public static final int CLIMBER_SLAVE_CAN_ID = 2;
-        public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
-    }
-
-    public static class OperatorConstants {
-        public static final int kDriverControllerPort = 0;
-    }
 
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0; 
