@@ -8,16 +8,18 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 
 public class IntakeCommand extends Command {
 
   private ShintakeSubsystem intake;
+  private LEDSubsystem ledSubsystem;
   private int count = 0;
 
-  public IntakeCommand(ShintakeSubsystem intake) {
+  public IntakeCommand(ShintakeSubsystem intake, LEDSubsystem ledSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-
+    this.ledSubsystem = ledSubsystem;
     this.intake = intake;
     addRequirements(intake);
   }
@@ -39,7 +41,10 @@ public class IntakeCommand extends Command {
     // if (!intake.getDigitalInput()) {
     //   intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
     //   } 
-    else if (count >= 1) intake.varIntake(0.05);
+    else if (count >= 1) {
+      intake.varIntake(0.05);
+      ledSubsystem.setLEDNote();
+    }
   }
 
   // Called once the command ends or is interrupted.
