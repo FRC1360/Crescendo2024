@@ -7,7 +7,7 @@ import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.util.OrbitTimer;
 
 public class ACPGoToPositionCommand extends Command {
-    
+
     private ArmChassisPivotSubsystem ACP;
     private double angle;
 
@@ -29,8 +29,8 @@ public class ACPGoToPositionCommand extends Command {
         this.ACP.movePIDController.reset();
         this.ACP.setTargetAngle(angle);
 
-        System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle()); 
-        
+        System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle());
+
         this.startState = new TrapezoidProfile.State(this.ACP.getACPAngle(), 0.0);
         this.endState = new TrapezoidProfile.State(this.ACP.getTargetAngle(), 0.0);
 
@@ -44,8 +44,8 @@ public class ACPGoToPositionCommand extends Command {
 
     private TrapezoidProfile.Constraints determineConstraints() {
         // Example constraints, adjust as needed
-        double maxVelocity = 10.0; // TODO Replace with your actual max velocity
-        double maxAcceleration = 5.0; // TODO Replace with your actual max acceleration
+        double maxVelocity = 200.0; // TODO Replace with your actual max velocity
+        double maxAcceleration = 225.0; // TODO Replace with your actual max acceleration
 
         return new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
     }
@@ -57,19 +57,12 @@ public class ACPGoToPositionCommand extends Command {
         TrapezoidProfile.State profileTarget;
 
         // prevent arm from going past vertical
-        if (this.ACP.getTargetAngle() > 90) {
-            this.ACP.setTargetAngle(90);
-        }
+        // if (this.ACP.getTargetAngle() > 90) {
+        // this.ACP.setTargetAngle(90);
+        // }
 
-        if (this.ACP.getACPAngle() < this.ACP.getTargetAngle()) {
-            // Going up
-            profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
+        profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
                 this.startState, this.endState);
-        } else {
-            // Going down or stationary
-            profileTarget = motionProfile.calculate(this.timer.getTimeDeltaSec(),
-                this.startState, this.endState);
-        }
 
         double target = profileTarget.position;
 
@@ -80,18 +73,25 @@ public class ACPGoToPositionCommand extends Command {
 
         double pidOutput = this.ACP.movePIDController.calculate(target, input);
 
-        double feedforwardOutput = this.ACP.ACPFeedForward
-                                    .calculate(target, this.ACP.getAngluarVelocity()); 
+        // double feedforwardOutput = this.ACP.ACPFeedForward
+        // .calculate(target, this.ACP.getAngluarVelocity());
 
-        double speed = pidOutput + feedforwardOutput;
+        double speed = pidOutput; // + feedforwardOutput;
 
-        SmartDashboard.putNumber("Shoulder_Move_Output", speed); 
+        SmartDashboard.putNumber("Shoulder_Move_Output", speed);
 
         this.ACP.setACPNormalizedVoltage(speed);
+
     }
 
     @Override
     public boolean isFinished() {
         return this.motionProfile.isFinished(this.timer.getTimeDeltaSec());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        SmartDashboard.putNumber("Shoulder_Move_Time", this.timer.getTimeDeltaSec());
+        this.ACP.setACPSpeed(0);
     }
 }
