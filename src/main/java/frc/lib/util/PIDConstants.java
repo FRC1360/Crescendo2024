@@ -1,6 +1,6 @@
 package frc.lib.util;
 
-import com.revrobotics.SparkPIDController; 
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

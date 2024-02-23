@@ -1,10 +1,13 @@
 package frc.lib.util;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NavX {
     // gyro values
@@ -30,19 +33,53 @@ public class NavX {
         return inverted;
     }
 
+    @AutoLogOutput(key = "Swerve/NavX/RawYaw")
+    public double getRawYawDegrees() {
+        return gyro.getFusedHeading();
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/Yaw")
+    public double getYawDegrees() {
+        return inverted
+                ? 360 - (gyro.getFusedHeading() - yawOffset)
+                : gyro.getFusedHeading() - yawOffset;
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/Pitch")
+    public double getPitchDegrees() {
+        return gyro.getPitch() - pitchOffset;
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/Roll")
+    public double getRollDegrees() {
+        return gyro.getRoll() - rollOffset;
+    }
+
     public Rotation2d getYaw() {
-        return Rotation2d.fromDegrees(
-                inverted
-                        ? 360 - (gyro.getFusedHeading() - yawOffset)
-                        : gyro.getFusedHeading() - yawOffset);
+        return Rotation2d.fromDegrees(getYawDegrees());
     }
 
     public Rotation2d getPitch() {
-        return Rotation2d.fromDegrees(gyro.getPitch() - pitchOffset);
+        return Rotation2d.fromDegrees(getPitchDegrees());
     }
 
     public Rotation2d getRoll() {
-        return Rotation2d.fromDegrees(gyro.getRoll() - rollOffset);
+        return Rotation2d.fromDegrees(getRollDegrees());
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/AccelX")
+    public double getAccelX() {
+        return gyro.getWorldLinearAccelX();
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/AccelY")
+    public double getAccelY() {
+        return gyro.getWorldLinearAccelY();
+    }
+
+    @AutoLogOutput(key = "Swerve/NavX/AccelZ")
+    public double getAccelZ() {
+        return gyro.getWorldLinearAccelZ();
     }
 
     public void resetGyro() {
