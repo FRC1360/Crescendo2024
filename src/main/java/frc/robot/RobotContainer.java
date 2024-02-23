@@ -56,12 +56,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
   // The robot's subsystems and commands are defined here...
-  private final ShintakeSubsystem m_shintakeSubsystem = new ShintakeSubsystem();
   private final LEDSubsystem ledSubsystem = new LEDSubsystem();
   private final StateMachine sm = new StateMachine();
-  public final ArmChassisPivotSubsystem ACPSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
-  public final ShintakePivotSubsystem SPSubsystem = new ShintakePivotSubsystem(()->0.0, () -> false);
-  private final DefaultShintakeCommand m_defaultShintakeCommand = new DefaultShintakeCommand(m_shintakeSubsystem);
+  public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem(() -> 0.0, () -> false);
+  public final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem(()->0.0, () -> false);
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   private final CommandJoystick left_controller = new CommandJoystick(0);
@@ -73,8 +71,6 @@ public class RobotContainer {
   public SendableChooser<Command> autoChooser; 
 
   public ArrayList<Command> tempInitAutos;
-  
-  public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER; 
 
   public final EventLoop loop = new EventLoop(); 
 
@@ -125,15 +121,15 @@ public class RobotContainer {
     // Left controller Button 1 (trigger) will become shoot (outake)
     // Right Controller Button 1 (trigger) will be intake 
     left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)));
 
-    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
+    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
 
     left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)));
 
     left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)));
 
     //left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
 
