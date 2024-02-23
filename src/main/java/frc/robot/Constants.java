@@ -31,8 +31,8 @@ public final class Constants {
 	public static final int LEDPort = 0;
 
     public static class ClimbConstants {
-        public static final int CLIMBER_LEAD_CAN_ID = 1;
-        public static final int CLIMBER_SLAVE_CAN_ID = 2;
+        public static final int CLIMBER_LEAD_CAN_ID = 99;
+        public static final int CLIMBER_SLAVE_CAN_ID = 98;
         public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
     }
 
@@ -77,8 +77,8 @@ public final class Constants {
         public static final int DEFAULT_INTAKE_SPEED = 50;
         public static final int SHOOT_SPEED_FRONT = 100;
         public static final int SHOOT_SPEED_BACK = 50;
-        public static final int RIGHT_SHOOTAKE_CAN_ID = 0;
-        public static final int LEFT_SHOOTAKE_CAN_ID = 1;
+        public static final int RIGHT_SHOOTAKE_CAN_ID = 38;
+        public static final int LEFT_SHOOTAKE_CAN_ID = 37;
         public static final int BACK_SHOOTAKE_ID = 2;
     }
 
