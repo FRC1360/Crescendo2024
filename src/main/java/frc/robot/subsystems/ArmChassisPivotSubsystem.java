@@ -234,14 +234,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("ACP_Control_Loop_Out", out); 
             this.setACPNormalizedVoltage(out);
         }
-
-        if (!transitioning)
-            checkTransitioning();
-
-        if (transitioning && this.atTarget() && (this.getScheduledAngle() == this.getTargetAngle())) {
-            transitioning = false;
-            this.setScheduledAngle(Double.NaN);
-        }
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
 
