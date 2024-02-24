@@ -2,10 +2,10 @@ package frc.robot.util;
 
 public class StateMachine {
 
-    public enum ArmPositionStates{
-    atHome, atSpeakerSubwooferScore, atSpeakerPodiumScore, atSpeakerDefendedScore, atAmpScore, atSource, atClimb
+    public enum ArmPositionStates {
+        atHome, atSpeakerSubwooferScore, atSpeakerPodiumScore, atSpeakerDefendedScore, atAmpScore, atSource, atClimb
     }
-    
+
     private ArmPositionStates armPosState;
 
     public StateMachine() {
@@ -23,7 +23,8 @@ public class StateMachine {
     public void setAtSpeakerPodiumScore() {
         this.armPosState = ArmPositionStates.atSpeakerPodiumScore;
     }
-    public void setAtSpeakerDefendedScore(){
+
+    public void setAtSpeakerDefendedScore() {
         this.armPosState = ArmPositionStates.atSpeakerDefendedScore;
     }
 
@@ -31,12 +32,12 @@ public class StateMachine {
         this.armPosState = ArmPositionStates.atAmpScore;
     }
 
-    public void setAtClimb(){
+    public void setAtClimb() {
         this.armPosState = ArmPositionStates.atClimb;
     }
-    
-    public void setAtSource(){
+
+    public void setAtSource() {
         this.armPosState = ArmPositionStates.atSource;
     }
-    
+
 }

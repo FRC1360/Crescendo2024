@@ -16,19 +16,18 @@ public class AssemblySourcePositionCommand extends SequentialCommandGroup {
     public AssemblySourcePositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
-            new InstantCommand(() -> ACPSubsystem.setInIntakePosition(true)),
-            new InstantCommand(ledSubsystem::setLEDDisable),
+                new InstantCommand(() -> sm.setAtSource()),
+                new InstantCommand(ledSubsystem::setLEDDisable),
 
-            // Command 1
-            new ACPGoToPositionCommand(ACPSubsystem, Constants.SOURCE_POSITION_ACP)
-                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 2"))),
-            // Command 2
+                // Command 1
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.SOURCE_POSITION_ACP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 2"))),
+                // Command 2
 
-            new STPGoToPositionCommand(STPSubsystem, Constants.SOURCE_POSITION_STP)
-                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 3"))),
-            new InstantCommand(ledSubsystem::setLEDEnable),
-            new InstantCommand(() -> SmartDashboard.putString("Source stage", "DONE")),
-            new InstantCommand(() -> sm.setAtSource())
-        );
+                new STPGoToPositionCommand(STPSubsystem, Constants.SOURCE_POSITION_STP)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 3"))),
+                new InstantCommand(ledSubsystem::setLEDSource),
+                new InstantCommand(() -> SmartDashboard.putString("Source stage", "DONE")),
+                new InstantCommand(() -> sm.setAtSource()));
     }
 }
