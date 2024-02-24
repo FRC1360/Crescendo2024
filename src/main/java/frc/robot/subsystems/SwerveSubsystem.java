@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.SwerveModuleCustom;
@@ -61,6 +62,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
 		// Configure the AutoBuilder that handles all the auto path following!!
 		// SwerveAutoConfig.configureAutoBuilder(this);
+
+		Preferences.initBoolean("Manual Drive Active", manualDrive);
+
+
 	}
 
 	public void configureAutoBuilder() {
@@ -253,6 +258,6 @@ public class SwerveSubsystem extends SubsystemBase {
 		lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
 		lastPoseTimestamp = System.currentTimeMillis();
 
-		SmartDashboard.putBoolean("Manual Drive Active", manualDrive);
+		Preferences.getBoolean("Manual Drive Active", manualDrive);
 	}
 }
