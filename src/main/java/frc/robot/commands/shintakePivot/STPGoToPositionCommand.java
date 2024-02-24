@@ -1,4 +1,4 @@
-package frc.robot.commands.shintakePivot;
+package frc.robot.commands.ShintakePivot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
