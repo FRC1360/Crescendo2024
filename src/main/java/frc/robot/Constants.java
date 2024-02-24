@@ -106,11 +106,11 @@ public final class Constants {
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 0.0;
+    public static final double HOME_POSITION_ACP = 30.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0;
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 90.0;
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0;
@@ -118,11 +118,11 @@ public final class Constants {
 
     // NOTE_SCORE_TRAP_POSITION
     public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
-    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 90.0; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 80.0; // TODO: SET ACTUAL VALUES
 
     // NOTE_SCORE_DEFENDED_SPEAKER_POSITION
     public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 30.0;
-    public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 90.0;
+    public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 80.0;
 
     // NOTE_SCORE_PODIUM_SPEAKER_POSITION
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 0;
@@ -132,9 +132,9 @@ public final class Constants {
     public static final double SOURCE_POSITION_STP = 180;
     public static final double SOURCE_POSITION_ACP = 50;
 
-    // CLIMB_POSITION fix this
+    // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
-    public static final double CLIMB_POSITION_ACP = 90.0;
+    public static final double CLIMB_POSITION_ACP = 80.0;
 
     public static class ACPConstants {
         // SHOULDER
@@ -146,8 +146,8 @@ public final class Constants {
 
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 90.0;
-        public static final double MIN_ACP_ANGLE = -150.0;   
+        public static final double MAX_ACP_ANGLE = 80.0;
+        public static final double MIN_ACP_ANGLE = 0.0;   
     }
 
     /*
