@@ -99,11 +99,11 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int ShintakePivot_MOTOR = 42;
         public static final int ShintakePivot_FOLLOW_MOTOR = 43;
-        public static final int ShintakePivot_MAX_ANGLE = 2;
-        public static final int ShintakePivot_MIN_ANGLE = 3;
-        public static final int ShintakePivot_ENCODER = 4;
-        public static final int ShintakePivot_GEAR_RATIO = 5;
-        public static final int ShintakePivot_ENCODER_OFFSET = 6;
+        public static final double ShintakePivot_MAX_ANGLE = 2;
+        public static final double ShintakePivot_MIN_ANGLE = 3;
+        public static final double ShintakePivot_ENCODER = 4;
+        public static final double ShintakePivot_GEAR_RATIO = (40.0 / 11.0) * (20.0 / 1.0);
+        public static final double ShintakePivot_ENCODER_OFFSET = 6;
     }
 
     // NOTE_SCORE_AMP_POSITION
