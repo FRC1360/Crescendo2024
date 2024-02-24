@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -44,21 +43,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double lastAngle;
     private long lastTime;
 
-    private boolean transitioning;
-    private double scheduledAngle;
-
-    // this can be moved to the command, avoid handling operator input in subsystems
-    private DoubleSupplier manualOffset;
-    private BooleanSupplier manualOffsetEnable;
-
     private DutyCycleEncoder absoluteEncoder;
 
     public ArmFeedforward ACPFeedForward;
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
-
-    public ArmChassisPivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
+    public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
         this.movePIDController = new OrbitPID(0.14, 0.0, 0.0); // kP = 0.02
 
@@ -71,6 +62,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0);
         this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 225.0); 
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
+
+        // Initalize start and end states so the robot begins at target during startup
+        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
+        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
 
         this.targetAngle = Constants.HOME_POSITION_ACP;
 
@@ -96,29 +91,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         this.ACPMotorMaster.getEncoder().setPositionConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
 
-        this.transitioning = false;
-        this.scheduledAngle = Double.NaN;
-
-        this.manualOffset = manualOffset;
-        this.manualOffsetEnable = manualOffsetEnable;
-
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
         this.timer = new OrbitTimer(); 
-
-        Preferences.initDouble("ACP_Target_Angle", this.getTargetAngle());
-        Preferences.initDouble("ACP_Angle", this.getACPAngle());
-        Preferences.initDouble("ACP_Manual_Offset", this.manualOffset.getAsDouble());
-        Preferences.initDouble("ACP_Scheduled_Angle", this.getScheduledAngle());
-        Preferences.initDouble("ACP_Output_Master", this.ACPMotorMaster.get());
-        Preferences.initDouble("ACP_Output_Slave", this.ACPMotorSlave.get());
-        Preferences.initDouble("ACP_Angular_Velocity", this.getAngularVelocity());
-        Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getPTerm());
-        Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getITerm());
-        Preferences.initDouble("ACP_Move_D_Gain", this.movePIDController.getDTerm());
-        Preferences.initDouble("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
-        Preferences.initDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        Preferences.initDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
-        Preferences.initDouble("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
 
         resetMotorRotations();
     }
@@ -188,7 +162,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public double getTargetAngle() {
-        return this.targetAngle + (manualOffsetEnable.getAsBoolean() ? manualOffset.getAsDouble() : 0);
+        return this.targetAngle;
     }
 
     /*
@@ -220,26 +194,14 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
                     || this.acpMotionProfile.isFinished(this.timer.getTimeDeltaSec()); // Should make this a constant
     }
 
-    public BooleanSupplier inTransitionState() {
-        return () -> this.transitioning;
-    }
-
-    public void setScheduledAngle(double angle) {
-        this.scheduledAngle = angle;
-    }
-
-    public double getScheduledAngle() {
-        return this.scheduledAngle;
-    }
-
     // this should probably be a flag set by commands when they start moving the
     // arm, not something that you check this way
     // this isnt very flexible and may give bad data near the target positions
-    public void checkTransitioning() {
-        transitioning = !(Math.abs(this.getACPAngle()) < 2)
-                && (this.getScheduledAngle() > 0.0 && this.getACPAngle() < 0.0)
-                || (this.getScheduledAngle() < 0.0 && this.getACPAngle() > 0.0);
-    }
+    // public void checkTransitioning() {
+    //     transitioning = !(Math.abs(this.getACPAngle()) < 2)
+    //             && (this.getScheduledAngle() > 0.0 && this.getACPAngle() < 0.0)
+    //             || (this.getScheduledAngle() < 0.0 && this.getACPAngle() > 0.0);
+    // }
 
     public void resetEncoderOffset() {
         this.absoluteEncoderOffset = this.absoluteEncoder.getAbsolutePosition();
@@ -274,49 +236,28 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         }
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
-
-
-
     }
 
     public void updateSmartDashboard() {
+        SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
+        SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());
 
-        Preferences.getDouble("ACP_Target_Angle", this.getTargetAngle());
-        Preferences.getDouble("ACP_Angle", this.getACPAngle());
-        Preferences.getDouble("ACP_Manual_Offset", this.manualOffset.getAsDouble());
-        Preferences.getDouble("ACP_Scheduled_Angle", this.getScheduledAngle());
-        Preferences.getDouble("ACP_Output_Master", this.ACPMotorMaster.get());
-        Preferences.getDouble("ACP_Output_Slave", this.ACPMotorSlave.get());
-        Preferences.getDouble("ACP_Angular_Velocity", this.getAngularVelocity());
-        Preferences.getDouble("ACP_Move_P_Gain", this.movePIDController.getPTerm());
-        Preferences.getDouble("ACP_Move_I_Gain", this.movePIDController.getITerm());
-        Preferences.getDouble("ACP_Move_D_Gain", this.movePIDController.getDTerm());
-        Preferences.getDouble("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
-        Preferences.getDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        Preferences.getDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
-        Preferences.getDouble("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
+        SmartDashboard.putNumber("ACP_Output_Master", this.ACPMotorMaster.get());
+        SmartDashboard.putNumber("ACP_Output_Slave", this.ACPMotorSlave.get());
 
-        // SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
-        // SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());
-        // SmartDashboard.putNumber("ACP_Manual_Offset", this.manualOffset.getAsDouble());
-        // SmartDashboard.putNumber("ACP_Scheduled_Angle", this.getScheduledAngle());
+        SmartDashboard.putNumber("ACP_Angular_Velocity", this.getAngularVelocity());
 
-        // SmartDashboard.putNumber("ACP_Output_Master", this.ACPMotorMaster.get());
-        // SmartDashboard.putNumber("ACP_Output_Slave", this.ACPMotorSlave.get());
+        SmartDashboard.putNumber("ACP_Move_P_Gain", this.movePIDController.getPTerm());
+        SmartDashboard.putNumber("ACP_Move_I_Gain", this.movePIDController.getITerm());
+        SmartDashboard.putNumber("ACP_Move_D_Gain", this.movePIDController.getDTerm());
 
-        // SmartDashboard.putNumber("ACP_Angular_Velocity", this.getAngularVelocity());
+        // SmartDashboard.putBoolean("ACP_Transition_State", transitioning);
 
-        // SmartDashboard.putNumber("ACP_Move_P_Gain", this.movePIDController.getPTerm());
-        // SmartDashboard.putNumber("ACP_Move_I_Gain", this.movePIDController.getITerm());
-        // SmartDashboard.putNumber("ACP_Move_D_Gain", this.movePIDController.getDTerm());
+        SmartDashboard.putNumber("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
+        SmartDashboard.putNumber("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
 
-        // // SmartDashboard.putBoolean("ACP_Transition_State", transitioning);
-
-        // SmartDashboard.putNumber("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
-        // SmartDashboard.putNumber("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        // SmartDashboard.putNumber("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
-
-        // SmartDashboard.putNumber("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
+        SmartDashboard.putNumber("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
         /*
          * movePIDController.kP = SmartDashboard.getNumber("ACPMoveKp",
          * movePIDController.kP);

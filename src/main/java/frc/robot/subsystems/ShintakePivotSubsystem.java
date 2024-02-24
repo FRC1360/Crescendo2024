@@ -57,6 +57,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
 
+        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
+        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
+
         this.ShintakePivotMotor.restoreFactoryDefaults();
         this.ShintakePivotMotor.setIdleMode(IdleMode.kBrake);
         this.ShintakePivotMotor.setInverted(true);

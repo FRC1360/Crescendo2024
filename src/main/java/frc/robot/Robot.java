@@ -56,6 +56,17 @@ public class Robot extends LoggedRobot {
 		loggerInit();
 
 		m_robotContainer = new RobotContainer();
+
+		Pathfinding.setPathfinder(new LocalADStar());
+
+		m_robotContainer.loadAllAutos();
+
+		m_robotContainer.initalizeAutoChooser();
+		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
+													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
+		SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
+		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
+		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
 	}
 
 	private void loggerInit() {
@@ -161,7 +172,8 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().get().toString());
+		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
+													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 	}
 
 	/** This function is called periodically during operator control. */
