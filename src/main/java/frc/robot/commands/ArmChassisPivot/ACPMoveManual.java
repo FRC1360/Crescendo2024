@@ -21,9 +21,9 @@ public class ACPMoveManual extends Command {
     @Override
     public void execute() {
         double joystickValue = joystick.getAsDouble();
-        double adjustedAngle = armChassisPivot.getTargetAngle() + joystickValue * 0.5; // Adjust as needed
+        double adjustedAngle = armChassisPivot.getTargetAngle() + joystickValue * 10; //* 0.5; // Adjust as needed
         armChassisPivot.setTargetAngle(adjustedAngle);
-        SmartDashboard.putNumber("ArmChassisPivot_Raw_Output", joystickValue * 0.5);
+        SmartDashboard.putNumber("ArmChassisPivot_Raw_Output", joystickValue * 10);
     }
 
     @Override

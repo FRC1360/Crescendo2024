@@ -15,23 +15,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.OrbitPID;
+import frc.robot.util.OrbitTimer;
 
 public class ShintakePivotSubsystem extends SubsystemBase {
 
     private CANSparkMax ShintakePivotMotor;
     private CANSparkMax ShintakePivotFollowingMotor;
-    private double ShintakePivotOffset; // Angle offset for the shoulder, should really be called angle
+    //private double ShintakePivotOffset; // Angle offset for the shoulder, should really be called angle
     private double targetAngle;
 
     public OrbitPID movePIDController;
     public ArmFeedforward ShintakePivotFeedForward;
     public TrapezoidProfile.Constraints ShintakePivotMotionProfileConstraints;
 
-    // private ShoulderShintakePivotMessenger shoulderShintakePivotMessenger;
+    private TrapezoidProfile stpMotionProfile;
+    private TrapezoidProfile.State motionProfileStartState; 
+    private TrapezoidProfile.State motionProfileEndState;  
 
-    private double cacheOffset;
-    private DoubleSupplier manualOffset;
-    private BooleanSupplier manualOffsetEnable;
+    //private double cacheOffset;
 
     private AnalogEncoder absoluteEncoder;
 
@@ -40,16 +41,19 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private Double lastAngle;
     private Double angularVelocity; // degrees per second
 
+    private OrbitTimer timer; 
+
     public ShintakePivotSubsystem() {
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
         this.ShintakePivotFollowingMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_FOLLOW_MOTOR,
                 MotorType.kBrushless);
-        this.ShintakePivotOffset = 0.0;
+        //this.ShintakePivotOffset = 0.0;
         this.ShintakePivotFollowingMotor.follow(ShintakePivotMotor);
         this.movePIDController = new OrbitPID(0.025, 0.0, 0.4); // TODO - Tune
 
         this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
         this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
+        this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
 
         this.ShintakePivotMotor.restoreFactoryDefaults();
         this.ShintakePivotMotor.setIdleMode(IdleMode.kBrake);
@@ -57,46 +61,15 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.targetAngle = Constants.HOME_POSITION_STP;
 
-        this.cacheOffset = 0.0;
+        this.timer = new OrbitTimer(); 
 
-        this.manualOffset = () -> 0.0;
-        this.manualOffsetEnable = () -> false;
-
-        this.absoluteEncoder = new AnalogEncoder(Constants.STPConstants.ShintakePivot_ENCODER);
-
-        this.lastTime = -1;
-        this.lastAngle = Double.NaN;
-        this.angularVelocity = Double.NaN;
-
-        resetMotorRotations();
-    }
-
-    public ShintakePivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
-        this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
-        this.ShintakePivotFollowingMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_FOLLOW_MOTOR,
-                MotorType.kBrushless);
-        this.ShintakePivotFollowingMotor.follow(ShintakePivotMotor);
-        this.ShintakePivotOffset = 0.0;
-
-        this.movePIDController = new OrbitPID(0.025, 0.0, 0.4); // TODO - Tune
-
-        this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
-        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
-
-        this.ShintakePivotMotor.restoreFactoryDefaults();
-        this.ShintakePivotMotor.setIdleMode(IdleMode.kBrake);
-        this.ShintakePivotMotor.setInverted(true);
-
-        this.cacheOffset = 0.0;
-
-        this.manualOffset = manualOffset;
-        this.manualOffsetEnable = manualOffsetEnable;
+        //this.cacheOffset = 0.0;
 
         this.absoluteEncoder = new AnalogEncoder(Constants.STPConstants.ShintakePivot_ENCODER);
 
         this.lastTime = -1;
         this.lastAngle = Double.NaN;
-        this.angularVelocity = Double.NaN;
+        this.angularVelocity = 0.0; //Double.NaN;
 
         resetMotorRotations();
     }
@@ -165,9 +138,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
      * }
      */
 
-    public void setShintakePivotOffset(double offset) {
-        this.ShintakePivotOffset = offset;
-    }
+    // public void setShintakePivotOffset(double offset) {
+    //     this.ShintakePivotOffset = offset;
+    // }
 
     // The offset is more akin to a LOCAL angle. The local angle is the angle
     // relative to ShintakePivot starting position.
@@ -177,30 +150,60 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     // ShintakePivot offset is 0, the ShintakePivot will stay pointing up
     // regardless of the shoulder's orientation. Change this value when you want to
     // change the angle of the ShintakePivot
-    public double getShintakePivotOffset() {
-        return this.ShintakePivotOffset;
-    }
+    // public double getShintakePivotOffset() {
+    //     return this.ShintakePivotOffset;
+    // }
 
     // The CACHE is a means of saving an arbitrary ShintakePivot position to return
     // to later
     // Setting the cache offset saves the current angle
     // Getting the cache offset gets the angle that the ShintakePivot was at when it
     // was last set
-    public void setCacheOffset() {
-        System.out.println("Setting cache offset to " + this.getShintakePivotOffset());
-        this.cacheOffset = this.getShintakePivotOffset();
-    }
+    // public void setCacheOffset() {
+    //     System.out.println("Setting cache offset to " + this.getShintakePivotOffset());
+    //     this.cacheOffset = this.getShintakePivotOffset();
+    // }
 
-    public double getCacheOffset() {
-        return this.cacheOffset;
-    }
+    // public double getCacheOffset() {
+    //     return this.cacheOffset;
+    // }
 
     public void setTargetAngle(double targetAngle) {
         this.targetAngle = targetAngle;
+
+        this.movePIDController.reset();
+
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getShintakePivotAngle(), this.getAngularVelocity());
+        this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
+        this.timer.start(); 
+
+        System.out.println("Target angle for ACP scheduled for: " + targetAngle); 
     }
 
+    public double calculateControlLoopOutput() { 
+        TrapezoidProfile.State profileTarget = this.stpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileEndState,
+                this.motionProfileStartState);
+
+        double target = profileTarget.position; 
+        double input = this.getShintakePivotAngle(); 
+
+        double pidOut = this.movePIDController.calculate(target, input); 
+
+        double feedforwardOutput = this.ShintakePivotFeedForward.calculate(
+            Math.toRadians(profileTarget.position),
+            Math.toRadians(this.getAngularVelocity()));
+
+        return pidOut + feedforwardOutput; 
+    }
+    
+
     public double getTargetAngle(){
-        return this.targetAngle + (manualOffsetEnable.getAsBoolean() ? manualOffset.getAsDouble() : 0);
+        return this.targetAngle;
+    }
+
+    public boolean atTarget() { 
+        return Math.abs(this.getTargetAngle() - this.getShintakePivotAngle()) <= 3.0 || 
+                        this.stpMotionProfile.isFinished(this.timer.getTimeDeltaSec()); 
     }
 
     /*
@@ -222,13 +225,13 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // this.getCacheOffset());
         // SmartDashboard.putNumber("ShintakePivot_Manual_Offset",
         // this.manualOffset.getAsDouble());
-        SmartDashboard.putNumber("ShintakePivot_Offset", this.getShintakePivotOffset());
+        //SmartDashboard.putNumber("ShintakePivot_Offset", this.getShintakePivotOffset());
         SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
         SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
 
-        movePIDController.kP = SmartDashboard.getNumber("STPMoveKp", movePIDController.kP);
-        movePIDController.kI = SmartDashboard.getNumber("STPMoveKi", movePIDController.kI);
-        movePIDController.kD = SmartDashboard.getNumber("STPMoveKd", movePIDController.kD);
+        // movePIDController.kP = SmartDashboard.getNumber("STPMoveKp", movePIDController.kP);
+        // movePIDController.kI = SmartDashboard.getNumber("STPMoveKi", movePIDController.kI);
+        // movePIDController.kD = SmartDashboard.getNumber("STPMoveKd", movePIDController.kD);
 
         SmartDashboard.putNumber("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
     }
@@ -255,6 +258,13 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         updateAngularVelocity();
+        updateSmartDashboard(); 
+
+        if (!this.stpMotionProfile.isFinished(this.timer.getTimeDeltaSec())) { 
+            double out = calculateControlLoopOutput(); 
+            SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
+            this.setShintakePivotNormalizedVoltage(out);
+        }
     }
 
 }
