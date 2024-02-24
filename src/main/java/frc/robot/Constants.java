@@ -72,10 +72,6 @@ public final class Constants {
         public static final double maxNoiseError = 0.25; // meters
     }
 
-    // HOME_POSITION
-    public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 0.0;
-
     public static class ShintakeConstants {
         public static final double UNFEED_SPEED_BACK = 0.1;
         public static final double INTAKE_SPEED_BACK = 0.1;
@@ -105,6 +101,10 @@ public final class Constants {
         public static final double ShintakePivot_GEAR_RATIO = (40.0 / 11.0) * (20.0 / 1.0);
         public static final double ShintakePivot_ENCODER_OFFSET = 6;
     }
+    
+    // HOME_POSITION
+    public static final double HOME_POSITION_STP = 0.0;
+    public static final double HOME_POSITION_ACP = 0.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0;
@@ -145,44 +145,8 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 90.0;
-        public static final double MIN_ACP_ANGLE = -150.0;
-
-        // HOME_POSITION
-        public static final double HOME_POSITION_STP = 170.0; // Originally 175.0
-        public static final double HOME_POSITION_ACP = -90.0; // -90.0, changed it for ribfest so that the neo doesn't
-        // hit the superstructure
-        // NOTE_SCORE_AMP_POSITION
-        public static final double NOTE_SCORE_AMP_POSITION_STP = -33.5;
-        public static final double NOTE_SCORE_AMP_POSITION_ACP = 42.0;
-
-        public static class VisionConstants {
-            public static final Transform3d robotToCam = // Made negative, z prev 0.7366
-                    new Transform3d(
-                            new Translation3d(
-                                    Units.inchesToMeters(2),
-                                    Units.inchesToMeters(2),
-                                    Units.inchesToMeters(16)), // forward is positive X, left is positive Y, and up is
-                                                               // positive Z.
-                            new Rotation3d(
-                                    0,
-                                    Math.toRadians(-32.0),
-                                    0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-            // from center.
-            public static final String cameraName = "Camera_Module_v1";
-            public static final double maxNoiseError = 0.25; // meters
-        }
-
-        // NOTE_SCORE_SPEAKER_POSITION
-        public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 130.0;
-        public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = -7.5;
-
-        // SOURCE_POSITION
-        public static final double SOURCE_POSITION_STP = 150.0;
-        public static final double SOURCE_POSITION_ACP = -48.0;
+        public static final double MIN_ACP_ANGLE = -150.0;   
     }
-
-    public static final int LEAD_INTAKE_MOTOR_ID = 0;
-    public static final int FOLLOW_INTAKE_MOTOR_ID = 0;
 
     /*
      * Swerve Constants (newly added ones)
