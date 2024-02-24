@@ -43,21 +43,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double lastAngle;
     private long lastTime;
 
-    private boolean transitioning;
-    private double scheduledAngle;
-
-    // this can be moved to the command, avoid handling operator input in subsystems
-    private DoubleSupplier manualOffset;
-    private BooleanSupplier manualOffsetEnable;
-
     private DutyCycleEncoder absoluteEncoder;
 
     public ArmFeedforward ACPFeedForward;
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
-
-    public ArmChassisPivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
+    public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
         this.movePIDController = new OrbitPID(0.14, 0.0, 0.0); // kP = 0.02
 
@@ -70,6 +62,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0);
         this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 225.0); 
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
+
+        // Initalize start and end states so the robot begins at target during startup
+        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
+        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
 
         this.targetAngle = Constants.HOME_POSITION_ACP;
 
@@ -94,12 +90,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorSlave.setInverted(false);
 
         this.ACPMotorMaster.getEncoder().setPositionConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
-
-        this.transitioning = false;
-        this.scheduledAngle = Double.NaN;
-
-        this.manualOffset = manualOffset;
-        this.manualOffsetEnable = manualOffsetEnable;
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
         this.timer = new OrbitTimer(); 
@@ -172,7 +162,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public double getTargetAngle() {
-        return this.targetAngle + (manualOffsetEnable.getAsBoolean() ? manualOffset.getAsDouble() : 0);
+        return this.targetAngle;
     }
 
     /*
@@ -204,26 +194,14 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
                     || this.acpMotionProfile.isFinished(this.timer.getTimeDeltaSec()); // Should make this a constant
     }
 
-    public BooleanSupplier inTransitionState() {
-        return () -> this.transitioning;
-    }
-
-    public void setScheduledAngle(double angle) {
-        this.scheduledAngle = angle;
-    }
-
-    public double getScheduledAngle() {
-        return this.scheduledAngle;
-    }
-
     // this should probably be a flag set by commands when they start moving the
     // arm, not something that you check this way
     // this isnt very flexible and may give bad data near the target positions
-    public void checkTransitioning() {
-        transitioning = !(Math.abs(this.getACPAngle()) < 2)
-                && (this.getScheduledAngle() > 0.0 && this.getACPAngle() < 0.0)
-                || (this.getScheduledAngle() < 0.0 && this.getACPAngle() > 0.0);
-    }
+    // public void checkTransitioning() {
+    //     transitioning = !(Math.abs(this.getACPAngle()) < 2)
+    //             && (this.getScheduledAngle() > 0.0 && this.getACPAngle() < 0.0)
+    //             || (this.getScheduledAngle() < 0.0 && this.getACPAngle() > 0.0);
+    // }
 
     public void resetEncoderOffset() {
         this.absoluteEncoderOffset = this.absoluteEncoder.getAbsolutePosition();
@@ -274,7 +252,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
         SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());
-        SmartDashboard.putNumber("ACP_Manual_Offset", this.manualOffset.getAsDouble());
         SmartDashboard.putNumber("ACP_Scheduled_Angle", this.getScheduledAngle());
 
         SmartDashboard.putNumber("ACP_Output_Master", this.ACPMotorMaster.get());
