@@ -190,8 +190,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public boolean atTarget() {
-        return Math.abs(this.getTargetAngle() - this.getACPAngle()) <= 3.0 
-                    || this.acpMotionProfile.isFinished(this.timer.getTimeDeltaSec()); // Should make this a constant
+        return Math.abs(this.getTargetAngle() - this.getACPAngle()) <= Constants.ACPConstants.ACP_GO_TO_POS_TOLERANCE; // Should make this a constant
     }
 
     // this should probably be a flag set by commands when they start moving the
@@ -229,11 +228,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         updateSmartDashboard();
 
         // All of Control Loop motion is done within the subsystem -- simply set a target angle and the subsystem will go there
-        if (!this.acpMotionProfile.isFinished(this.timer.getTimeDeltaSec())) {
-            double out = calculateControlLoopOutput(); 
-            SmartDashboard.putNumber("ACP_Control_Loop_Out", out); 
-            this.setACPNormalizedVoltage(out);
-        }
+        // When the motion profile is finished, the result which it outputs will be the goal, making it a PID/FF control loop only
+        double out = calculateControlLoopOutput(); 
+        SmartDashboard.putNumber("ACP_Control_Loop_Out", out); 
+        this.setACPNormalizedVoltage(out);
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
     }

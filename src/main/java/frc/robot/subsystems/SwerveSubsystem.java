@@ -60,10 +60,6 @@ public class SwerveSubsystem extends SubsystemBase {
 				getPositions(), new Pose2d());
 
 		// Configure the AutoBuilder that handles all the auto path following!!
-		// SwerveAutoConfig.configureAutoBuilder(this);
-	}
-
-	public void configureAutoBuilder() {
 		SwerveAutoConfig.configureAutoBuilder(this);
 	}
 

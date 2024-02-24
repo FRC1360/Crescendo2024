@@ -58,9 +58,7 @@ public class RobotContainer {
 
 	private final CommandJoystick left_controller = new CommandJoystick(0);
 	private final CommandJoystick right_controller = new CommandJoystick(1);
-	private final CommandXboxController operator_controller = new CommandXboxController(0);
-
-	private final LEDSubsystem LED = new LEDSubsystem();
+	private final CommandXboxController operator_controller = new CommandXboxController(2);
 
 	public SwerveSubsystem swerveSubsystem;
 
@@ -238,6 +236,6 @@ public class RobotContainer {
 	}
 
 	public LEDSubsystem getLedSubsystem() {
-		return LED;
+		return ledSubsystem;
 	}
 }

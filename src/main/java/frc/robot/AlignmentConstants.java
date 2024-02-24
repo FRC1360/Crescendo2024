@@ -15,7 +15,7 @@ public class AlignmentConstants {
     public static final Pose2d BLUE_SOURCE = new Pose2d(15.12, 1.81, Rotation2d.fromDegrees(-60.95)); // ID 1 & 2
     public static final Pose2d BLUE_AMP = new Pose2d(1.82, 7.30, Rotation2d.fromDegrees(90.0)); // ID 6
 
-    public static final Pose2d BLUE_SPEAKER = new Pose2d(1.82, 5.53, Rotation2d.fromDegrees(-180.0)); // ID 7 & 8
+    public static final Pose2d BLUE_SPEAKER = new Pose2d(1.82, 5.53, Rotation2d.fromDegrees(0.0)); // ID 7 & 8 ** NEED TO FACE AWAY FOR SHOT 
 
     // STAGE with respect to blue alliance (far is cannot be seen)
 

@@ -184,6 +184,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public double calculateControlLoopOutput() { 
+        // Motion profile outputs goal when finished
         TrapezoidProfile.State profileTarget = this.stpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileEndState,
                 this.motionProfileStartState);
 
@@ -205,8 +206,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public boolean atTarget() { 
-        return Math.abs(this.getTargetAngle() - this.getShintakePivotAngle()) <= 3.0 || 
-                        this.stpMotionProfile.isFinished(this.timer.getTimeDeltaSec()); 
+        return Math.abs(this.getTargetAngle() - this.getShintakePivotAngle()) <= Constants.STPConstants.STP_GO_TO_POS_TOLERANCE; 
     }
 
     /*
@@ -262,12 +262,10 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     public void periodic() {
         updateAngularVelocity();
         updateSmartDashboard(); 
-
-        if (!this.stpMotionProfile.isFinished(this.timer.getTimeDeltaSec())) { 
-            double out = calculateControlLoopOutput(); 
-            SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
-            this.setShintakePivotNormalizedVoltage(out);
-        }
+        
+        double out = calculateControlLoopOutput(); 
+        SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
+        this.setShintakePivotNormalizedVoltage(out);
     }
 
 }

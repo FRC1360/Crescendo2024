@@ -103,7 +103,24 @@ public final class Constants {
         public static final int ShintakePivot_ENCODER_CHANNEL = 4;
         public static final double ShintakePivot_GEAR_RATIO = (40.0 / 11.0) * (20.0 / 1.0);
         public static final double ShintakePivot_ENCODER_OFFSET = 6;
+        public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
+
+    public static class ACPConstants {
+        // SHOULDER
+        public static final int ACP_MOTOR_MASTER = 50;
+        public static final int ACP_MOTOR_SLAVE = 51;
+        public static final int ACP_ENCODER_CHANNEL = 0;
+
+        public static final double ACP_ENCODER_OFFSET = 0.472;
+
+        public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
+        public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
+        public static final double MAX_ACP_ANGLE = 80.0;
+        public static final double MIN_ACP_ANGLE = 0.0;  
+        
+        public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
+    } 
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
@@ -136,20 +153,6 @@ public final class Constants {
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
     public static final double CLIMB_POSITION_ACP = 80.0;
-
-    public static class ACPConstants {
-        // SHOULDER
-        public static final int ACP_MOTOR_MASTER = 50;
-        public static final int ACP_MOTOR_SLAVE = 51;
-        public static final int ACP_ENCODER_CHANNEL = 0;
-
-        public static final double ACP_ENCODER_OFFSET = 0.472;
-
-        public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
-        public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = 0.0;   
-    }
 
     /*
      * Swerve Constants (newly added ones)
@@ -217,9 +220,9 @@ public final class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final int driveMotorID = 20;
-            public static final int angleMotorID = 21;
-            public static final int canCoderID = 22;
+            public static final int driveMotorID = 15;
+            public static final int angleMotorID = 16; 
+            public static final int canCoderID = 17;
 
             public static final double angleOffset = 360.0 - 195.46; // 40.3;
 
@@ -229,9 +232,9 @@ public final class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final int driveMotorID = 30;
-            public static final int angleMotorID = 31;
-            public static final int canCoderID = 32;
+            public static final int driveMotorID = 20;
+            public static final int angleMotorID = 21;
+            public static final int canCoderID = 22;
             public static final double angleOffset = 360.0 - 158.73; // 252.2;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -239,9 +242,9 @@ public final class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final int driveMotorID = 40;
-            public static final int angleMotorID = 41;
-            public static final int canCoderID = 42;
+            public static final int driveMotorID = 25;
+            public static final int angleMotorID = 26;
+            public static final int canCoderID = 27;
             public static final double angleOffset = 360.0 - 50.18; // 326.85;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
