@@ -136,9 +136,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
      * Sets arm voltage based off 0.0 - 12.0
      */
     public void setShintakePivotVoltage(double voltage) {
-        if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
-                || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
-            voltage = 0.0;
+        // if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
+        //         || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
+        //     voltage = 0.0;
         this.ShintakePivotMotor.setVoltage(voltage);
     }
 

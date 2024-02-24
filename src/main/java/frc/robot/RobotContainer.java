@@ -14,7 +14,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autos.FetchPath;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
+import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
+import frc.robot.commands.assembly.AssemblySourcePositionCommand;
+import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.swerve.LockWheels;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -53,7 +57,7 @@ public class RobotContainer {
 
 	private final CommandJoystick left_controller = new CommandJoystick(0);
 	private final CommandJoystick right_controller = new CommandJoystick(1);
-	private final XboxController operator_controller = new XboxController(2);
+	private final CommandXboxController operator_controller = new CommandXboxController(0);
 
 	private final LEDSubsystem LED = new LEDSubsystem();
 
@@ -62,6 +66,7 @@ public class RobotContainer {
 	public SendableChooser<Command> autoChooser;
 
 	public ArrayList<Command> tempInitAutos;
+
 
 	// public final EventLoop loop = new EventLoop();
 
@@ -171,18 +176,9 @@ public class RobotContainer {
 
 		// left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
 
-		// xboxController.b().whileTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem,
-		// Constants.ACPConstants.HOME_POSITION_ACP));
-		// xboxController.a().whileTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem,
-		// Constants.ACPConstants.NOTE_SCORE_AMP_POSITION_ACP));
-		// xboxController.x().whileTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem,
-		// Constants.ACPConstants.NOTE_SCORE_SPEAKER_POSITION_ACP));
-		// xboxController.y().whileTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem,
-		// Constants.ACPConstants.SOURCE_POSITION_ACP));
+		operator_controller.b().whileTrue(new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		operator_controller.a().whileTrue(new AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		operator_controller.x().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
 		// new Trigger(m_exampleSubsystem::exampleCondition)

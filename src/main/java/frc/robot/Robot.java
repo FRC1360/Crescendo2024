@@ -124,7 +124,7 @@ public class Robot extends LoggedRobot {
 	/** This function is called once each time the robot enters Disabled mode. */
 	@Override
 	public void disabledInit() {
-		new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
+		// new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
 	}
 
 	@Override
