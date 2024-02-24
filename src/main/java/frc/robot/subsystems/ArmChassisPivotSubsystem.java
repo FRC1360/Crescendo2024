@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,7 +41,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private DoubleSupplier manualOffset;
     private BooleanSupplier manualOffsetEnable;
 
-    private AnalogEncoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     public ArmFeedforward ACPFeedForward;
 
@@ -91,7 +91,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.manualOffset = manualOffset;
         this.manualOffsetEnable = manualOffsetEnable;
 
-        this.absoluteEncoder = new AnalogEncoder(Constants.ACPConstants.ACP_ENCODER);
+        this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
 
         this.isSafe = true;
 

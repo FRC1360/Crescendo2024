@@ -99,7 +99,7 @@ public final class Constants {
         public static final int ShintakePivot_FOLLOW_MOTOR = 43;
         public static final double ShintakePivot_MAX_ANGLE = 2;
         public static final double ShintakePivot_MIN_ANGLE = 3;
-        public static final int ShintakePivot_ENCODER = 4;
+        public static final int ShintakePivot_ENCODER_CHANNEL = 4;
         public static final double ShintakePivot_GEAR_RATIO = (40.0 / 11.0) * (20.0 / 1.0);
         public static final double ShintakePivot_ENCODER_OFFSET = 6;
     }
@@ -140,7 +140,7 @@ public final class Constants {
         // SHOULDER
         public static final int ACP_MOTOR_MASTER = 50;
         public static final int ACP_MOTOR_SLAVE = 51;
-        public static final int ACP_ENCODER = 0;
+        public static final int ACP_ENCODER_CHANNEL = 0;
 
         public static final double ACP_ENCODER_OFFSET = 0.472;
 
