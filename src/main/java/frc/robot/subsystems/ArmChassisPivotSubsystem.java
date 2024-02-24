@@ -45,9 +45,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public ArmFeedforward ACPFeedForward;
 
-    // try handling states using an enum, its more readable and effective
-    private boolean isSafe;
-
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
     public ArmChassisPivotSubsystem(DoubleSupplier manualOffset, BooleanSupplier manualOffsetEnable) {
@@ -92,8 +89,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.manualOffsetEnable = manualOffsetEnable;
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
-
-        this.isSafe = true;
 
         resetMotorRotations();
     }
