@@ -21,6 +21,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private CANSparkMax ShintakePivotMotor;
     private CANSparkMax ShintakePivotFollowingMotor;
     private double ShintakePivotOffset; // Angle offset for the shoulder, should really be called angle
+    private double targetAngle;
 
     public OrbitPID movePIDController;
     public ArmFeedforward ShintakePivotFeedForward;
@@ -53,6 +54,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.ShintakePivotMotor.restoreFactoryDefaults();
         this.ShintakePivotMotor.setIdleMode(IdleMode.kBrake);
         this.ShintakePivotMotor.setInverted(true);
+
+        this.targetAngle = Constants.HOME_POSITION_STP;
 
         this.cacheOffset = 0.0;
 
@@ -190,6 +193,14 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public double getCacheOffset() {
         return this.cacheOffset;
+    }
+
+    public void setTargetAngle(double targetAngle) {
+        this.targetAngle = targetAngle;
+    }
+
+    public double getTargetAngle(){
+        return this.targetAngle + (manualOffsetEnable.getAsBoolean() ? manualOffset.getAsDouble() : 0);
     }
 
     /*

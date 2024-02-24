@@ -48,6 +48,8 @@ public final class Constants {
         public static final int CLIMBER_LEAD_CAN_ID = 99;
         public static final int CLIMBER_SLAVE_CAN_ID = 98;
         public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
+        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.9;
+        public static final double CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS = 0;
     }
 
     public static class OperatorConstants {
