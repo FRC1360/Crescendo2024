@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -23,6 +24,11 @@ public class ClimberSubsystem extends SubsystemBase {
 		this.m_climbMotorSlave = new CANSparkMax(Constants.ClimbConstants.CLIMBER_SLAVE_CAN_ID, MotorType.kBrushless);
 
 		m_climbMotorSlave.follow(m_climbMotorLead);
+
+		Preferences.initBoolean("Is extended ", isExtended);
+		Preferences.initBoolean("Is climber safe", isSafe);
+		Preferences.initDouble("Climber height in rotations", getEncoderPosition());
+		Preferences.initDouble("Climb motor velocity", m_climbMotorLead.getEncoder().getVelocity());
 	}
 
 	public double getEncoderPosition() {
@@ -65,6 +71,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		SmartDashboard.putBoolean("is extended: ", isSafe);
+		Preferences.getBoolean("Is extended ", isExtended);
+		Preferences.getBoolean("Is climber safe", isSafe);
+		Preferences.getDouble("Climber height in rotations", getEncoderPosition());
+		Preferences.getDouble("Climb motor velocity", m_climbMotorLead.getEncoder().getVelocity());
+
 	}
 }

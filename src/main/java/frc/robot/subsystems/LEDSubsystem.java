@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,6 +19,8 @@ public class LEDSubsystem extends SubsystemBase {
         this.LEDController = new Spark(Constants.LED.LEDPort);
         this.LEDColour = 0.0;
         this.LEDstate = LEDStates.ENABLED;
+
+        Preferences.initDouble("LED Colour", this.LEDColour);
     }
 
     public void setLEDEnable() {
@@ -66,6 +69,8 @@ public class LEDSubsystem extends SubsystemBase {
         }
 
         this.LEDController.set(this.LEDColour);
+        Preferences.getDouble("LED Colour", this.LEDColour);
+
     }
 
 }

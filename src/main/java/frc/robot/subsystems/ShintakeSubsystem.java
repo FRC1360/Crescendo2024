@@ -43,7 +43,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 	private final TuningTable kD_Lower = new TuningTable("D_Lower_Shooter");
 	private final TuningTable kF_Lower = new TuningTable("F_Lower_Shooter");
 
-	private double leftkP, leftkI, leftkD, rightkI, rightkP, rightkD;
+	private double leftkP, leftkI, leftkD, leftFF, rightkI, rightkP, rightkD, rightFF;
 
 	public ShintakeSubsystem() {
 		// Using CANSparkFlexes for the two shooter neo vortexes
@@ -55,19 +55,23 @@ public class ShintakeSubsystem extends SubsystemBase {
 		this.m_counter = new Counter(m_digital);
 		this.m_encoderLeft = m_left.getEncoder();
 		this.m_encoderRight = m_right.getEncoder();
-		this.leftkP = 0.0;
+		this.leftkP = 0.0008;
 		this.leftkI = 0.000;
 		this.leftkD = 0.00;
-		this.rightkP = 0.00;
+		this.leftFF = 0.00016;
+		this.rightkP = 0.0008;
 		this.rightkI = 0.0;
 		this.rightkD = 0.00;
+		this.rightFF = 0.00016;
 
 		Preferences.initDouble("right kP", rightkP);
 		Preferences.initDouble("right kI", rightkI);
 		Preferences.initDouble("right kD", rightkD);
+		Preferences.initDouble("right FF", rightFF);
 		Preferences.initDouble("left kP", leftkP);
 		Preferences.initDouble("left kI", leftkI);
 		Preferences.initDouble("left kD", leftkD);
+		Preferences.initDouble("left FF", leftFF);
 		// kP_Upper.setDefault(Constants.Shooter.kP_Upper);
 		// kI_Upper.setDefault(Constants.Shooter.kI_Upper);
 		// kD_Upper.setDefault(Constants.Shooter.kD_Upper);
@@ -81,15 +85,15 @@ public class ShintakeSubsystem extends SubsystemBase {
 		this.rightWheelPID = m_right.getPIDController();
 		this.leftWheelPID = m_left.getPIDController();
 
-		leftWheelPID.setP(0.0008); // 0.0011 (3 zeros, 1 one, 1 five)
+		leftWheelPID.setP(leftkP); // 0.0011 (3 zeros, 1 one, 1 five)
 		// leftWheelPID.setI(kI_Lower.get());
 		// leftWheelPID.setD(0.0005); //0.00012
-		leftWheelPID.setFF(0.00016); // 0.0001815 (3 zeros, 1 one, 1 eight, 1 one, 1 five)
+		leftWheelPID.setFF(leftFF); // 0.0001815 (3 zeros, 1 one, 1 eight, 1 one, 1 five)
 
-		rightWheelPID.setP(0.0008); // 0.0009 (4 zeros, 1 three)
+		rightWheelPID.setP(rightkP); // 0.0009 (4 zeros, 1 three)
 		// rightWheelPID.setI(kI_Upper.get());
 		// rightWheelPID.setD(0.0005); // 0.0005 (3 zeros, 1 five)
-		rightWheelPID.setFF(0.00016); // 0.0001807 (3 zeros, 1 one, 1 eight, 1 zero, 1 seven)
+		rightWheelPID.setFF(rightFF); // 0.0001807 (3 zeros, 1 one, 1 eight, 1 zero, 1 seven)
 
 		m_left.setInverted(false);
 		m_right.setInverted(true);
@@ -201,18 +205,11 @@ public class ShintakeSubsystem extends SubsystemBase {
 		// leftWheelPID.setI(leftkI);
 		// SmartDashboard.getNumber("left kD", leftkD);
 		// leftWheelPID.setD(leftkD);
-		// Preferences.getDouble("right kP", rightkP);
-		// rightWheelPID.setP(rightkP);
-		// Preferences.getDouble("right kI", rightkI);
-		// rightWheelPID.setI(rightkI);
-		// Preferences.getDouble("right kD", rightkD);
-		// rightWheelPID.setD(rightkD);
-		// Preferences.getDouble("left kP", leftkP);
-		// leftWheelPID.setP(leftkP);
-		// Preferences.getDouble("left kI", leftkI);
-		// leftWheelPID.setI(leftkI);
-		// Preferences.getDouble("left kD", leftkD);
-		// leftWheelPID.setD(leftkD);
-
+		Preferences.getDouble("right kP", rightkP);
+		Preferences.getDouble("right kI", rightkI);
+		Preferences.getDouble("right kD", rightkD);
+		Preferences.getDouble("left kP", leftkP);
+		Preferences.getDouble("left kI", leftkI);
+		Preferences.getDouble("left kD", leftkD);
 	}
 }
