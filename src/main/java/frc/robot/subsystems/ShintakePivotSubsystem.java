@@ -127,9 +127,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public void setShintakePivotSpeed(double speed) {
-        if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
-                || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
-            speed = 0.0;
+        // if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
+        //         || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
+        //     speed = 0.0;
         this.ShintakePivotMotor.set(speed);
     }
 
