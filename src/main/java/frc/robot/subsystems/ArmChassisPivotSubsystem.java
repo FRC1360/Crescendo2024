@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -50,12 +50,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private DoubleSupplier manualOffset;
     private BooleanSupplier manualOffsetEnable;
 
-    private AnalogEncoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     public ArmFeedforward ACPFeedForward;
-
-    // try handling states using an enum, its more readable and effective
-    private boolean isSafe;
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
@@ -104,9 +101,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.manualOffset = manualOffset;
         this.manualOffsetEnable = manualOffsetEnable;
 
-        this.absoluteEncoder = new AnalogEncoder(Constants.ACPConstants.ACP_ENCODER);
-
-        this.isSafe = true;
+        this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
         this.timer = new OrbitTimer(); 
 
         resetMotorRotations();

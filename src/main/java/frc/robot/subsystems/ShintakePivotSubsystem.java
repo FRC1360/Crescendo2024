@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,7 +34,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     //private double cacheOffset;
 
-    private AnalogEncoder absoluteEncoder;
+    private DutyCycleEncoder absoluteEncoder;
 
     private double lastTime;
 
@@ -65,7 +65,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         //this.cacheOffset = 0.0;
 
-        this.absoluteEncoder = new AnalogEncoder(Constants.STPConstants.ShintakePivot_ENCODER);
+        this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.ShintakePivot_ENCODER_CHANNEL);
 
         this.lastTime = -1;
         this.lastAngle = Double.NaN;
@@ -102,9 +102,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public void setShintakePivotSpeed(double speed) {
-        if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
-                || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
-            speed = 0.0;
+        // if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
+        //         || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
+        //     speed = 0.0;
         this.ShintakePivotMotor.set(speed);
     }
 

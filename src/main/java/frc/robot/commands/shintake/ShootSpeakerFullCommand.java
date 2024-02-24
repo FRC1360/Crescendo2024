@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
+import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand_Old;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 
@@ -26,7 +26,7 @@ public class ShootSpeakerFullCommand extends SequentialCommandGroup {
 		addCommands(
 				new InstantCommand(() -> shooter.setVelocity(Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER,
 						Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER))
-						.alongWith(new ACPGoToPositionCommand(ACP, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP)/* REPLACE OUTAKE COMMAND WITH GO TO POSITION COMMAND */)
+						.alongWith(new ACPGoToPositionCommand_Old(ACP, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP)/* REPLACE OUTAKE COMMAND WITH GO TO POSITION COMMAND */)
 						.onlyIf(() -> shooter.getShooterReady(shooter.getBackEncoder()))
 						.andThen(new ShootSpeakerCommand(shooter)).onlyIf(xboxController.b()));
 	}
