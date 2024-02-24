@@ -236,15 +236,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         }
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
-
-
-
     }
 
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
         SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());
-        SmartDashboard.putNumber("ACP_Scheduled_Angle", this.getScheduledAngle());
 
         SmartDashboard.putNumber("ACP_Output_Master", this.ACPMotorMaster.get());
         SmartDashboard.putNumber("ACP_Output_Slave", this.ACPMotorSlave.get());

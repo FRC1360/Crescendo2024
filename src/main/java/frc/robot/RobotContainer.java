@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autos.FetchPath;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
+import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand_Old;
+import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
+import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
@@ -48,8 +50,7 @@ public class RobotContainer {
 	public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
 	// The robot's subsystems and commands are defined here...
 	private final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
-	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem(() -> 0.0,
-			() -> false);
+	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem();
 
 	private final LEDSubsystem ledSubsystem = new LEDSubsystem();
 	private final StateMachine sm = new StateMachine();
@@ -166,21 +167,25 @@ public class RobotContainer {
 		// new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
 		// .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
 		// });
+			
 
-		// operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL =
-		// ASSEMBLY_LEVEL.PODIUM_FAR));
-		// operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL =
-		// ASSEMBLY_LEVEL.PODIUM_LEFT));
-		// operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL =
-		// ASSEMBLY_LEVEL.PODIUM_RIGHT));
+		// NOTE! The assembly commands will be activated after the driver schedules through assembly scheduler
+		operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL =
+		ASSEMBLY_LEVEL.PODIUM_FAR));
+		operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL =
+		ASSEMBLY_LEVEL.PODIUM_LEFT));
+		operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL =
+		ASSEMBLY_LEVEL.PODIUM_RIGHT));
 
 		// left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
 
-		operator_controller.b().whileTrue(new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		operator_controller.a().whileTrue(new AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		operator_controller.x().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		// operator_controller.b().whileTrue(new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		// operator_controller.a().whileTrue(new AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		// operator_controller.x().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
+		operator_controller.leftBumper().whileTrue(new ACPMoveManual(armChassisPivotSubsystem, () -> operator_controller.getRightY())); 
+		operator_controller.rightBumper().whileTrue(new STPMoveManual(shintakePivotSubsystem, () -> operator_controller.getRightY())); 
 		// new Trigger(m_exampleSubsystem::exampleCondition)
 		// .onTrue(new ExampleCommand(m_exampleSubsystem));
 
