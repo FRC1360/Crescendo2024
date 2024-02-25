@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -204,7 +205,8 @@ public final class Constants {
         public static final PIDConstants anglePID = new PIDConstants(0.023, 0.000001, 0.0);
 
         /* Custom PID Controllers */
-        public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
+        //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
+        public static final PIDConstants driveAlignPID = new PIDConstants(1.25, 0, 0);
 
         /* Front Left Module - Module 0 */
         public static final class Mod0 {

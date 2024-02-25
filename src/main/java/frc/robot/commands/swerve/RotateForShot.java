@@ -1,6 +1,9 @@
 package frc.robot.commands.swerve;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.AlignmentConstants;
@@ -10,8 +13,13 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class RotateForShot extends Command {
     
     private SwerveSubsystem swerveSubsystem; 
-    public RotateForShot(SwerveSubsystem swerve) { 
+    private DoubleSupplier xDriveSupplier; 
+    private DoubleSupplier yDriveSupplier; 
+
+    public RotateForShot(SwerveSubsystem swerve, DoubleSupplier xDriveSupplier, DoubleSupplier yDriveSupplier) { 
         this.swerveSubsystem = swerve; 
+        this.xDriveSupplier = xDriveSupplier; 
+        this.yDriveSupplier = yDriveSupplier; 
 
         addRequirements(swerve);
     }
@@ -33,18 +41,17 @@ public class RotateForShot extends Command {
 
         if (DriverStation.getAlliance().isPresent() 
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) { 
-            targetAngle = convertDeltaYToAngle(curPose.getY() - AlignmentConstants.RED_SPEAKER.getY()) 
-                            + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); ; 
+            targetAngle = -convertDeltaYToAngle(curPose.getY() - AlignmentConstants.RED_SPEAKER.getY()) 
+                            + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); 
         }
 
-        double currentAngle = (curPose.getRotation().getRadians() + 2 * Math.PI) % (2 * Math.PI);
+        double rotPIDOut = this.swerveSubsystem.calculatePIDAngleOutput(targetAngle); 
 
-        if (Math.abs(targetAngle) < 20) {
-            // If aligning near 0, use the -180 to 180 alignment (built in Rotation2d) to
-            // prevent rollover
-            currentAngle = curPose.getRotation().getRadians();
-        }
+        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()), rotPIDOut, true, true);
+    }
 
-        
+    @Override
+    public boolean isFinished() { 
+        return false;
     }
 }

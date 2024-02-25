@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.EstimatedRobotPose;
 
+import edu.wpi.first.math.controller.PIDController;
+
 // import org.photonvision.EstimatedRobotPose;
 // import org.photonvision.PhotonCamera;
 
@@ -24,6 +26,7 @@ import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveAutoConfig;
+import frc.robot.util.PIDSwerveValues;
 import swervelib.math.SwerveModuleState2;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -38,6 +41,18 @@ public class SwerveSubsystem extends SubsystemBase {
 	public boolean manualDrive = false;
 
 	private PhotonCameraWrapper pCameraWrapper;
+
+	private PIDController driveXPID = new PIDController(Constants.Swerve.driveAlignPID.p, 
+														Constants.Swerve.driveAlignPID.i, 
+														Constants.Swerve.driveAlignPID.d); 
+	
+	private PIDController driveYPID = new PIDController(Constants.Swerve.driveAlignPID.p, 
+														Constants.Swerve.driveAlignPID.i, 
+														Constants.Swerve.driveAlignPID.d); 
+
+	private PIDController anglePID = new PIDController(Constants.Swerve.anglePID.p, 
+														Constants.Swerve.anglePID.i, 
+														Constants.Swerve.anglePID.d); 
 
 	@AutoLogOutput(key = "Swerve/CurrentVelocity")
 	public Translation2d currentVelocity = new Translation2d(0, 0);
@@ -228,6 +243,51 @@ public class SwerveSubsystem extends SubsystemBase {
 		return error.getX() < positionTolerance && error.getY() < positionTolerance; // &&
 																						// error.getRotation().getRadians()
 																						// < angleTolerance;
+	}
+
+	public double calculatePIDAngleOutput(double targetAngDeg) { 
+		System.out.println("Aligning to angle: " + targetAngDeg); 
+
+		Pose2d currentPose = this.currentPose();
+
+		// Constrain angles between 0 and 360
+
+        double currentAngle = (currentPose.getRotation().getDegrees() + 360.0) % (360.0);
+        double targetAngle = (targetAngDeg + 360.0) % (360.0);
+
+        if (Math.abs(targetAngDeg) < 20) {
+            // If aligning near 0, use the -180 to 180 alignment (built in Rotation2d) to
+            // prevent rollover
+            currentAngle = currentPose.getRotation().getDegrees();
+            targetAngle = targetAngDeg;
+        }
+
+        System.out.println("Current angle: " + currentAngle + " Target Angle: " + targetAngle);
+
+		System.out.println("Error Angle" + anglePID.getPositionError());
+
+        // Negated because a positive rotation is perceived as going CW (for the
+        // joysticks)
+        // But robot angle is positive rotating CCW
+        double angleOutput = -this.anglePID.calculate(currentAngle, targetAngle);
+
+		return angleOutput; 
+	}
+
+	public PIDSwerveValues calculatePIDDriveOutput(Pose2d target) { 
+		System.out.print("Aligning to pose: ");
+        System.out.println(target);
+
+		Pose2d currentPose = this.currentPose();
+
+        double driveXOut = this.driveXPID.calculate(currentPose.getX(), target.getX());
+        double driveYOut = this.driveYPID.calculate(currentPose.getY(), target.getY());
+
+        System.out.println("Current Pose: " + this.currentPose());
+
+        System.out.println("Error X: " + driveXPID.getPositionError() + " Error Y: " + driveYPID.getPositionError());
+
+		return new PIDSwerveValues(driveXOut, driveYOut, this.calculatePIDAngleOutput(target.getRotation().getDegrees())); 
 	}
 
 	@Override

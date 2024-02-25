@@ -23,6 +23,7 @@ import frc.robot.commands.assembly.AssemblySourcePositionCommand;
 import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.swerve.LockWheels;
+import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
@@ -152,6 +153,12 @@ public class RobotContainer {
 		// AlignmentConstants.BLUE_SPEAKER).getCommand());
 
 		left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem));
+		right_controller.button(6).whileTrue(new RotateForShot(swerveSubsystem, 
+					() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+						* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+				() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+						* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND));
+						
 		right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
 		right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive));
 
