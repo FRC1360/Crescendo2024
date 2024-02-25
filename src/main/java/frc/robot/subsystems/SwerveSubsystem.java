@@ -274,6 +274,10 @@ public class SwerveSubsystem extends SubsystemBase {
 		return angleOutput; 
 	}
 
+	public boolean drivePIDAtTarget() { 
+		return this.driveXPID.atSetpoint() && this.driveYPID.atSetpoint() && this.anglePID.atSetpoint(); 
+	}
+
 	public PIDSwerveValues calculatePIDDriveOutput(Pose2d target) { 
 		System.out.print("Aligning to pose: ");
         System.out.println(target);

@@ -11,9 +11,6 @@ public class AlignToPose extends Command {
 
     private SwerveSubsystem swerveSubsystem;
     private Pose2d target;
-    private PIDController driveXPid = new PIDController(1.25, 0, 0);
-    private PIDController driveYPid = new PIDController(1.25, 0, 0);
-    private PIDController anglePid = new PIDController(1.25, 0, 0);
 
     public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target) {
         this.swerveSubsystem = swerveSubsystem;
@@ -24,9 +21,6 @@ public class AlignToPose extends Command {
 
     @Override
     public void initialize() {
-        driveXPid.reset();
-        driveYPid.reset();
-        anglePid.reset();
     }
 
     @Override
@@ -38,7 +32,7 @@ public class AlignToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return driveXPid.atSetpoint() && driveYPid.atSetpoint() && anglePid.atSetpoint();
+        return this.swerveSubsystem.drivePIDAtTarget(); 
     }
 
     @Override
