@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Preferences;
@@ -26,7 +27,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     // we can use SparkMAX integrated PID, its got more features and is easier to
     // use
-    public OrbitPID movePIDController; // PID Controller for following Trapazoid Motion Profile
+    public PIDController movePIDController; // PID Controller for following Trapazoid Motion Profile
     // you shouldn't need separate motion profiles for each direction, PIDF will
     // handle gravity and whatnot
     // public TrapezoidProfile.Constraints ACPUpMotionProfileConstraints;
@@ -52,11 +53,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
-        this.movePIDController = new OrbitPID(0.14, 0.0, 0.0); // kP = 0.02
-
-        SmartDashboard.putNumber("ACPMoveKp", movePIDController.kP);
-        SmartDashboard.putNumber("ACPMoveKi", movePIDController.kI);
-        SmartDashboard.putNumber("ACPMoveKd", movePIDController.kD);
+        this.movePIDController = new PIDController(0.14, 0.0, 0.0); // kP = 0.02
 
         // This units are deg / second for velocity and deg / sec^2 for acceleration
         // this.ACPUpMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 350.0);
@@ -100,9 +97,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         Preferences.initDouble("ACP_Output_Master", this.ACPMotorMaster.get());
         Preferences.initDouble("ACP_Output_Slave", this.ACPMotorSlave.get());
         Preferences.initDouble("ACP_Angular_Velocity", this.getAngularVelocity());
-        Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getPTerm());
-        Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getITerm());
-        Preferences.initDouble("ACP_Move_D_Gain", this.movePIDController.getDTerm());
+        Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
+        Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getI());
+        Preferences.initDouble("ACP_Move_D_Gain", this.movePIDController.getD());
         Preferences.initDouble("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
         Preferences.initDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
         Preferences.initDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
@@ -227,7 +224,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         double target = profileTarget.position; 
         double input = this.getACPAngle(); 
 
-        double pidOut = this.movePIDController.calculate(target, input); 
+        double pidOut = this.movePIDController.calculate(input, target); 
 
         double feedforwardOutput = this.ACPFeedForward.calculate(
             Math.toRadians(profileTarget.position),
@@ -257,9 +254,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         Preferences.getDouble("ACP_Output_Master", this.ACPMotorMaster.get());
         Preferences.getDouble("ACP_Output_Slave", this.ACPMotorSlave.get());
         Preferences.getDouble("ACP_Angular_Velocity", this.getAngularVelocity());
-        Preferences.getDouble("ACP_Move_P_Gain", this.movePIDController.getPTerm());
-        Preferences.getDouble("ACP_Move_I_Gain", this.movePIDController.getITerm());
-        Preferences.getDouble("ACP_Move_D_Gain", this.movePIDController.getDTerm());
+        Preferences.getDouble("ACP_Move_P_Gain", this.movePIDController.getP());
+        Preferences.getDouble("ACP_Move_I_Gain", this.movePIDController.getI());
+        Preferences.getDouble("ACP_Move_D_Gain", this.movePIDController.getD());
         Preferences.getDouble("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
         Preferences.getDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
         Preferences.getDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());

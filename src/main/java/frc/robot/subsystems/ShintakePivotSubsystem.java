@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Preferences;
@@ -25,7 +26,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     //private double ShintakePivotOffset; // Angle offset for the shoulder, should really be called angle
     private double targetAngle;
 
-    public OrbitPID movePIDController;
+    public PIDController movePIDController;
     public ArmFeedforward ShintakePivotFeedForward;
     public TrapezoidProfile.Constraints ShintakePivotMotionProfileConstraints;
 
@@ -51,7 +52,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
                 MotorType.kBrushless);
         //this.ShintakePivotOffset = 0.0;
         this.ShintakePivotFollowingMotor.follow(ShintakePivotMotor);
-        this.movePIDController = new OrbitPID(0.025, 0.0, 0.4); // TODO - Tune
+        this.movePIDController = new PIDController(0.025, 0.0, 0.4); // TODO - Tune
 
         this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
         this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
@@ -76,9 +77,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.lastAngle = Double.NaN;
         this.angularVelocity = 0.0; //Double.NaN;
 
-        Preferences.initDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
-        Preferences.initDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());
-        Preferences.initDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getDTerm());
+        Preferences.initDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
+        Preferences.initDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
+        Preferences.initDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
         Preferences.initDouble("ShintakePivot_Angle", this.getShintakePivotAngle());
         Preferences.initDouble("ShintakePivot_NEO_Encoder", this.getMotorRotations());
         Preferences.initDouble("ShintakePivot_Motor_Rotations", this.getMotorRotations());
@@ -204,7 +205,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         double target = profileTarget.position; 
         double input = this.getShintakePivotAngle(); 
 
-        double pidOut = this.movePIDController.calculate(target, input); 
+        double pidOut = this.movePIDController.calculate(input, target); 
 
         double feedforwardOutput = this.ShintakePivotFeedForward.calculate(
             Math.toRadians(profileTarget.position),
@@ -231,9 +232,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public void updateSmartDashboard() {
 
-        Preferences.getDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
-        Preferences.getDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());
-        Preferences.getDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getDTerm());
+        Preferences.getDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
+        Preferences.getDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
+        Preferences.getDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
         Preferences.getDouble("ShintakePivot_Angle", this.getShintakePivotAngle());
         Preferences.getDouble("ShintakePivot_NEO_Encoder", this.getMotorRotations());
         Preferences.getDouble("ShintakePivot_Motor_Rotations", this.getMotorRotations());
