@@ -57,6 +57,8 @@ public class SwerveSubsystem extends SubsystemBase {
 	@AutoLogOutput(key = "Swerve/CurrentVelocity")
 	public Translation2d currentVelocity = new Translation2d(0, 0);
 
+	private Pose2d prevTargetPose = new Pose2d(); 
+
 	public SwerveSubsystem() {
 		// Gyro setup
 		navX = new NavX();
@@ -245,7 +247,11 @@ public class SwerveSubsystem extends SubsystemBase {
 																						// < angleTolerance;
 	}
 
-	public double calculatePIDAngleOutput(double targetAngDeg) { 
+	public double calculatePIDAngleOutput(double targetAngDeg) {
+		if (targetAngDeg != prevTargetPose.getRotation().getDegrees()) { 
+			this.anglePID.reset();
+			this.prevTargetPose = new Pose2d(0, 0, Rotation2d.fromDegrees(targetAngDeg)); 
+		} 
 		System.out.println("Aligning to angle: " + targetAngDeg); 
 
 		Pose2d currentPose = this.currentPose();
@@ -278,7 +284,16 @@ public class SwerveSubsystem extends SubsystemBase {
 		return this.driveXPID.atSetpoint() && this.driveYPID.atSetpoint() && this.anglePID.atSetpoint(); 
 	}
 
-	public PIDSwerveValues calculatePIDDriveOutput(Pose2d target) { 
+	public PIDSwerveValues calculatePIDDriveOutput(Pose2d target) {
+		if (target.getX() != prevTargetPose.getX() || 
+			target.getY() != prevTargetPose.getY() || 
+			target.getRotation().getDegrees() != prevTargetPose.getRotation().getDegrees()) 
+		{ 
+			this.driveXPID.reset();
+			this.driveYPID.reset();
+			this.anglePID.reset();
+			this.prevTargetPose = target; 
+		}  
 		System.out.print("Aligning to pose: ");
         System.out.println(target);
 
