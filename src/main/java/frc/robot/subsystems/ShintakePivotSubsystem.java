@@ -57,19 +57,15 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.movePIDController = new PIDController(kP, kI, kD); // TODO - Tune || 0.025, 0.0, 0.4
 
         this.ShintakePivotFeedForward = new ArmFeedforward(kS, kG, kV); // ks, kg, kv || 0.0, 0.125, 0.0
-        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
-        this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
-
-        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
-        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
 
         this.ShintakePivotMotor.restoreFactoryDefaults();
         this.ShintakePivotMotor.setIdleMode(IdleMode.kBrake);
         this.ShintakePivotMotor.setInverted(true);
 
-        this.targetAngle = Constants.HOME_POSITION_STP;
+        this.targetAngle = Constants.HOME_POSITION_STP; 
 
-        this.timer = new OrbitTimer(); 
+        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
+        this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
 
         //this.cacheOffset = 0.0;
 
@@ -90,6 +86,10 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.initDouble("Shintake Pivot FeedForward kV", kV);
 
         resetMotorRotations();
+
+        this.timer = new OrbitTimer();
+        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getShintakePivotAngle(), 0.0);
     }
 
     public void setIdleMode(IdleMode mode) {
@@ -200,8 +200,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public double calculateControlLoopOutput() { 
         // Motion profile outputs goal when finished
-        TrapezoidProfile.State profileTarget = this.stpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileEndState,
-                this.motionProfileStartState);
+        TrapezoidProfile.State profileTarget = this.stpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileStartState,
+                this.motionProfileEndState);
 
         double target = profileTarget.position; 
         double input = this.getShintakePivotAngle(); 

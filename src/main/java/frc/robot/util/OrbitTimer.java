@@ -7,7 +7,7 @@ public class OrbitTimer {
     private long startTime;
 
     public OrbitTimer() {
-        this.startTime = 0;
+        this.startTime = System.currentTimeMillis();
     }
 
     public void start() {

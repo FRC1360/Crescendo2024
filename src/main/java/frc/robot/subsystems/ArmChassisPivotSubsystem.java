@@ -57,18 +57,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
         this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
 
-        // This units are deg / second for velocity and deg / sec^2 for acceleration
-        // this.ACPUpMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 350.0);
-        // this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0);
-        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(25.0, 10.0); 
-        this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
-
-        // Initalize start and end states so the robot begins at target during startup
-        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
-        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
-
-        this.targetAngle = Constants.HOME_POSITION_ACP;
-
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
         this.ACPMotorSlave = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_SLAVE, MotorType.kBrushless);
 
@@ -92,7 +80,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorMaster.getEncoder().setPositionConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
-        this.timer = new OrbitTimer(); 
+
+        // This units are deg / second for velocity and deg / sec^2 for acceleration
+        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(25.0, 10.0); 
+        this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
 
         Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
         Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getI());
@@ -103,9 +94,15 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         Preferences.initDouble("ACP FeedForward kS", kS);
         Preferences.initDouble("ACP FeedForward kG", kG);
         Preferences.initDouble("ACP FeedForward kV", kV);
-        
 
         resetMotorRotations();
+
+        // Initalize start and end states so the robot goes to target during startup
+        this.timer = new OrbitTimer(); 
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); 
+        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
+
+        this.targetAngle = Constants.HOME_POSITION_ACP;
     }
 
     public double getMotorRotations() {
@@ -219,8 +216,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.absoluteEncoderOffset = this.absoluteEncoder.getAbsolutePosition();
     }
 
-    public double calculateControlLoopOutput() { 
-        this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+    private double calculateControlLoopOutput() { 
         TrapezoidProfile.State profileTarget = this.acpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileStartState,
                                                                                      this.motionProfileEndState);
 
