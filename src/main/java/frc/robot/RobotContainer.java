@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autos.FetchPath;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
@@ -111,8 +112,11 @@ public class RobotContainer {
 	 * joysticks}.
 	 */
 	private void configureBindings() {
-		operator_controller.a().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(0.15)));
-		operator_controller.b().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(-0.05)));
+		//operator_controller.a().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(0.15)));
+		//operator_controller.b().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(-0.05)));
+		operator_controller.a().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 0.0));
+		operator_controller.b().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 70.0));
+		operator_controller.y().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 30.0));
 		
 		// swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
 		// 		swerveSubsystem,

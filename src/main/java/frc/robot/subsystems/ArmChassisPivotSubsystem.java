@@ -53,12 +53,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
-        this.movePIDController = new PIDController(0.14, 0.0, 0.0); // kP = 0.02
+        this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
 
         // This units are deg / second for velocity and deg / sec^2 for acceleration
         // this.ACPUpMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 350.0);
         // this.ACPDownMotionProfileConstraints = new TrapezoidProfile.Constraints(100.0, 250.0);
-        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 225.0); 
+        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(25.0, 10.0); 
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
 
         // Initalize start and end states so the robot begins at target during startup
@@ -70,7 +70,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
         this.ACPMotorSlave = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_SLAVE, MotorType.kBrushless);
 
-        this.ACPFeedForward = new ArmFeedforward(0.0, 0.0005, 0.0); // kG = 0.001
+        this.ACPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0); // kG = 0.001
         SmartDashboard.putNumber("ACPMoveKg", ACPFeedForward.kg);
 
         this.ACPMotorMaster.restoreFactoryDefaults();
@@ -220,11 +220,16 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public double calculateControlLoopOutput() { 
-        TrapezoidProfile.State profileTarget = this.acpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileEndState,
-                this.motionProfileStartState);
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+        TrapezoidProfile.State profileTarget = this.acpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileStartState,
+                                                                                     this.motionProfileEndState);
 
         double target = profileTarget.position; 
         double input = this.getACPAngle(); 
+
+
+        SmartDashboard.putNumber("ACP_Profile_Position", target);
+        SmartDashboard.putNumber("ACP_Profile_Velocity", profileTarget.velocity);
 
         double pidOut = this.movePIDController.calculate(input, target); 
 
@@ -232,7 +237,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             Math.toRadians(profileTarget.position),
             Math.toRadians(this.getAngularVelocity()));
 
-        return pidOut + feedforwardOutput; 
+        return pidOut; 
     }
 
     @Override
@@ -242,9 +247,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         // All of Control Loop motion is done within the subsystem -- simply set a target angle and the subsystem will go there
         // When the motion profile is finished, the result which it outputs will be the goal, making it a PID/FF control loop only
-        //double out = calculateControlLoopOutput(); 
-        //SmartDashboard.putNumber("ACP_Control_Loop_Out", out); 
-        //this.setACPNormalizedVoltage(out);
+        double out = calculateControlLoopOutput(); 
+        SmartDashboard.putNumber("ACP_Control_Loop_Out", out); 
+        this.setACPNormalizedVoltage(out);
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
     }
@@ -263,6 +268,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         Preferences.getDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
         Preferences.getDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
         Preferences.getDouble("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
+
 
         SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
         SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());

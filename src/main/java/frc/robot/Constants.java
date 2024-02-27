@@ -117,8 +117,8 @@ public final class Constants {
 
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 45.0;
-        public static final double MIN_ACP_ANGLE = 0.0;  
+        public static final double MAX_ACP_ANGLE = 80.0;
+        public static final double MIN_ACP_ANGLE = -10.0;  
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
     } 
