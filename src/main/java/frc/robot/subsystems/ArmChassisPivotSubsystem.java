@@ -51,6 +51,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
+    private double kP, kI, kD, kS, kG, kV;
+
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
         this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
@@ -92,18 +94,16 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
         this.timer = new OrbitTimer(); 
 
-        Preferences.initDouble("ACP_Target_Angle", this.getTargetAngle());
-        Preferences.initDouble("ACP_Angle", this.getACPAngle());
-        Preferences.initDouble("ACP_Output_Master", this.ACPMotorMaster.get());
-        Preferences.initDouble("ACP_Output_Slave", this.ACPMotorSlave.get());
-        Preferences.initDouble("ACP_Angular_Velocity", this.getAngularVelocity());
         Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
         Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getI());
         Preferences.initDouble("ACP_Move_D_Gain", this.movePIDController.getD());
-        Preferences.initDouble("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
-        Preferences.initDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        Preferences.initDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
-        Preferences.initDouble("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
+        Preferences.initDouble("ACP kP", kP);
+        Preferences.initDouble("ACP kI", kI);
+        Preferences.initDouble("ACP kD", kD);
+        Preferences.initDouble("ACP FeedForward kS", kS);
+        Preferences.initDouble("ACP FeedForward kG", kG);
+        Preferences.initDouble("ACP FeedForward kV", kV);
+        
 
         resetMotorRotations();
     }
@@ -256,27 +256,28 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public void updateSmartDashboard() {
 
-        Preferences.getDouble("ACP_Target_Angle", this.getTargetAngle());
-        Preferences.getDouble("ACP_Angle", this.getACPAngle());
-        Preferences.getDouble("ACP_Output_Master", this.ACPMotorMaster.get());
-        Preferences.getDouble("ACP_Output_Slave", this.ACPMotorSlave.get());
-        Preferences.getDouble("ACP_Angular_Velocity", this.getAngularVelocity());
+
         Preferences.getDouble("ACP_Move_P_Gain", this.movePIDController.getP());
         Preferences.getDouble("ACP_Move_I_Gain", this.movePIDController.getI());
         Preferences.getDouble("ACP_Move_D_Gain", this.movePIDController.getD());
         Preferences.getDouble("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
         Preferences.getDouble("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
         Preferences.getDouble("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
-        Preferences.getDouble("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
 
 
+        Preferences.getDouble("ACP kP", kP);
+        Preferences.getDouble("ACP kI", kI);
+        Preferences.getDouble("ACP kD", kD);
+        Preferences.getDouble("ACP FeedForward kG", kG);
+        Preferences.getDouble("ACP FeedForward kV", kV);
         SmartDashboard.putNumber("ACP_Target_Angle", this.getTargetAngle());
         SmartDashboard.putNumber("ACP_Angle", this.getACPAngle());
-
         SmartDashboard.putNumber("ACP_Output_Master", this.ACPMotorMaster.get());
-        SmartDashboard.putNumber("ACP_Output_Slave", this.ACPMotorSlave.get());
-
         SmartDashboard.putNumber("ACP_Angular_Velocity", this.getAngularVelocity());
+        SmartDashboard.putNumber("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
+        SmartDashboard.putNumber("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
+        SmartDashboard.putNumber("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
 
         // SmartDashboard.putNumber("ACP_Move_P_Gain", this.movePIDController.getPTerm());
         // SmartDashboard.putNumber("ACP_Move_I_Gain", this.movePIDController.getITerm());
@@ -284,11 +285,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         // SmartDashboard.putBoolean("ACP_Transition_State", transitioning);
 
-        SmartDashboard.putNumber("ACP_Absolute_Encoder_Get", this.absoluteEncoder.get());
-        SmartDashboard.putNumber("ACP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("ACP_Motor_Encoder", this.ACPMotorMaster.getEncoder().getPosition());
-
-        SmartDashboard.putNumber("ACP_Master_Current", this.ACPMotorMaster.getOutputCurrent());
         /*
          * movePIDController.kP = SmartDashboard.getNumber("ACPMoveKp",
          * movePIDController.kP);
