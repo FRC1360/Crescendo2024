@@ -288,9 +288,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         updateAngularVelocity();
         updateSmartDashboard(); 
         
-        double out = calculateControlLoopOutput(); 
+        /*double out = calculateControlLoopOutput(); 
         SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
-        this.setShintakePivotNormalizedVoltage(out);
+        this.setShintakePivotNormalizedVoltage(out);*/
     }
 
 }

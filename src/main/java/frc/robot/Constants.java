@@ -109,15 +109,15 @@ public final class Constants {
 
     public static class ACPConstants {
         // SHOULDER
-        public static final int ACP_MOTOR_MASTER = 50;
-        public static final int ACP_MOTOR_SLAVE = 51;
+        public static final int ACP_MOTOR_MASTER = 40;
+        public static final int ACP_MOTOR_SLAVE = 41;
         public static final int ACP_ENCODER_CHANNEL = 0;
 
-        public static final double ACP_ENCODER_OFFSET = 0.472;
+        public static final double ACP_ENCODER_OFFSET = 0.658;
 
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 80.0;
+        public static final double MAX_ACP_ANGLE = 45.0;
         public static final double MIN_ACP_ANGLE = 0.0;  
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
