@@ -53,11 +53,11 @@ public class Robot extends LoggedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		loggerInit();
+		//loggerInit();
 
 		m_robotContainer = new RobotContainer();
 
-		Pathfinding.setPathfinder(new LocalADStar());
+		/*Pathfinding.setPathfinder(new LocalADStar());
 
 		m_robotContainer.loadAllAutos();
 
@@ -66,7 +66,7 @@ public class Robot extends LoggedRobot {
 													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 		SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
 		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
+		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);*/
 	}
 
 	private void loggerInit() {
@@ -141,6 +141,7 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void disabledPeriodic() {
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
+		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
 	}
 
 	/**

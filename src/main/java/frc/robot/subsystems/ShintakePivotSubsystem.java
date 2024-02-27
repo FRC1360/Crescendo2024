@@ -45,6 +45,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private OrbitTimer timer; 
 
+    private double kP, kI, kD, kS, kG, kV;
+
     public ShintakePivotSubsystem() {
         
         this.ShintakePivotMotor = new CANSparkMax(Constants.STPConstants.ShintakePivot_MOTOR, MotorType.kBrushless);
@@ -52,9 +54,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
                 MotorType.kBrushless);
         //this.ShintakePivotOffset = 0.0;
         this.ShintakePivotFollowingMotor.follow(ShintakePivotMotor);
-        this.movePIDController = new PIDController(0.025, 0.0, 0.4); // TODO - Tune
+        this.movePIDController = new PIDController(kP, kI, kD); // TODO - Tune || 0.025, 0.0, 0.4
 
-        this.ShintakePivotFeedForward = new ArmFeedforward(0.0, 0.125, 0.0); // ks, kg, kv
+        this.ShintakePivotFeedForward = new ArmFeedforward(kS, kG, kV); // ks, kg, kv || 0.0, 0.125, 0.0
         this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(200.0, 600.0); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
 
@@ -80,13 +82,12 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.initDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
         Preferences.initDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
         Preferences.initDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
-        Preferences.initDouble("ShintakePivot_Angle", this.getShintakePivotAngle());
-        Preferences.initDouble("ShintakePivot_NEO_Encoder", this.getMotorRotations());
-        Preferences.initDouble("ShintakePivot_Motor_Rotations", this.getMotorRotations());
-        Preferences.initDouble("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
-        Preferences.initDouble("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        Preferences.initDouble("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
-
+        Preferences.initDouble("Shintake Pivot kP", kP);
+        Preferences.initDouble("Shintake Pivot kI", kI);
+        Preferences.initDouble("Shintake Pivot kD", kD);
+        Preferences.initDouble("Shintake Pivot FeedForward kS", kS);
+        Preferences.initDouble("Shintake Pivot FeedForward kG", kG);
+        Preferences.initDouble("Shintake Pivot FeedForward kV", kV);
 
         resetMotorRotations();
     }
@@ -235,12 +236,18 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.getDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
         Preferences.getDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
         Preferences.getDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
-        Preferences.getDouble("ShintakePivot_Angle", this.getShintakePivotAngle());
-        Preferences.getDouble("ShintakePivot_NEO_Encoder", this.getMotorRotations());
-        Preferences.getDouble("ShintakePivot_Motor_Rotations", this.getMotorRotations());
-        Preferences.getDouble("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
-        Preferences.getDouble("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        Preferences.getDouble("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
+        Preferences.getDouble("Shintake Pivot kP", kP);
+        Preferences.getDouble("Shintake Pivot kI", kI);
+        Preferences.getDouble("Shintake Pivot kD", kD);
+        Preferences.getDouble("Shintake Pivot FeedForward kS", kS);
+        Preferences.getDouble("Shintake Pivot FeedForward kG", kG);
+        Preferences.getDouble("Shintake Pivot FeedForward kV", kV);
+        SmartDashboard.putNumber("ShintakePivot_Angle", this.getShintakePivotAngle());
+        SmartDashboard.putNumber("ShintakePivot_NEO_Encoder", this.getMotorRotations());
+        SmartDashboard.putNumber("ShintakePivot_Motor_Rotations", this.getMotorRotations());
+        SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
+        SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
 
         // SmartDashboard.putNumber("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
         // SmartDashboard.putNumber("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());
@@ -288,9 +295,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         updateAngularVelocity();
         updateSmartDashboard(); 
         
-        double out = calculateControlLoopOutput(); 
+        /*double out = calculateControlLoopOutput(); 
         SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
-        this.setShintakePivotNormalizedVoltage(out);
+        this.setShintakePivotNormalizedVoltage(out);*/
     }
 
 }
