@@ -80,7 +80,13 @@ public class SwerveSubsystem extends SubsystemBase {
 		// Configure the AutoBuilder that handles all the auto path following!!
 		SwerveAutoConfig.configureAutoBuilder(this);
 
-		Preferences.initBoolean("Manual Drive Active", manualDrive);
+		Preferences.initDouble("Swerve DriveXY kP", Constants.Swerve.driveAlignPID.p);
+		Preferences.initDouble("Swerve DriveXY kI", Constants.Swerve.driveAlignPID.i);
+		Preferences.initDouble("Swerve DriveXY kD", Constants.Swerve.driveAlignPID.d);
+		Preferences.initDouble("Swerve Angle kP", Constants.Swerve.driveAlignPID.p);
+		Preferences.initDouble("Swerve Angle kI", Constants.Swerve.driveAlignPID.i);
+		Preferences.initDouble("Swerve Angle kD", Constants.Swerve.driveAlignPID.d);
+
 	}
 
 	public void toggleManualDrive() {
@@ -331,6 +337,11 @@ public class SwerveSubsystem extends SubsystemBase {
 		lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
 		lastPoseTimestamp = System.currentTimeMillis();
 
-		Preferences.getBoolean("Manual Drive Active", manualDrive);
+		Preferences.getDouble("Swerve DriveXY kP", Constants.Swerve.driveAlignPID.p);
+		Preferences.getDouble("Swerve DriveXY kI", Constants.Swerve.driveAlignPID.i);
+		Preferences.getDouble("Swerve DriveXY kD", Constants.Swerve.driveAlignPID.d);
+		Preferences.getDouble("Swerve Angle kP", Constants.Swerve.driveAlignPID.p);
+		Preferences.getDouble("Swerve Angle kI", Constants.Swerve.driveAlignPID.i);
+		Preferences.getDouble("Swerve Angle kD", Constants.Swerve.driveAlignPID.d);
 	}
 }
