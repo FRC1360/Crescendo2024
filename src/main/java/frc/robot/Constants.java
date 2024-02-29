@@ -97,12 +97,12 @@ public final class Constants {
     }
 
     public static class STPConstants { // random placeholder numbers
-        public static final int ShintakePivot_MOTOR = 42;
-        public static final int ShintakePivot_FOLLOW_MOTOR = 43;
+        public static final int STP_MOTOR_MASTER = 42;
+        public static final int STP_MOTOR_SLAVE = 43;
         public static final double ShintakePivot_MAX_ANGLE = 2;
         public static final double ShintakePivot_MIN_ANGLE = 3;
         public static final int ShintakePivot_ENCODER_CHANNEL = 4;
-        public static final double ShintakePivot_GEAR_RATIO = (40.0 / 11.0) * (20.0 / 1.0);
+        public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double ShintakePivot_ENCODER_OFFSET = 6;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }

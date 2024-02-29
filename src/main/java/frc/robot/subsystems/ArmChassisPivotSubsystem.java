@@ -43,7 +43,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     private double angularVelocity; // angular velocity in deg / second
     private double lastAngle;
-    private long lastTime;
+    private double lastTime;
 
     private DutyCycleEncoder absoluteEncoder;
 
@@ -60,7 +60,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
         this.ACPMotorSlave = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_SLAVE, MotorType.kBrushless);
 
-        this.ACPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0); // kG = 0.001
+        this.ACPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
         SmartDashboard.putNumber("ACPMoveKg", ACPFeedForward.kg);
 
         this.ACPMotorMaster.restoreFactoryDefaults();
@@ -75,7 +75,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorSlave.follow(this.ACPMotorMaster);
 
         this.ACPMotorMaster.setInverted(true);
-        this.ACPMotorSlave.setInverted(true);
+        // this.ACPMotorSlave.setInverted(true);
 
         this.ACPMotorMaster.getEncoder().setPositionConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
 
@@ -149,7 +149,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
        
 
         this.ACPMotorMaster.setVoltage(voltage);
-        this.ACPMotorSlave.setVoltage(voltage);
+        //this.ACPMotorSlave.setVoltage(voltage);
     }
 
     /*
@@ -186,7 +186,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     private void updateAngularVelocity() {
-        long currentTime = System.currentTimeMillis();
+        double currentTime = (System.currentTimeMillis() / 1000.0);
 
         double deltaTime = (currentTime - lastTime) / 1000.0;
 
