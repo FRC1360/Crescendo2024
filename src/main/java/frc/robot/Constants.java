@@ -103,7 +103,7 @@ public final class Constants {
         public static final double ShintakePivot_MIN_ANGLE = 3;
         public static final int ShintakePivot_ENCODER_CHANNEL = 4;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double ShintakePivot_ENCODER_OFFSET = 6;
+        public static final double ShintakePivot_ENCODER_OFFSET = 0.650;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -113,19 +113,19 @@ public final class Constants {
         public static final int ACP_MOTOR_SLAVE = 41;
         public static final int ACP_ENCODER_CHANNEL = 0;
 
-        public static final double ACP_ENCODER_OFFSET = 0.658;
+        public static final double ACP_ENCODER_OFFSET = 0.229;
 
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = -10.0;  
+        public static final double MIN_ACP_ANGLE = 20.0; //-10.0;  
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
     } 
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 30.0;
+    public static final double HOME_POSITION_ACP = 60.0; //30.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0;
@@ -148,7 +148,7 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180;
+    public static final double SOURCE_POSITION_STP = 230; //180;
     public static final double SOURCE_POSITION_ACP = 50;
 
     // CLIMB_POSITION

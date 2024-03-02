@@ -16,12 +16,16 @@ import frc.robot.autos.FetchPath;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
+import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
+import frc.robot.commands.assembly.AssemblyHomePositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
 import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
+import frc.robot.commands.shintake.IntakeCommand;
+import frc.robot.commands.shintake.ShootSpeakerCommand;
 import frc.robot.commands.swerve.LockWheels;
 import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -50,9 +54,10 @@ import java.util.function.BooleanSupplier;
 public class RobotContainer {
 	public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
 	// The robot's subsystems and commands are defined here...
-	private final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
+	public final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
 	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem();
 
+	public final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem(); 
 	private final LEDSubsystem ledSubsystem = new LEDSubsystem();
 	private final StateMachine sm = new StateMachine();
 	// Replace with CommandPS4Controller or CommandJoystick if needed
@@ -114,10 +119,20 @@ public class RobotContainer {
 	private void configureBindings() {
 		//operator_controller.a().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(0.15)));
 		//operator_controller.b().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(-0.05)));
-		operator_controller.a().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 0.0));
-		operator_controller.b().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 70.0));
-		operator_controller.y().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 30.0));
+		// operator_controller.a().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 60.0));
+		// operator_controller.b().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 30.0));
+		// operator_controller.y().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 50.0));
+
+		operator_controller.a().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
+		// operator_controller.a().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 150.0));
+		// operator_controller.b().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 60.0));
+		// operator_controller.y().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 90.0));
+
+		operator_controller.b().whileTrue(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 		
+		operator_controller.rightBumper().whileTrue(new IntakeCommand(shintakeSubsystem, ledSubsystem));
+
+		operator_controller.leftBumper().whileTrue(new InstantCommand(() -> shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() * 2800, operator_controller.getLeftTriggerAxis() *  2800)));  
 		// swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
 		// 		swerveSubsystem,
 		// 		() -> -modifyAlliance(modifyAxis(left_controller.getY()))

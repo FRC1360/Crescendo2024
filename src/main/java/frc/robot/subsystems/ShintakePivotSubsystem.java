@@ -53,7 +53,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private double kP, kI, kD, kS, kG, kV;
 
     public ShintakePivotSubsystem() {
-        this.movePIDController = new PIDController(0.001, 0.0, 0.0); // TODO - Tune || 0.025, 0.0, 0.4
+        this.movePIDController = new PIDController(0.025, 0.0, 0.0); // TODO - Tune || 0.025, 0.0, 0.4
 
         this.STPMotorMaster = new CANSparkMax(Constants.STPConstants.STP_MOTOR_MASTER, MotorType.kBrushless);
         this.STPMotorSlave = new CANSparkMax(Constants.STPConstants.STP_MOTOR_SLAVE, MotorType.kBrushless);
@@ -84,7 +84,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.ShintakePivot_ENCODER_CHANNEL);
 
 
-        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(10.0, 10.0); // TODO - Tune
+        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(7.5 * 3, 2.5 * 6); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
 
         //this.cacheOffset = 0.0;
@@ -107,7 +107,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         resetMotorRotations();
 
         this.timer = new OrbitTimer();
-        this.motionProfileStartState = new TrapezoidProfile.State(this.getShintakePivotAngle(), 0.0);
+        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0); //this.getShintakePivotAngle(), 0.0);
         this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
 
         //commented out for testing purposes
@@ -303,9 +303,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         // All of Control Loop motion is done within the subsystem -- simply set a target angle and the subsystem will go there
         // When the motion profile is finished, the result which it outputs will be the goal, making it a PID/FF control loop only
-        /*double out = calculateControlLoopOutput(); 
+        double out = calculateControlLoopOutput(); 
         SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
-        this.setShintakePivotNormalizedVoltage(out);*/
+        this.setShintakePivotNormalizedVoltage(out);
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
     }
@@ -326,6 +326,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
         SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
+        SmartDashboard.putNumber("ShintakePivot_Target_Angle", this.getTargetAngle());
 
         // SmartDashboard.putNumber("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
         // SmartDashboard.putNumber("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());

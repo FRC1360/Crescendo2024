@@ -142,6 +142,7 @@ public class Robot extends LoggedRobot {
 	public void disabledPeriodic() {
 		//m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
+		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
 	}
 
 	/**
@@ -176,6 +177,9 @@ public class Robot extends LoggedRobot {
 		}
 		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
 													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
+
+		m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
+		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
 	}
 
 	/** This function is called periodically during operator control. */
