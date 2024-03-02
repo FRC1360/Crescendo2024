@@ -25,10 +25,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
 		m_climbMotorSlave.follow(m_climbMotorLead);
 
-		Preferences.initBoolean("Is extended ", isExtended);
-		Preferences.initBoolean("Is climber safe", isSafe);
-		Preferences.initDouble("Climber height in rotations", getEncoderPosition());
-		Preferences.initDouble("Climb motor velocity", m_climbMotorLead.getEncoder().getVelocity());
 	}
 
 	public double getEncoderPosition() {
@@ -71,10 +67,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		Preferences.getBoolean("Is extended ", isExtended);
-		Preferences.getBoolean("Is climber safe", isSafe);
-		Preferences.getDouble("Climber height in rotations", getEncoderPosition());
-		Preferences.getDouble("Climb motor velocity", m_climbMotorLead.getEncoder().getVelocity());
+		SmartDashboard.putBoolean("Is extended ", isExtended);
+		SmartDashboard.putBoolean("Is climber safe", isSafe);
+		SmartDashboard.putNumber("Climber height in rotations", getEncoderPosition());
+		SmartDashboard.putNumber("Climb motor velocity", m_climbMotorLead.getEncoder().getVelocity());
 
 	}
 }
