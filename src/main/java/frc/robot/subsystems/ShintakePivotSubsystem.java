@@ -256,7 +256,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         //     this.angularVelocity = deltaAngle / ((double) deltaTime);
         // }
         
-        double deltaTime = (currentTime - lastTime) / 1000.0;
+        double deltaTime = (currentTime - lastTime); /// 1000.0;
 
         this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
         this.lastAngle = currentAngle;

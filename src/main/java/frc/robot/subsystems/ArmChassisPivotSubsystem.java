@@ -188,7 +188,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private void updateAngularVelocity() {
         double currentTime = (System.currentTimeMillis() / 1000.0);
 
-        double deltaTime = (currentTime - lastTime) / 1000.0;
+        double deltaTime = (currentTime - lastTime); /// 1000.0;
 
         this.angularVelocity = (this.getACPAngle() - lastAngle) / deltaTime;
         this.lastAngle = this.getACPAngle();
