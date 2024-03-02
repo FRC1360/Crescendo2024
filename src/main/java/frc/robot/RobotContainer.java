@@ -15,12 +15,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.autos.FetchPath;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
+import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
+//import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
 import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.swerve.LockWheels;
+import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
@@ -48,8 +51,7 @@ public class RobotContainer {
 	public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
 	// The robot's subsystems and commands are defined here...
 	private final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
-	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem(() -> 0.0,
-			() -> false);
+	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem();
 
 	private final LEDSubsystem ledSubsystem = new LEDSubsystem();
 	private final StateMachine sm = new StateMachine();
@@ -57,11 +59,9 @@ public class RobotContainer {
 
 	private final CommandJoystick left_controller = new CommandJoystick(0);
 	private final CommandJoystick right_controller = new CommandJoystick(1);
-	private final CommandXboxController operator_controller = new CommandXboxController(0);
+	private final CommandXboxController operator_controller = new CommandXboxController(2);
 
-	private final LEDSubsystem LED = new LEDSubsystem();
-
-	public SwerveSubsystem swerveSubsystem;
+	//public SwerveSubsystem swerveSubsystem;
 
 	public SendableChooser<Command> autoChooser;
 
@@ -74,7 +74,7 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-		this.swerveSubsystem = new SwerveSubsystem();
+		//this.swerveSubsystem = new SwerveSubsystem();
 
 		// m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
@@ -112,61 +112,75 @@ public class RobotContainer {
 	 * joysticks}.
 	 */
 	private void configureBindings() {
-		swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
-				swerveSubsystem,
-				() -> -modifyAlliance(modifyAxis(left_controller.getY()))
-						* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
-				() -> -modifyAlliance(modifyAxis(left_controller.getX()))
-						* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
-				() -> -modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-				right_controller));
+		//operator_controller.a().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(0.15)));
+		//operator_controller.b().whileTrue(new InstantCommand(()-> armChassisPivotSubsystem.setACPNormalizedVoltage(-0.05)));
+		operator_controller.a().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 0.0));
+		operator_controller.b().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 70.0));
+		operator_controller.y().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 30.0));
+		
+		// swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
+		// 		swerveSubsystem,
+		// 		() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+		// 				* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+		// 		() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+		// 				* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
+		// 		() -> -modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+		// 		right_controller));
 
-		// left_controller.button(1).onTrue(new
-		// InstantCommand(swerveSubsystem::zeroGyro));
+		// // left_controller.button(1).onTrue(new
+		// // InstantCommand(swerveSubsystem::zeroGyro));
 
-		// Left controller Button 1 (trigger) will become shoot (outake)
-		// Right Controller Button 1 (trigger) will be intake
-		left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, ledSubsystem, sm)));
+		// // Left controller Button 1 (trigger) will become shoot (outake)
+		// // Right Controller Button 1 (trigger) will be intake
+		// left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
+		// 		.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+		// 				shintakePivotSubsystem, ledSubsystem, sm)));
 
-		left_controller.button(3)
-				.whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, ledSubsystem, sm)
-						.alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
+		//left_controller.button(3)
+		//.whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+		//shintakePivotSubsystem, ledSubsystem, sm)
+		//.alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
 
-		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, ledSubsystem, sm)));
+		// left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
+		// 		.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+		// 				shintakePivotSubsystem, ledSubsystem, sm)));
 
-		left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
-				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, ledSubsystem, sm)));
+		// left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
+		// 		.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+		// 				shintakePivotSubsystem, ledSubsystem, sm)));
 
-		// left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
-		// AlignmentConstants.RED_SOURCE).getCommand());
+		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
+		// // AlignmentConstants.RED_SOURCE).getCommand());
 
-		// left_controller.button(3).whileTrue(new
-		// PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
+		// // left_controller.button(3).whileTrue(new
+		// // PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
 
-		// left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem,
-		// AlignmentConstants.BLUE_SPEAKER).getCommand());
+		// // left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem,
+		// // AlignmentConstants.BLUE_SPEAKER).getCommand());
 
-		left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem));
-		right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
-		right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive));
+		// left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem));
+		// right_controller.button(6).whileTrue(new RotateForShot(swerveSubsystem, 
+		// 			() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+		// 				* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+		// 		() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+		// 				* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND));
 
-		// Debounce makes for more stability
-		// new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
-		// .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR;
-		// });
-		// new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1)
-		// .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT;
-		// });
-		// new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
-		// .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
-		// });
+		// right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
+		// right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive));
 
+		// // Debounce makes for more stability
+		// // new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
+		// // .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR;
+		// // });
+		// // new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1)
+		// // .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT;
+		// // });
+		// // new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
+		// // .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
+		// // });
+			
+
+		// // NOTE! The assembly commands will be activated after the driver schedules through assembly scheduler
 		// operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL =
 		// ASSEMBLY_LEVEL.PODIUM_FAR));
 		// operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL =
@@ -174,20 +188,22 @@ public class RobotContainer {
 		// operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL =
 		// ASSEMBLY_LEVEL.PODIUM_RIGHT));
 
-		// left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
+		// // left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
 
-		operator_controller.b().whileTrue(new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		operator_controller.a().whileTrue(new AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		operator_controller.x().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		// Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+		// // operator_controller.b().whileTrue(new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		// // operator_controller.a().whileTrue(new AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		// // operator_controller.x().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		// // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-		// new Trigger(m_exampleSubsystem::exampleCondition)
-		// .onTrue(new ExampleCommand(m_exampleSubsystem));
+		// operator_controller.leftBumper().whileTrue(new ACPMoveManual(armChassisPivotSubsystem, () -> operator_controller.getRightY())); 
+		// operator_controller.rightBumper().whileTrue(new STPMoveManual(shintakePivotSubsystem, () -> operator_controller.getRightY())); 
+		// // new Trigger(m_exampleSubsystem::exampleCondition)
+		// // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-		// Schedule `exampleMethodCommand` when the Xbox controller's B button is
-		// pressed,
-		// cancelling on release.
-		// XboxController.kB.whileTrue(m_exampleSubsystem.exampleMethodCommand());
+		// // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+		// // pressed,
+		// // cancelling on release.
+		// // XboxController.kB.whileTrue(m_exampleSubsystem.exampleMethodCommand());
 	}
 
 	/**
@@ -233,6 +249,6 @@ public class RobotContainer {
 	}
 
 	public LEDSubsystem getLedSubsystem() {
-		return LED;
+		return ledSubsystem;
 	}
 }

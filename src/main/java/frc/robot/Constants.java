@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -96,14 +97,31 @@ public final class Constants {
     }
 
     public static class STPConstants { // random placeholder numbers
-        public static final int ShintakePivot_MOTOR = 42;
-        public static final int ShintakePivot_FOLLOW_MOTOR = 43;
+        public static final int STP_MOTOR_MASTER = 42;
+        public static final int STP_MOTOR_SLAVE = 43;
         public static final double ShintakePivot_MAX_ANGLE = 2;
         public static final double ShintakePivot_MIN_ANGLE = 3;
         public static final int ShintakePivot_ENCODER_CHANNEL = 4;
-        public static final double ShintakePivot_GEAR_RATIO = (40.0 / 11.0) * (20.0 / 1.0);
+        public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double ShintakePivot_ENCODER_OFFSET = 6;
+        public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
+
+    public static class ACPConstants {
+        // SHOULDER
+        public static final int ACP_MOTOR_MASTER = 40;
+        public static final int ACP_MOTOR_SLAVE = 41;
+        public static final int ACP_ENCODER_CHANNEL = 0;
+
+        public static final double ACP_ENCODER_OFFSET = 0.658;
+
+        public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
+        public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
+        public static final double MAX_ACP_ANGLE = 80.0;
+        public static final double MIN_ACP_ANGLE = -10.0;  
+        
+        public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
+    } 
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
@@ -136,20 +154,6 @@ public final class Constants {
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
     public static final double CLIMB_POSITION_ACP = 80.0;
-
-    public static class ACPConstants {
-        // SHOULDER
-        public static final int ACP_MOTOR_MASTER = 50;
-        public static final int ACP_MOTOR_SLAVE = 51;
-        public static final int ACP_ENCODER_CHANNEL = 0;
-
-        public static final double ACP_ENCODER_OFFSET = 0.472;
-
-        public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
-        public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = 0.0;   
-    }
 
     /*
      * Swerve Constants (newly added ones)
@@ -201,7 +205,8 @@ public final class Constants {
         public static final PIDConstants anglePID = new PIDConstants(0.023, 0.000001, 0.0);
 
         /* Custom PID Controllers */
-        public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
+        //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
+        public static final PIDConstants driveAlignPID = new PIDConstants(1.25, 0, 0);
 
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
@@ -209,7 +214,7 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
 
-            public static final double angleOffset = 360.0 - 218.93 + 180.0; // 130.0; // Always reversed direction, add
+            public static final double angleOffset = 0.0; //360.0 - 218.93 + 180.0; // 130.0; // Always reversed direction, add
                                                                              // 180
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -217,11 +222,11 @@ public final class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final int driveMotorID = 20;
-            public static final int angleMotorID = 21;
-            public static final int canCoderID = 22;
+            public static final int driveMotorID = 15;
+            public static final int angleMotorID = 16; 
+            public static final int canCoderID = 17;
 
-            public static final double angleOffset = 360.0 - 195.46; // 40.3;
+            public static final double angleOffset = 0.0; //360.0 - 195.46; // 40.3;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -229,20 +234,20 @@ public final class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final int driveMotorID = 30;
-            public static final int angleMotorID = 31;
-            public static final int canCoderID = 32;
-            public static final double angleOffset = 360.0 - 158.73; // 252.2;
+            public static final int driveMotorID = 20;
+            public static final int angleMotorID = 21;
+            public static final int canCoderID = 22;
+            public static final double angleOffset = 0.0; //360.0 - 158.73; // 252.2;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final int driveMotorID = 40;
-            public static final int angleMotorID = 41;
-            public static final int canCoderID = 42;
-            public static final double angleOffset = 360.0 - 50.18; // 326.85;
+            public static final int driveMotorID = 25;
+            public static final int angleMotorID = 26;
+            public static final int canCoderID = 27;
+            public static final double angleOffset = 0.0; //360.0 - 50.18; // 326.85;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);

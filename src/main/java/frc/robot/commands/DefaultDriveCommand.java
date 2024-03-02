@@ -38,25 +38,28 @@ public class DefaultDriveCommand extends Command {
 
         double rotSpeed = -m_rotationSupplier.getAsDouble();
 
-        double curAngle = m_drivetrainSubsystem.navX.getYaw().getDegrees() % 360.0;
+        // double curAngle = m_drivetrainSubsystem.navX.getYaw().getDegrees() % 360.0;
 
-        double curAngle2 = (m_drivetrainSubsystem.navX.getYaw().getDegrees() + 180.0) % 360.0;
+        // double curAngle2 = (m_drivetrainSubsystem.navX.getYaw().getDegrees() + 180.0) % 360.0;
 
-        SmartDashboard.putNumber("Default_Drive_Command_Cur_Angle", curAngle);
         // 2 -> 0 (180deg in alternative frame of reference)
         // 5 -> 90
         // 3 -> 180
         // 4 -> 270
 
         if (this.rotationJoystick.button(3).getAsBoolean())
-            rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle);
+            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(180.0); 
+            //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle);
         else if (this.rotationJoystick.button(2).getAsBoolean())
-            rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
+            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0); 
+            //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
         else if (this.rotationJoystick.button(5).getAsBoolean())
-            rotSpeed = -Constants.Swerve.robotRotationPID.calculate(90.0, curAngle);
+            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(90.0); 
+            //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(90.0, curAngle);
         else if (this.rotationJoystick.button(4).getAsBoolean()) {
-            rotSpeed = -Constants.Swerve.robotRotationPID.calculate(270.0,
-                    curAngle + (Math.abs(270 - curAngle) > 180 ? 360 : 0));
+            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(270.0); 
+            // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(270.0,
+            //         curAngle + (Math.abs(270 - curAngle) > 180 ? 360 : 0));
         }
 
         m_drivetrainSubsystem.drive(
