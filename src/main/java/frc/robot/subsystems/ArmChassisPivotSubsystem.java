@@ -55,12 +55,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
-        this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
+        // this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
+        this.movePIDController = new PIDController(kP, kI, kD); // kP = 0.02
 
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
         this.ACPMotorSlave = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_SLAVE, MotorType.kBrushless);
 
-        this.ACPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
+        this.ACPFeedForward = new ArmFeedforward(kS, kG, kV);
         SmartDashboard.putNumber("ACPMoveKg", ACPFeedForward.kg);
 
         this.ACPMotorMaster.restoreFactoryDefaults();
@@ -240,6 +241,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     public void periodic() {
         updateAngularVelocity();
         updateSmartDashboard();
+        this.movePIDController = new PIDController(kP, kI, kD); // added this here to make sure it updates on the fly
 
         // All of Control Loop motion is done within the subsystem -- simply set a target angle and the subsystem will go there
         // When the motion profile is finished, the result which it outputs will be the goal, making it a PID/FF control loop only
