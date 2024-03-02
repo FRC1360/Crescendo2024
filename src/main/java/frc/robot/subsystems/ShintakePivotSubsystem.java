@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,7 +51,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private double ShintakePivotOffset = Constants.STPConstants.ShintakePivot_ENCODER_OFFSET;
 
 
-    private double kP = 0.001;
+    private double kP = 0.025;
     private double kI = 0.0;
     private double kD = 0.0;
     private double kS = 0.0;
@@ -58,7 +59,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private double kV = 0.0;
 
     public ShintakePivotSubsystem() {
-        this.movePIDController = new PIDController(0.025, 0.0, 0.0); // TODO - Tune || 0.025, 0.0, 0.4
+        this.movePIDController = new PIDController(kP, kI, kD); // TODO - Tune || 0.025, 0.0, 0.4
 
         this.STPMotorMaster = new CANSparkMax(Constants.STPConstants.STP_MOTOR_MASTER, MotorType.kBrushless);
         this.STPMotorSlave = new CANSparkMax(Constants.STPConstants.STP_MOTOR_SLAVE, MotorType.kBrushless);
@@ -136,6 +137,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public void resetMotorRotations() {
+        if (this.absoluteEncoder.getAbsolutePosition() == 0.0) { 
+            DriverStation.reportError("STP Absolute encoder reports 0.0! Possibly not connected properly!", true);
+        }
         double newPos = (this.absoluteEncoder.getAbsolutePosition()- this.ShintakePivotOffset);
 
         SmartDashboard.putNumber("New Pos", newPos);

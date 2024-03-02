@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -130,7 +131,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void resetMotorRotations() {
-        //
+        if (this.absoluteEncoder.getAbsolutePosition() == 0.0) { 
+            DriverStation.reportError("ACP Absolute encoder reports 0.0! Possibly not connected properly!", true);
+        }
+
         double newPos = (absoluteEncoder.getAbsolutePosition() - this.absoluteEncoderOffset);
 
         SmartDashboard.putNumber("New_Pos", newPos);
