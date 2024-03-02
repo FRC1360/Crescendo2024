@@ -50,7 +50,12 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private double ShintakePivotOffset = Constants.STPConstants.ShintakePivot_ENCODER_OFFSET;
 
 
-    private double kP, kI, kD, kS, kG, kV;
+    private double kP = 0.001;
+    private double kI = 0.0;
+    private double kD = 0.0;
+    private double kS = 0.0;
+    private double kG = 0.0;
+    private double kV = 0.0;
 
     public ShintakePivotSubsystem() {
         this.movePIDController = new PIDController(0.025, 0.0, 0.0); // TODO - Tune || 0.025, 0.0, 0.4
@@ -58,7 +63,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.STPMotorMaster = new CANSparkMax(Constants.STPConstants.STP_MOTOR_MASTER, MotorType.kBrushless);
         this.STPMotorSlave = new CANSparkMax(Constants.STPConstants.STP_MOTOR_SLAVE, MotorType.kBrushless);
 
-        this.STPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0); // ks, kg, kv || 
+        // this.STPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0); // ks, kg, kv ||
+        this.STPFeedForward = new ArmFeedforward(kS, kG, kV); 
         SmartDashboard.putNumber("STPMoveKg", STPFeedForward.kg);
 
 
@@ -97,9 +103,6 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.initDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
         Preferences.initDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
         Preferences.initDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
-        Preferences.initDouble("Shintake Pivot kP", kP);
-        Preferences.initDouble("Shintake Pivot kI", kI);
-        Preferences.initDouble("Shintake Pivot kD", kD);
         Preferences.initDouble("Shintake Pivot FeedForward kS", kS);
         Preferences.initDouble("Shintake Pivot FeedForward kG", kG);
         Preferences.initDouble("Shintake Pivot FeedForward kV", kV);
@@ -314,9 +317,6 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.getDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
         Preferences.getDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
         Preferences.getDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
-        Preferences.getDouble("Shintake Pivot kP", kP);
-        Preferences.getDouble("Shintake Pivot kI", kI);
-        Preferences.getDouble("Shintake Pivot kD", kD);
         Preferences.getDouble("Shintake Pivot FeedForward kS", kS);
         Preferences.getDouble("Shintake Pivot FeedForward kG", kG);
         Preferences.getDouble("Shintake Pivot FeedForward kV", kV);

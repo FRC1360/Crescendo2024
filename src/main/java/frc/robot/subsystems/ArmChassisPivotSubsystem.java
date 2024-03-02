@@ -51,18 +51,23 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
-    private double kP, kI, kD, kS, kG, kV;
+    private double kP = 0.0325;
+    private double kI = 0.0;
+    private double kD = 0.0;
+    private double kS = 0.0;
+    private double kG = 0.0;
+    private double kV = 0.0;
 
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
-        this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
-        //this.movePIDController = new PIDController(kP, kI, kD); // kP = 0.02
+        // this.movePIDController = new PIDController(0.0325, 0.0, 0.0); // kP = 0.02
+        this.movePIDController = new PIDController(kP, kI, kD);
 
         this.ACPMotorMaster = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_MASTER, MotorType.kBrushless);
         this.ACPMotorSlave = new CANSparkMax(Constants.ACPConstants.ACP_MOTOR_SLAVE, MotorType.kBrushless);
 
-        this.ACPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
-        //this.ACPFeedForward = new ArmFeedforward(kS, kG, kV);
+        // this.ACPFeedForward = new ArmFeedforward(0.0, 0.0, 0.0);
+        this.ACPFeedForward = new ArmFeedforward(kS, kG, kV);
         SmartDashboard.putNumber("ACPMoveKg", ACPFeedForward.kg);
 
         this.ACPMotorMaster.restoreFactoryDefaults();

@@ -38,21 +38,25 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
+	private double XkP = 1.25; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double XkI = 0.0;
+    private double XkD = 0.0;
+    private double YkP = 1.25; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double YkI = 0.0;
+    private double YkD = 0.0;
+	private double AkP = 0.023; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
+    private double AkI = 0.000001;
+    private double AkD = 0.0;
+
 	public boolean manualDrive = false;
 
 	private PhotonCameraWrapper pCameraWrapper;
 
-	private PIDController driveXPID = new PIDController(Constants.Swerve.driveAlignPID.p, 
-														Constants.Swerve.driveAlignPID.i, 
-														Constants.Swerve.driveAlignPID.d); 
+	private PIDController driveXPID = new PIDController(XkP, XkI, XkD); 
 	
-	private PIDController driveYPID = new PIDController(Constants.Swerve.driveAlignPID.p, 
-														Constants.Swerve.driveAlignPID.i, 
-														Constants.Swerve.driveAlignPID.d); 
+	private PIDController driveYPID = new PIDController(YkP, YkI, YkD); 
 
-	private PIDController anglePID = new PIDController(Constants.Swerve.anglePID.p, 
-														Constants.Swerve.anglePID.i, 
-														Constants.Swerve.anglePID.d); 
+	private PIDController anglePID = new PIDController(AkP, AkI, AkD); 
 
 	@AutoLogOutput(key = "Swerve/CurrentVelocity")
 	public Translation2d currentVelocity = new Translation2d(0, 0);
@@ -80,12 +84,15 @@ public class SwerveSubsystem extends SubsystemBase {
 		// Configure the AutoBuilder that handles all the auto path following!!
 		SwerveAutoConfig.configureAutoBuilder(this);
 
-		Preferences.initDouble("Swerve DriveXY kP", Constants.Swerve.driveAlignPID.p);
-		Preferences.initDouble("Swerve DriveXY kI", Constants.Swerve.driveAlignPID.i);
-		Preferences.initDouble("Swerve DriveXY kD", Constants.Swerve.driveAlignPID.d);
-		Preferences.initDouble("Swerve Angle kP", Constants.Swerve.driveAlignPID.p);
-		Preferences.initDouble("Swerve Angle kI", Constants.Swerve.driveAlignPID.i);
-		Preferences.initDouble("Swerve Angle kD", Constants.Swerve.driveAlignPID.d);
+		Preferences.initDouble("Swerve DriveX kP", this.XkP);
+		Preferences.initDouble("Swerve DriveX kI", this.XkI);
+		Preferences.initDouble("Swerve DriveX kD", this.XkD);
+		Preferences.initDouble("Swerve DriveY kP", this.YkP);
+		Preferences.initDouble("Swerve DriveY kI", this.YkI);
+		Preferences.initDouble("Swerve DriveY kD", this.YkD);
+		Preferences.initDouble("Swerve Angle kP", this.AkP);
+		Preferences.initDouble("Swerve Angle kI", this.AkI);
+		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
 	}
 
@@ -343,11 +350,14 @@ public class SwerveSubsystem extends SubsystemBase {
 		lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
 		lastPoseTimestamp = System.currentTimeMillis();
 
-		Preferences.getDouble("Swerve DriveXY kP", Constants.Swerve.driveAlignPID.p);
-		Preferences.getDouble("Swerve DriveXY kI", Constants.Swerve.driveAlignPID.i);
-		Preferences.getDouble("Swerve DriveXY kD", Constants.Swerve.driveAlignPID.d);
-		Preferences.getDouble("Swerve Angle kP", Constants.Swerve.driveAlignPID.p);
-		Preferences.getDouble("Swerve Angle kI", Constants.Swerve.driveAlignPID.i);
-		Preferences.getDouble("Swerve Angle kD", Constants.Swerve.driveAlignPID.d);
+		Preferences.getDouble("Swerve DriveX kP", this.XkP);
+		Preferences.getDouble("Swerve DriveX kI", this.XkI);
+		Preferences.getDouble("Swerve DriveX kD", this.XkD);
+		Preferences.getDouble("Swerve DriveY kP", this.YkP);
+		Preferences.getDouble("Swerve DriveY kI", this.YkI);
+		Preferences.getDouble("Swerve DriveY kD", this.YkD);
+		Preferences.getDouble("Swerve Angle kP", this.AkP);
+		Preferences.getDouble("Swerve Angle kI", this.AkI);
+		Preferences.getDouble("Swerve Angle kD", this.AkD);
 	}
 }
