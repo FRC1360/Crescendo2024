@@ -139,6 +139,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     public void resetMotorRotations() {
         if (this.absoluteEncoder.getAbsolutePosition() == 0.0) { 
             DriverStation.reportError("STP Absolute encoder reports 0.0! Possibly not connected properly!", true);
+            System.exit(1);
         }
         double newPos = (this.absoluteEncoder.getAbsolutePosition()- this.ShintakePivotOffset);
 

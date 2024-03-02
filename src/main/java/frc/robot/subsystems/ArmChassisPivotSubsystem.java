@@ -130,9 +130,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorMaster.set(speed);
     }
 
-    public void resetMotorRotations() {
+    public void resetMotorRotations() 
+    {
         if (this.absoluteEncoder.getAbsolutePosition() == 0.0) { 
             DriverStation.reportError("ACP Absolute encoder reports 0.0! Possibly not connected properly!", true);
+            System.exit(1);
         }
 
         double newPos = (absoluteEncoder.getAbsolutePosition() - this.absoluteEncoderOffset);
