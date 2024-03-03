@@ -14,10 +14,8 @@ import frc.robot.util.OrbitTimer;
 public class ShootSpeakerCommand extends Command {
 
 	private ShintakeSubsystem m_shooter;
-	private boolean ready;
-	// private int count_detect;
-	private double prev;
-	private OrbitTimer time = new OrbitTimer();
+	// private int count_detect; 
+	private OrbitTimer timer = new OrbitTimer();
 	private boolean ready2;
 
 	public ShootSpeakerCommand(ShintakeSubsystem shooter) {
@@ -29,13 +27,10 @@ public class ShootSpeakerCommand extends Command {
 
 	@Override
 	public void initialize() {
-		m_shooter.stopIntake();
-		m_shooter.stopShooter();
+		//m_shooter.stopIntake();
 		m_shooter.resetShintakeCount();
-		ready = false;
 		// count_detect = 0;
 		ready2 = false;
-		prev = this.m_shooter.getBackEncoder();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -43,9 +38,9 @@ public class ShootSpeakerCommand extends Command {
 	public void execute() {
 		if (m_shooter.shooterWheelsReady() && !ready2) {
 			ready2 = true;
-			time.start();
+			timer.start();
 		}
-		if (time.getTimeDeltaMillis() >= 250 && ready2)
+		if (timer.getTimeDeltaMillis() >= 250 && ready2)
 			m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
 	}
 
@@ -54,7 +49,6 @@ public class ShootSpeakerCommand extends Command {
 	public void end(boolean interrupted) {
 		m_shooter.stopIntake();
 		m_shooter.stopShooter();
-		ready = false;
 		ready2 = false;
 	}
 

@@ -91,7 +91,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.ShintakePivot_ENCODER_CHANNEL);
 
 
-        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(7.5 * 3, 2.5 * 6); // TODO - Tune
+        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(7.5 * 4, 2.5 * 6); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
 
         //this.cacheOffset = 0.0;

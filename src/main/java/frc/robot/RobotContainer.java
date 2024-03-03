@@ -25,7 +25,9 @@ import frc.robot.commands.assembly.AssemblySourcePositionCommand;
 import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.shintake.IntakeCommand;
+import frc.robot.commands.shintake.OutakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
+import frc.robot.commands.shintake.ShootSpeakerFullCommand;
 import frc.robot.commands.swerve.LockWheels;
 import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -123,7 +125,11 @@ public class RobotContainer {
 		// operator_controller.b().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 30.0));
 		// operator_controller.y().onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 50.0));
 
-		operator_controller.a().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
+		//operator_controller.a().whileTrue(new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+
+		//operator_controller.a().whileTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 0.0)); 
+		operator_controller.a().whileTrue(new AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
+		//operator_controller.a().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 		// operator_controller.a().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 150.0));
 		// operator_controller.b().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 60.0));
 		// operator_controller.y().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 90.0));
@@ -132,7 +138,13 @@ public class RobotContainer {
 		
 		operator_controller.rightBumper().whileTrue(new IntakeCommand(shintakeSubsystem, ledSubsystem));
 
-		operator_controller.leftBumper().whileTrue(new InstantCommand(() -> shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() * 2800, operator_controller.getLeftTriggerAxis() *  2800)));  
+		//operator_controller.x().whileTrue(new OutakeCommand(shintakeSubsystem)); 
+
+		operator_controller.povUp().whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
+
+		operator_controller.x().onTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem, operator_controller)); 
+
+		//operator_controller.leftBumper().whileTrue(new InstantCommand(() -> shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() * 2800, operator_controller.getLeftTriggerAxis() *  2800)));  
 		// swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
 		// 		swerveSubsystem,
 		// 		() -> -modifyAlliance(modifyAxis(left_controller.getY()))

@@ -79,12 +79,12 @@ public final class Constants {
     public static class ShintakeConstants {
         public static final double UNFEED_SPEED_BACK = 0.1;
         public static final double INTAKE_SPEED_BACK = 0.1;
-        public static final double INITIAL_DEFAULT_INTAKE_SPEED = 0.1;
+        public static final double INITIAL_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6250;
+        public static final double SHOOT_VELOCITY_FRONT = 5800; //6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 5800; //6250;
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
         public static final int RIGHT_SHOOTAKE_CAN_ID = 37;
@@ -118,22 +118,22 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = 20.0; //-10.0;  
+        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
     } 
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 60.0; //30.0;
+    public static final double HOME_POSITION_ACP = 30.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0;
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 80.0;
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 200.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 55.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 60.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 50.0;
 
     // NOTE_SCORE_TRAP_POSITION
     public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
@@ -148,8 +148,8 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 230; //180;
-    public static final double SOURCE_POSITION_ACP = 50;
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop
+    public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
