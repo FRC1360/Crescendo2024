@@ -8,6 +8,7 @@ import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
+import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.util.StateMachine;
 
@@ -26,7 +27,7 @@ public class AssemblyAmpPositionCommand extends SequentialCommandGroup {
 
                 new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_AMP_POSITION_STP)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Amp stage", "STAGE 3"))),
-                new InstantCommand(ledSubsystem::setLEDScoring),
+                new InstantCommand(ledSubsystem::setLEDScoring),        
                 new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
                 new InstantCommand(() -> sm.setAtAmpScore()));
     }

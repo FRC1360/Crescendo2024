@@ -17,6 +17,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
 import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
+import frc.robot.commands.assembly.AmpScoreCommand;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
 import frc.robot.commands.assembly.AssemblyHomePositionCommand;
@@ -141,6 +142,7 @@ public class RobotContainer {
 		//operator_controller.x().whileTrue(new OutakeCommand(shintakeSubsystem)); 
 
 		operator_controller.povUp().whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
+		operator_controller.y().whileTrue(new AmpScoreCommand(shintakeSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		operator_controller.x().onTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem, operator_controller)); 
 
