@@ -1,6 +1,7 @@
 package frc.robot.commands.assembly;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -23,9 +24,10 @@ public class AssemblySourcePositionCommand extends SequentialCommandGroup {
                 new ACPGoToPositionCommand(ACPSubsystem, Constants.SOURCE_POSITION_ACP)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 2"))),
                 // Command 2
-
-                new STPGoToPositionCommand(STPSubsystem, Constants.SOURCE_POSITION_STP)
+                //.alongWith(
+                new STPGoToPositionCommand(STPSubsystem, Constants.SOURCE_POSITION_STP, ACPSubsystem)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 3"))),
+               // ),
                 new InstantCommand(ledSubsystem::setLEDSource),
                 new InstantCommand(() -> SmartDashboard.putString("Source stage", "DONE")),
                 new InstantCommand(() -> sm.setAtSource()));

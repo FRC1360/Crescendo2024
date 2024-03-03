@@ -128,7 +128,6 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 		leftWheelPID.setReference(this.leftVelocity, CANSparkFlex.ControlType.kVelocity);
 		rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);
-
 	}
 
 	public boolean shooterWheelsReady() {

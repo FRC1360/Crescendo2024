@@ -359,5 +359,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.getDouble("Swerve Angle kP", this.AkP);
 		Preferences.getDouble("Swerve Angle kI", this.AkI);
 		Preferences.getDouble("Swerve Angle kD", this.AkD);
+
+		SmartDashboard.putBoolean("Manual Drive Active", manualDrive); 
 	}
 }

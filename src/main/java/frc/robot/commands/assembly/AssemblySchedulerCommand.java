@@ -13,6 +13,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
+import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.util.StateMachine;
 
 public class AssemblySchedulerCommand extends Command {
@@ -34,16 +35,18 @@ public class AssemblySchedulerCommand extends Command {
     private ShintakePivotSubsystem shintakePivot;
     private LEDSubsystem led;
     private StateMachine sm;
+    private ShintakeSubsystem shintake; 
     private int n = 0;
 
     public AssemblySchedulerCommand(Supplier<ASSEMBLY_LEVEL> level, SwerveSubsystem swerveSubsystem,
-            ArmChassisPivotSubsystem chassisPivot, ShintakePivotSubsystem shintakePivot, LEDSubsystem led,
+            ArmChassisPivotSubsystem chassisPivot, ShintakePivotSubsystem shintakePivot, ShintakeSubsystem shintake, LEDSubsystem led,
             StateMachine sm) {
         this.level = level;
         this.swerveSubsystem = swerveSubsystem;
         this.chassisPivot = chassisPivot;
         this.shintakePivot = shintakePivot;
         this.led = led;
+        this.shintake = shintake; 
         this.sm = sm;
     }
 
@@ -77,24 +80,33 @@ public class AssemblySchedulerCommand extends Command {
                 case SUBWOOFER:
                     // this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot,
                     // shintakePivot, led, sm);
-                    this.assemblyCommand = new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER)
-                            .getCommand()
-                            .andThen(new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = 
+                    // new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER)
+                    //         .getCommand()
+                    //         .andThen(
+                                new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm); 
+                                // );
                     break;
 
                 case AMP:
                     // this.assemblyCommand = new AssemblyAmpPositionCommand(chassisPivot,
                     // shintakePivot, led, sm);
-                    this.assemblyCommand = new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand()
-                            .andThen(new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = 
+                    // new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand()
+                    //         .andThen(
+                                new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm); 
+                                // );
                     break;
 
                 case SOURCE:
                     // this.assemblyCommand = new AssemblySourcePositionCommand(chassisPivot,
                     // shintakePivot, led, sm);
-                    this.assemblyCommand = new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE)
-                            .getCommand()
-                            .andThen(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = 
+                    //new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE)
+                    //         .getCommand()
+                           // .andThen(
+                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm);
+                                //);
                     break;
                 default:
                     break;
@@ -127,7 +139,7 @@ public class AssemblySchedulerCommand extends Command {
                     // shintakePivot, led, sm);
                     this.assemblyCommand = new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SPEAKER)
                             .getCommand()
-                            .andThen(new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            .andThen(new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm));
                     ;
                     break;
 

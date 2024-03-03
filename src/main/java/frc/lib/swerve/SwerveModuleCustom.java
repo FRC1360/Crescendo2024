@@ -156,6 +156,7 @@ public class SwerveModuleCustom {
         }
 
         //System.out.println("Desired angle: " + angle); 
+        SmartDashboard.putNumber("Target Mod Angle " + this.moduleNumber, angle); 
         angleController.setReference(angle, ControlType.kPosition);
         lastAngle = angle;
         this.targetAngle = angle;

@@ -20,11 +20,13 @@ public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
 
                 // Command 1
                 new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_ACP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 2"))),
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 2")))
                 // Command 2
+                .alongWith(
 
-                new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_STP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 3"))),
+                new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_STP, ACPSubsystem)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 3")))
+                ), 
                 new InstantCommand(ledSubsystem::setLEDEnable),
                 new InstantCommand(() -> SmartDashboard.putString("Amp stage", "DONE")),
                 new InstantCommand(() -> sm.setAtClimb()));

@@ -20,11 +20,14 @@ public class AssemblyClimbCommand extends SequentialCommandGroup {
 
                 // Command 1
 
-                new STPGoToPositionCommand(STPSubsystem, Constants.CLIMB_POSITION_STP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Climb stage", "STAGE 2"))),
+                new STPGoToPositionCommand(STPSubsystem, Constants.CLIMB_POSITION_STP, ACPSubsystem)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Climb stage", "STAGE 2")))
+                
+                .alongWith(
                 // Command 2
                 new ACPGoToPositionCommand(ACPSubsystem, Constants.CLIMB_POSITION_ACP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Climb stage", "STAGE 3"))),
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Climb stage", "STAGE 3")))
+                ), 
                 // Command 3 add climber stuff here
 
                 new InstantCommand(ledSubsystem::setLEDEnable),

@@ -17,7 +17,7 @@ import frc.robot.subsystems.ShintakeSubsystem;
 public class ShootSpeakerFullCommand extends SequentialCommandGroup {
 
 	/** Creates a new ShootSpeakerFullCommand. */
-	public ShootSpeakerFullCommand(ShintakeSubsystem shooter, ArmChassisPivotSubsystem ACP, CommandXboxController xboxController) {
+	public ShootSpeakerFullCommand(ShintakeSubsystem shooter, ArmChassisPivotSubsystem ACP) {
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(

@@ -140,7 +140,7 @@ public class Robot extends LoggedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		//m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
+		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
 	}
@@ -189,6 +189,7 @@ public class Robot extends LoggedRobot {
 		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT);
 		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT);
 
+		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 	}
 
 	@Override

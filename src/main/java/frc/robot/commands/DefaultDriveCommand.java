@@ -54,10 +54,10 @@ public class DefaultDriveCommand extends Command {
             rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0); 
             //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
         else if (this.rotationJoystick.button(5).getAsBoolean())
-            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(90.0); 
+            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(45.0); 
             //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(90.0, curAngle);
         else if (this.rotationJoystick.button(4).getAsBoolean()) {
-            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(270.0); 
+            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(315.0); 
             // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(270.0,
             //         curAngle + (Math.abs(270 - curAngle) > 180 ? 360 : 0));
         }
