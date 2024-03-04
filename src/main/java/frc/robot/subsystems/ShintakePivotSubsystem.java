@@ -34,7 +34,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private OrbitTimer timer;
     
-    public TrapezoidProfile.Constraints ShintakePivotMotionProfileConstraints;
+    public TrapezoidProfile.Constraints STPMotionProfileConstraints;
     
     private Double angularVelocity;
     private double lastTime;
@@ -48,7 +48,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
      // degrees per second
      public ArmFeedforward STPFeedForward;
 
-    private double ShintakePivotOffset = Constants.STPConstants.ShintakePivot_ENCODER_OFFSET;
+    private double STPOffset = Constants.STPConstants.STP_ENCODER_OFFSET;
 
 
     private double kP = 0.025;
@@ -88,11 +88,11 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.STPMotorMaster.getEncoder().setPositionConversionFactor(Constants.STPConstants.STP_GEAR_RATIO);
 
-        this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.ShintakePivot_ENCODER_CHANNEL);
+        this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.STP_ENCODER_CHANNEL);
 
 
-        this.ShintakePivotMotionProfileConstraints = new TrapezoidProfile.Constraints(120, 80); // TODO - Tune
-        this.stpMotionProfile = new TrapezoidProfile(this.ShintakePivotMotionProfileConstraints);
+        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(120, 80); // TODO - Tune
+        this.stpMotionProfile = new TrapezoidProfile(this.STPMotionProfileConstraints);
 
         //this.cacheOffset = 0.0;
 
@@ -101,9 +101,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.lastAngle = Double.NaN;
         this.angularVelocity = 0.0; //Double.NaN;
 
-        Preferences.initDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
-        Preferences.initDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
-        Preferences.initDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
+        Preferences.initDouble("STP_Move_P_Gain", this.movePIDController.getP());
+        Preferences.initDouble("STP_Move_I_Gain", this.movePIDController.getI());
+        Preferences.initDouble("STP_Move_D_Gain", this.movePIDController.getD());
         Preferences.initDouble("Shintake Pivot FeedForward kS", kS);
         Preferences.initDouble("Shintake Pivot FeedForward kG", kG);
         Preferences.initDouble("Shintake Pivot FeedForward kV", kV);
@@ -111,7 +111,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         resetMotorRotations();
 
         this.timer = new OrbitTimer();
-        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0); //this.getShintakePivotAngle(), 0.0);
+        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0); //this.getSTPAngle(), 0.0);
         this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
 
         //commented out for testing purposes
@@ -125,13 +125,13 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     // Returns the ShintakePivot GLOBAL angle. The global angle is the angle
     // relative to the shoulder
-    public double getShintakePivotAngle() {
+    public double getSTPAngle() {
         return this.rotationsToAngleConversion(this.getMotorRotations());
     }
 
-    public void setShintakePivotSpeed(double speed) {
-        // if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
-        //         || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
+    public void setSTPSpeed(double speed) {
+        // if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+        //         || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
         //     speed = 0.0;
         this.STPMotorMaster.set(speed);
     }
@@ -141,7 +141,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
             DriverStation.reportError("STP Absolute encoder reports 0.0! Possibly not connected properly!", true);
             System.exit(1);
         }
-        double newPos = (this.absoluteEncoder.getAbsolutePosition()- this.ShintakePivotOffset);
+        double newPos = (this.absoluteEncoder.getAbsolutePosition()- this.STPOffset);
 
         SmartDashboard.putNumber("New Pos", newPos);
 
@@ -162,9 +162,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     /*
      * Sets arm voltage based off 0.0 - 12.0
      */
-    public void setShintakePivotVoltage(double voltage) {
-        // if (this.getShintakePivotAngle() > Constants.STPConstants.ShintakePivot_MAX_ANGLE
-        //         || this.getShintakePivotAngle() < Constants.STPConstants.ShintakePivot_MIN_ANGLE)
+    public void setSTPVoltage(double voltage) {
+        // if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+        //         || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
         //     voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
@@ -172,8 +172,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     /*
      * Sets arm voltage based off 0.0 - 1.0
      */
-    public void setShintakePivotNormalizedVoltage(double voltage) {
-        this.setShintakePivotVoltage(voltage * 12.0); // Should probably change this to a constant somewhere for
+    public void setSTPNormalizedVoltage(double voltage) {
+        this.setSTPVoltage(voltage * 12.0); // Should probably change this to a constant somewhere for
                                                       // ARM_VOLTAGE
     }
 
@@ -181,28 +181,28 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     // shoulder
     /*
      * public double getTargetAngle() { // Use getTargetAngle() when doing commands
-     * to move the ShintakePivot
+     * to move the shintake pivot
      * 
-     * return -this.shoulderShintakePivotMessenger.getShoulderAngle() +
-     * this.getShintakePivotOffset() + (manualOffsetEnable.getAsBoolean() ?
+     * return -this.shoulderSTPMessenger.getShoulderAngle() +
+     * this.getSTPOffset() + (manualOffsetEnable.getAsBoolean() ?
      * -manualOffset.getAsDouble() : 0.0);
      * }
      */
 
-    // public void setShintakePivotOffset(double offset) {
-    //     this.ShintakePivotOffset = offset;
+    // public void setSTPOffset(double offset) {
+    //     this.STPOffset = offset;
     // }
 
     // The offset is more akin to a LOCAL angle. The local angle is the angle
-    // relative to ShintakePivot starting position.
-    // This angle ensures the ShintakePivot doesn't move relative to the starting
+    // relative to shintake pivot starting position.
+    // This angle ensures the Shintake pivot doesn't move relative to the starting
     // location while the shoulder rotates
     // For example, if the ShintakePivot starts pointing directly up and the
     // ShintakePivot offset is 0, the ShintakePivot will stay pointing up
     // regardless of the shoulder's orientation. Change this value when you want to
     // change the angle of the ShintakePivot
-    // public double getShintakePivotOffset() {
-    //     return this.ShintakePivotOffset;
+    // public double getSTPOffset() {
+    //     return this.STPOffset;
     // }
 
     // The CACHE is a means of saving an arbitrary ShintakePivot position to return
@@ -211,8 +211,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     // Getting the cache offset gets the angle that the ShintakePivot was at when it
     // was last set
     // public void setCacheOffset() {
-    //     System.out.println("Setting cache offset to " + this.getShintakePivotOffset());
-    //     this.cacheOffset = this.getShintakePivotOffset();
+    //     System.out.println("Setting cache offset to " + this.getSTPOffset());
+    //     this.cacheOffset = this.getSTPOffset();
     // }
 
     // public double getCacheOffset() {
@@ -224,7 +224,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.movePIDController.reset();
 
-        this.motionProfileStartState = new TrapezoidProfile.State(this.getShintakePivotAngle(), this.getAngularVelocity());
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), this.getAngularVelocity());
         this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
         this.timer.start(); 
 
@@ -254,7 +254,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     public void updateAngularVelocity() {
         //time in seconds
         double currentTime = (System.currentTimeMillis() / 1000.0);
-        double currentAngle = this.getShintakePivotAngle();
+        double currentAngle = this.getSTPAngle();
 
         // if (this.lastTime != -1 && !this.lastAngle.isNaN()) {
         //     double deltaTime = currentTime - this.lastTime;
@@ -276,11 +276,11 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public boolean atTarget() { 
-            return Math.abs(this.getTargetAngle() - this.getShintakePivotAngle()) <= Constants.STPConstants.STP_GO_TO_POS_TOLERANCE; 
+            return Math.abs(this.getTargetAngle() - this.getSTPAngle()) <= Constants.STPConstants.STP_GO_TO_POS_TOLERANCE; 
     }
 
     public void resetEncoderOffset(){
-        this.ShintakePivotOffset = this.absoluteEncoder.getAbsolutePosition();
+        this.STPOffset = this.absoluteEncoder.getAbsolutePosition();
     }
 
     public double calculateControlLoopOutput() { 
@@ -289,7 +289,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
                 this.motionProfileEndState);
 
         double target = profileTarget.position; 
-        double input = this.getShintakePivotAngle(); 
+        double input = this.getSTPAngle(); 
 
         SmartDashboard.putNumber("STP_Profile_Position", target);
         SmartDashboard.putNumber("STP_Profile_Velocity", profileTarget.velocity);
@@ -313,46 +313,46 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // When the motion profile is finished, the result which it outputs will be the goal, making it a PID/FF control loop only
         double out = calculateControlLoopOutput(); 
         SmartDashboard.putNumber("STP_Control_Loop_Out", out); 
-        this.setShintakePivotNormalizedVoltage(out);
+        this.setSTPNormalizedVoltage(out);
         // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
         // SmartDashboard.putNumber("Target Angle: ", true);
     }
     public void updateSmartDashboard() {
 
-        Preferences.getDouble("ShintakePivot_Move_P_Gain", this.movePIDController.getP());
-        Preferences.getDouble("ShintakePivot_Move_I_Gain", this.movePIDController.getI());
-        Preferences.getDouble("ShintakePivot_Move_D_Gain", this.movePIDController.getD());
+        Preferences.getDouble("STP_Move_P_Gain", this.movePIDController.getP());
+        Preferences.getDouble("STP_Move_I_Gain", this.movePIDController.getI());
+        Preferences.getDouble("STP_Move_D_Gain", this.movePIDController.getD());
         Preferences.getDouble("Shintake Pivot FeedForward kS", kS);
         Preferences.getDouble("Shintake Pivot FeedForward kG", kG);
         Preferences.getDouble("Shintake Pivot FeedForward kV", kV);
-        SmartDashboard.putNumber("ShintakePivot_Angle", this.getShintakePivotAngle());
-        SmartDashboard.putNumber("ShintakePivot_NEO_Encoder", this.getMotorRotations());
+        SmartDashboard.putNumber("STP_Angle", this.getSTPAngle());
+        SmartDashboard.putNumber("STP_NEO_Encoder", this.getMotorRotations());
         SmartDashboard.putNumber("STP_MOTOR_MASTER_Rotations", this.getMotorRotations());
-        SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
-        SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
-        SmartDashboard.putNumber("ShintakePivot_Target_Angle", this.getTargetAngle());
+        SmartDashboard.putNumber("STP_Absolute_Encoder_Relative", this.absoluteEncoder.get());
+        SmartDashboard.putNumber("STP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("STP_Angular_Velocity", this.getAngularVelocity().doubleValue());
+        SmartDashboard.putNumber("STP_Target_Angle", this.getTargetAngle());
 
-        // SmartDashboard.putNumber("ShintakePivot_Move_P_Gain", this.movePIDController.getPTerm());
-        // SmartDashboard.putNumber("ShintakePivot_Move_I_Gain", this.movePIDController.getITerm());
-        // SmartDashboard.putNumber("ShintakePivot_Move_D_Gain", this.movePIDController.getDTerm());
+        // SmartDashboard.putNumber("STP_Move_P_Gain", this.movePIDController.getPTerm());
+        // SmartDashboard.putNumber("STP_Move_I_Gain", this.movePIDController.getITerm());
+        // SmartDashboard.putNumber("STP_Move_D_Gain", this.movePIDController.getDTerm());
 
-        // SmartDashboard.putNumber("ShintakePivot_Angle", this.getShintakePivotAngle());
-        // SmartDashboard.putNumber("ShintakePivot_NEO_Encoder", this.getMotorRotations());
+        // SmartDashboard.putNumber("STP_Angle", this.getSTPAngle());
+        // SmartDashboard.putNumber("STP_NEO_Encoder", this.getMotorRotations());
         // SmartDashboard.putNumber("STP_MOTOR_MASTER_Rotations", this.getMotorRotations());
-        // // SmartDashboard.putNumber("ShintakePivot_Cache_Offset",
+        // // SmartDashboard.putNumber("STP_Cache_Offset",
         // // this.getCacheOffset());
-        // // SmartDashboard.putNumber("ShintakePivot_Manual_Offset",
+        // // SmartDashboard.putNumber("STP_Manual_Offset",
         // // this.manualOffset.getAsDouble());
-        // //SmartDashboard.putNumber("ShintakePivot_Offset", this.getShintakePivotOffset());
-        // SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Relative", this.absoluteEncoder.get());
-        // SmartDashboard.putNumber("ShintakePivot_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
+        // //SmartDashboard.putNumber("STP_Offset", this.getSTPOffset());
+        // SmartDashboard.putNumber("STP_Absolute_Encoder_Relative", this.absoluteEncoder.get());
+        // SmartDashboard.putNumber("STP_Absolute_Encoder_Absolute", this.absoluteEncoder.getAbsolutePosition());
 
         // // movePIDController.kP = SmartDashboard.getNumber("STPMoveKp", movePIDController.kP);
         // // movePIDController.kI = SmartDashboard.getNumber("STPMoveKi", movePIDController.kI);
         // // movePIDController.kD = SmartDashboard.getNumber("STPMoveKd", movePIDController.kD);
 
-        // SmartDashboard.putNumber("ShintakePivot_Angular_Velocity", this.getAngularVelocity().doubleValue());
+        // SmartDashboard.putNumber("STP_Angular_Velocity", this.getAngularVelocity().doubleValue());
     }
 
     
