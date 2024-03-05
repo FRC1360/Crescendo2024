@@ -122,6 +122,9 @@ public final class Constants {
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
     } 
+    // START_POSITION
+    public static final double START_POSITION_STP = 0.0;
+    public static final double START_POSITION_ACP = 40.0;
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
