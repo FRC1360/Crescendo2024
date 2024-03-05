@@ -126,7 +126,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
 	public void updateAbsAngleSmartDashboard() { 
 		for (int i = 0; i < 4; i++) { 
-			SmartDashboard.putNumber("Mod " + i + " Abs angle", swerveModules[i].getCanCoder().getDegrees()); 
+			SmartDashboard.putNumber("Mod " + i + " Abs angle", swerveModules[i].getCanCoder().getDegrees());
+			SmartDashboard.putNumber("NEO Integrated Encoder Angle " + i, swerveModules[i].getAngle().getDegrees());  
 		}
 	}
 
