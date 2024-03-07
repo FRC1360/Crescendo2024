@@ -173,6 +173,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setTargetAngle(double targetAngle) {
+        if (this.targetAngle == targetAngle)
+        {
+            return;
+        }
         this.targetAngle = targetAngle;
 
         this.movePIDController.reset();
