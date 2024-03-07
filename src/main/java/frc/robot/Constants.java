@@ -99,8 +99,8 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 270;
-        public static final double STP_MIN_ANGLE = -90;
+        public static final double STP_MAX_ANGLE = 2;
+        public static final double STP_MIN_ANGLE = 3;
         public static final int STP_ENCODER_CHANNEL = 4;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double STP_ENCODER_OFFSET = 0.650;
@@ -118,17 +118,17 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = 21.0; // Can't go lower, limelight //-10.0; //20.0; 
+        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
     } 
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
-    public static final double START_POSITION_ACP = 31.0;
+    public static final double START_POSITION_ACP = 40.0;
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 31.0;
+    public static final double HOME_POSITION_ACP = 0.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 200.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
@@ -217,7 +217,7 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
 
-            public static final double angleOffset = 145.3; //360.0-209.97; //360.0 - 218.93 + 180.0; // 130.0; // Always reversed direction, add
+            public static final double angleOffset = 167.3 + 180; //360.0-209.97; //360.0 - 218.93 + 180.0; // 130.0; // Always reversed direction, add
                                                                              // 180
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -229,7 +229,7 @@ public final class Constants {
             public static final int angleMotorID = 16; 
             public static final int canCoderID = 17;
 
-            public static final double angleOffset = 80.06; //360.0 - 195.46; // 40.3;
+            public static final double angleOffset = 88.06 + 183.9 - 360; //360.0 - 195.46; // 40.3;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -240,7 +240,7 @@ public final class Constants {
             public static final int driveMotorID = 20;
             public static final int angleMotorID = 21;
             public static final int canCoderID = 22;
-            public static final double angleOffset = 160.82; //360.0 - 158.73; // 252.2;
+            public static final double angleOffset = 160.82 + 70 ; //360.0 - 158.73; // 252.2;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
