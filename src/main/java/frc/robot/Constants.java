@@ -128,7 +128,7 @@ public final class Constants {
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 0.0;
+    public static final double HOME_POSITION_ACP = 21.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 200.0; //-140.0 - 70.0; // Must go positive, wires will break going negative

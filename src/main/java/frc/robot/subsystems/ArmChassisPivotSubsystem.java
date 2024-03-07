@@ -90,7 +90,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
 
         // This units are deg / second for velocity and deg / sec^2 for acceleration
-        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(15, 7.5); 
+        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(60, 60); 
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
 
         Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
