@@ -99,8 +99,8 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 2;
-        public static final double STP_MIN_ANGLE = 3;
+        public static final double STP_MAX_ANGLE = 270;
+        public static final double STP_MIN_ANGLE = -90;
         public static final int STP_ENCODER_CHANNEL = 4;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double STP_ENCODER_OFFSET = 0.650;
@@ -118,17 +118,17 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
+        public static final double MIN_ACP_ANGLE = 21.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
     } 
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
-    public static final double START_POSITION_ACP = 40.0;
+    public static final double START_POSITION_ACP = 31.0;
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 0.0;
+    public static final double HOME_POSITION_ACP = 31.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 200.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
