@@ -17,7 +17,6 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
 import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
-import frc.robot.commands.assembly.AmpScoreCommand;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
 import frc.robot.commands.assembly.AssemblyHomePositionCommand;
@@ -25,6 +24,7 @@ import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
 import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
+import frc.robot.commands.shintake.AmpScoreCommand;
 import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.shintake.OutakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
@@ -143,11 +143,12 @@ public class RobotContainer {
 		//operator_controller.x().whileTrue(new OutakeCommand(shintakeSubsystem)); 
 
 		//operator_controller.povUp().whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
-		operator_controller.y().whileTrue(new AmpScoreCommand(shintakeSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+		//operator_controller.y().whileTrue(new AmpScoreCommand(shintakeSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 		//operator_controller.povUp().and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP)).whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
 
+		right_controller.button(1).and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP)).whileTrue(new AmpScoreCommand(shintakeSubsystem, ledSubsystem, sm));
 		//operator_controller.x().onTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem, operator_controller)); 
-		right_controller.button(1).whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
+		right_controller.button(1).and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)).whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
 
 		//operator_controller.leftBumper().whileTrue(new InstantCommand(() -> shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() * 2800, operator_controller.getLeftTriggerAxis() *  2800)));  
 		swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
@@ -175,9 +176,9 @@ public class RobotContainer {
 		// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())
 		// .alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
 
-		// left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-		// 		.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-		// 				shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
+		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
+				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
 		left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,

@@ -85,6 +85,7 @@ public final class Constants {
         public static final double SHOOT_SPEED_FRONT = 0.5;
         public static final double SHOOT_VELOCITY_FRONT = 5800; //6250;
         public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 5800; //6250;
+        public static final double AMP_VELOCITY_FRONT = 3000; 
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
         public static final int RIGHT_SHOOTAKE_CAN_ID = 37;
@@ -131,7 +132,7 @@ public final class Constants {
     public static final double HOME_POSITION_ACP = 21.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 200.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 220.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 55.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
