@@ -141,6 +141,7 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void disabledPeriodic() {
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
+		m_robotContainer.swerveSubsystem.resetModuleZeros();
 		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
 	}
