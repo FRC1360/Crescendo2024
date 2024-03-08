@@ -122,12 +122,18 @@ public class ShintakeSubsystem extends SubsystemBase {
 	}
 
 	public void setVelocity(double rightVelocity, double leftVelocity) {
-		System.out.println("Setting velocity to: " + rightVelocity); 
-		this.leftVelocity = leftVelocity;
-		this.rightVelocity = rightVelocity;
-
-		leftWheelPID.setReference(this.leftVelocity, CANSparkFlex.ControlType.kVelocity);
-		rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);
+		System.out.println("Setting velocity to: " + rightVelocity);
+		if (this.leftVelocity != leftVelocity)
+		{
+			this.leftVelocity = leftVelocity;
+			leftWheelPID.setReference(this.leftVelocity, CANSparkFlex.ControlType.kVelocity);
+		}
+		
+		if (this.rightVelocity != rightVelocity)
+		{
+			this.rightVelocity = rightVelocity;
+			rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);	
+		}
 	}
 
 	public boolean shooterWheelsReady() {

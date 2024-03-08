@@ -103,7 +103,7 @@ public class Robot extends LoggedRobot {
 
 		AutoLogOutputManager.addPackage("frc.lib");
 
-		Logger.registerURCL(URCL.startExternal());
+        Logger.registerURCL(URCL.startExternal());
 		Logger.start();
 		DataLogManager.start();
 	}
@@ -192,6 +192,17 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 	}
 
+	private class TestContext
+	{
+		public double acpAngle = Constants.HOME_POSITION_ACP;
+		public double stpAngle = Constants.HOME_POSITION_STP;
+		public double stLeftVel = 0;
+		public double stRightVel = 0;
+		public double stIntakeVel = 0;
+	}
+
+	private TestContext m_test = new TestContext();
+
 	@Override
 	public void testInit() {
 		// Cancels all running commands at the start of test mode.
@@ -201,6 +212,20 @@ public class Robot extends LoggedRobot {
 	/** This function is called periodically during test mode. */
 	@Override
 	public void testPeriodic() {
+		
+		m_test.acpAngle = SmartDashboard.getNumber("TEST_ACP_ANGLE", m_test.acpAngle);
+		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle);
+		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel);
+		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
+		
+		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle);
+		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle);
+		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stLeftVel, m_test.stRightVel);
+		m_robotContainer.shintakeSubsystem.varIntake(m_test.stIntakeVel);
+
+		m_robotContainer.shintakePivotSubsystem.periodic();
+		m_robotContainer.armChassisPivotSubsystem.periodic();
+		m_robotContainer.shintakeSubsystem.periodic();
 	}
 
 	/** This function is called once when the robot is first started up. */
