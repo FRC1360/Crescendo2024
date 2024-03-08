@@ -56,6 +56,7 @@ public class NavX {
     }
 
     public Rotation2d getYaw() {
+        System.out.println("NavX: " + getYawDegrees()); 
         return Rotation2d.fromDegrees(getYawDegrees());
     }
 
