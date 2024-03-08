@@ -134,20 +134,13 @@ public class SwerveModuleCustom {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
-            //double percentOutput = desiredState.speedMetersPerSecond / Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND;
-            // double percentOutput = 0.25; 
-            // System.out.println("Setting"); 
-            // driveMotor.set(percentOutput);
-
-            //this.targetSpeed = desiredState.speedMetersPerSecond;
-            driveController.setReference(
-                desiredState.speedMetersPerSecond,
-                    ControlType.kVelocity,
-                    0,
-                    feedforward.calculate(desiredState.speedMetersPerSecond));
+            double percentOutput = desiredState.speedMetersPerSecond / Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND;
+            driveMotor.set(percentOutput);
         } else {
+            System.out.println("In control loop"); 
             this.targetSpeed = desiredState.speedMetersPerSecond;
             SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber, desiredState.speedMetersPerSecond); 
+            SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber, this.getSpeed()); 
             driveController.setReference(
                     desiredState.speedMetersPerSecond,
                     ControlType.kVelocity,
