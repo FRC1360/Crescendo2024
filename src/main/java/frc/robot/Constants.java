@@ -133,7 +133,7 @@ public final class Constants {
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 220.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 55.0; //80.0;
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 73.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0;

@@ -179,4 +179,3 @@ ctre_sim/
 
 # build constants used in code, generated during build
 src/main/java/frc/robot/BuildConstants.java
-src/main/java/frc/robot/BuildConstants.java
