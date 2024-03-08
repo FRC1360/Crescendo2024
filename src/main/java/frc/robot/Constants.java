@@ -63,13 +63,13 @@ public final class Constants {
         public static final Transform3d robotToCam = // Made negative, z prev 0.7366
                 new Transform3d(
                         new Translation3d(
-                                Units.inchesToMeters(2),
-                                Units.inchesToMeters(2),
-                                Units.inchesToMeters(16)), // forward is positive X, left is positive Y, and up is
+                                Units.inchesToMeters(13.5),
+                                Units.inchesToMeters(-6.5),
+                                Units.inchesToMeters(9.0)), // forward is positive X, left is positive Y, and up is
                                                            // positive Z.
                         new Rotation3d(
                                 0,
-                                Math.toRadians(-32.0),
+                                Math.toRadians(-45.0),
                                 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final String cameraName = "Camera_Module_v1";

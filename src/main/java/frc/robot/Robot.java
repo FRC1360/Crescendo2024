@@ -53,7 +53,7 @@ public class Robot extends LoggedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		//loggerInit();
+		loggerInit();
 
 		m_robotContainer = new RobotContainer();
 
