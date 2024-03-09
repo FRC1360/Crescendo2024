@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.AlignmentConstants;
 import frc.robot.Constants.Swerve;
 import frc.robot.autos.PathfindAuto;
@@ -42,12 +43,11 @@ public class AssemblySchedulerCommand extends Command {
     private StateMachine sm;
     private ShintakeSubsystem shintake; 
     private BooleanSupplier noPathFind; 
-    private InterpolatingDoubleTreeMap shintakePivotDistanceMap; 
     private int n = 0;
 
     public AssemblySchedulerCommand(Supplier<ASSEMBLY_LEVEL> level, SwerveSubsystem swerveSubsystem,
             ArmChassisPivotSubsystem chassisPivot, ShintakePivotSubsystem shintakePivot, ShintakeSubsystem shintake, LEDSubsystem led,
-            StateMachine sm, BooleanSupplier noPathfind, InterpolatingDoubleTreeMap shintakePivotDistanceMap) {
+            StateMachine sm, BooleanSupplier noPathfind) {
         this.level = level;
         this.swerveSubsystem = swerveSubsystem;
         this.chassisPivot = chassisPivot;
@@ -56,7 +56,6 @@ public class AssemblySchedulerCommand extends Command {
         this.shintake = shintake; 
         this.noPathFind = noPathfind; 
         this.sm = sm;
-        this.shintakePivotDistanceMap = shintakePivotDistanceMap; 
     }
 
     @Override
@@ -118,8 +117,8 @@ public class AssemblySchedulerCommand extends Command {
                                 //);
                     break;
                 case SUBWOOFER_DEFENDED: 
-                    this.assemblyCommand = new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                shintakePivotDistanceMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER))); 
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
                     break; 
                 default:
                     break;
@@ -167,8 +166,8 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SUBWOOFER_DEFENDED: 
-                    this.assemblyCommand = new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                this.shintakePivotDistanceMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER))); 
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
                     break; 
                 default:
                     break;

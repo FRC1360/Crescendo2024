@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -50,6 +51,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private double STPOffset = Constants.STPConstants.STP_ENCODER_OFFSET;
 
+    public InterpolatingDoubleTreeMap shintakePivotDistanceAngleMap; 
 
     private double kP = 0.025;
     private double kI = 0.0;
@@ -116,6 +118,15 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.targetAngle = this.getSTPAngle(); 
         
+        this.shintakePivotDistanceAngleMap = new InterpolatingDoubleTreeMap(); 
+        // Calc by inverse tan((2.045-0.9017)/(dist-0.248)) <-- target speaker height - height of shooter / dist - offset of speaker from center of bot
+        this.shintakePivotDistanceAngleMap.put(0.5, 90-77.56); 
+        this.shintakePivotDistanceAngleMap.put(1.0, 90-56.67); 
+        this.shintakePivotDistanceAngleMap.put(1.5, 90-42.40); 
+        this.shintakePivotDistanceAngleMap.put(2.0, 90-33.127); 
+        this.shintakePivotDistanceAngleMap.put(2.5, 90-26.916); 
+        this.shintakePivotDistanceAngleMap.put(3.0, 90-22.56); 
+
     }
 
     public double getMotorRotations() {
