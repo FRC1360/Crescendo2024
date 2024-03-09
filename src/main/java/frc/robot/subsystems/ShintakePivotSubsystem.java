@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -50,6 +51,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private double STPOffset = Constants.STPConstants.STP_ENCODER_OFFSET;
 
+    public InterpolatingDoubleTreeMap shintakePivotDistanceAngleMap; 
 
     private double kP = 0.025;
     private double kI = 0.0;
@@ -116,6 +118,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.targetAngle = this.getSTPAngle(); 
         
+        this.shintakePivotDistanceAngleMap = new InterpolatingDoubleTreeMap(); 
+        this.shintakePivotDistanceAngleMap.put(0.5, 50.0); 
     }
 
     public double getMotorRotations() {
