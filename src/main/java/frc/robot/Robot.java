@@ -160,6 +160,7 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
+		m_robotContainer.getHoming().schedule();
 	}
 
 	/** This function is called periodically during autonomous. */
@@ -176,11 +177,12 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		m_robotContainer.getHoming().schedule();
 		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
 													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 
-		m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
-		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
+		// m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
+		// m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
 	}
 
 	/** This function is called periodically during operator control. */

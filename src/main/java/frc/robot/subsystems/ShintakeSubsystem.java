@@ -152,6 +152,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	// Stops both motors
 	public void stopShooter() {
+		this.leftVelocity = 0.0; 
+		this.rightVelocity = 0.0; 
 		m_left.set(0.0);
 		m_right.set(0.0);
 	}

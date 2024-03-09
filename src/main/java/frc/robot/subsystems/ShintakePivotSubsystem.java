@@ -111,11 +111,10 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         resetMotorRotations();
 
         this.timer = new OrbitTimer();
-        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0); //this.getSTPAngle(), 0.0);
-        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0); //this.getSTPAngle(), 0.0);
+        this.motionProfileEndState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0);
 
-        //commented out for testing purposes
-        //this.targetAngle = Constants.HOME_POSITION_STP; 
+        this.targetAngle = this.getSTPAngle(); 
         
     }
 

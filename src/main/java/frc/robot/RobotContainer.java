@@ -56,7 +56,7 @@ import java.util.function.BooleanSupplier;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-	public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER;
+	public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.AMP;
 	// The robot's subsystems and commands are defined here...
 	public final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
 	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem();
@@ -147,7 +147,9 @@ public class RobotContainer {
 		//operator_controller.y().whileTrue(new AmpScoreCommand(shintakeSubsystem, armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 		//operator_controller.povUp().and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP)).whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
 
-		right_controller.button(1).and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP)).whileTrue(new AmpScoreCommand(shintakeSubsystem, ledSubsystem, sm));
+		right_controller.button(1)
+		.and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP))
+		.whileTrue(new AmpScoreCommand(shintakeSubsystem, ledSubsystem, sm));
 		//operator_controller.x().onTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem, operator_controller)); 
 		right_controller.button(1).and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)).whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
 
@@ -180,6 +182,8 @@ public class RobotContainer {
 		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
+
+		left_controller.button(4).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
 		left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
@@ -288,5 +292,9 @@ public class RobotContainer {
 
 	public LEDSubsystem getLedSubsystem() {
 		return ledSubsystem;
+	}
+
+	public AssemblyHomePositionCommand getHoming() { 
+		return new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm); 
 	}
 }

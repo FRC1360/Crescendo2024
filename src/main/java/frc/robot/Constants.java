@@ -129,7 +129,7 @@ public final class Constants {
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 21.0;
+    public static final double HOME_POSITION_ACP = 17.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 220.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
@@ -152,7 +152,7 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop  335
     public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION

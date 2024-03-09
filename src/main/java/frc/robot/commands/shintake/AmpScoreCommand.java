@@ -21,6 +21,7 @@ public class AmpScoreCommand extends Command {
   /** Creates a new AmpScoreCommand. */
   public AmpScoreCommand(ShintakeSubsystem shintakeSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
     this.shintakeSubsystem = shintakeSubsystem; 
+    addRequirements(this.shintakeSubsystem);
   }
 
   @Override
@@ -36,5 +37,6 @@ public class AmpScoreCommand extends Command {
   @Override
   public void end(boolean interrupted) { 
     this.shintakeSubsystem.stopShooter();
+    this.shintakeSubsystem.stopIntake();
   }
 }

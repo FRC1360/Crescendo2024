@@ -107,10 +107,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         // Initalize start and end states so the robot goes to target during startup
         this.timer = new OrbitTimer(); 
-        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); //this.getACPAngle(), 0.0); 
-        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_ACP, 0.0); 
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); //this.getACPAngle(), 0.0); 
+        this.motionProfileEndState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); 
 
-        this.targetAngle = Constants.HOME_POSITION_ACP;
+        this.targetAngle = this.getACPAngle(); //Constants.HOME_POSITION_ACP;
     }
 
     public double getMotorRotations() {
