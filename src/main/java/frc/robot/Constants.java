@@ -100,8 +100,8 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 2;
-        public static final double STP_MIN_ANGLE = 3;
+        public static final double STP_MAX_ANGLE = 360.0;
+        public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 4;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double STP_ENCODER_OFFSET = 0.650;

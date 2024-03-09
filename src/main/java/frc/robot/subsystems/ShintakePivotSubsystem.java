@@ -130,9 +130,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public void setSTPSpeed(double speed) {
-        // if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
-        //         || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
-        //     speed = 0.0;
+        if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+                || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
+            speed = 0.0;
         this.STPMotorMaster.set(speed);
     }
 
