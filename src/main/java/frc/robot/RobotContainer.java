@@ -35,6 +35,7 @@ import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.util.StateMachine;
@@ -75,6 +76,7 @@ public class RobotContainer {
 	public SendableChooser<Command> autoChooser;
 
 	public ArrayList<Command> tempInitAutos;
+    public ClimberSubsystem climberSubsystem;
 
 
 	// public final EventLoop loop = new EventLoop();

@@ -200,6 +200,8 @@ public class Robot extends LoggedRobot {
 		public double stLeftVel = 0;
 		public double stRightVel = 0;
 		public double stIntakeVel = 0;
+		public double clHeight = 0;
+		public double clSpeed = 0;
 	}
 
 	private TestContext m_test = new TestContext();
@@ -218,16 +220,18 @@ public class Robot extends LoggedRobot {
 		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle); // Degrees | Min = -180, Max = 360
 		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel); // RPM | limit is 6784
 		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel); // RPM | limit is 6784
-
+		m_test.clHeight = SmartDashboard.getNumber("Climb target height", m_test.clHeight); // Height in Motor rotations | Min and Max currently unknown
+		m_test.clSpeed = SmartDashboard.getNumber("Climb target speed", m_test.clSpeed); // Speed using [.set()] | Min and Max currently unknown
 		
-		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle);
-		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle);
-		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stLeftVel, m_test.stRightVel);
-		m_robotContainer.shintakeSubsystem.varIntake(m_test.stIntakeVel);
+		m_robotContainer.climberSubsystem.goToPosition(m_test.clHeight, m_test.clSpeed); // sets target height and speed for climber
+		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle); // Degrees
+		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle); // Degrees
+		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stLeftVel, m_test.stRightVel); // RPM
+		m_robotContainer.shintakeSubsystem.varIntake(m_test.stIntakeVel); // Sets speed of intake [.set()] | NO Max or Min
 
-		m_robotContainer.shintakePivotSubsystem.periodic();
-		m_robotContainer.armChassisPivotSubsystem.periodic();
-		m_robotContainer.shintakeSubsystem.periodic();
+		m_robotContainer.shintakePivotSubsystem.periodic(); // Displays angles, PID, and FF values for STP 
+		m_robotContainer.armChassisPivotSubsystem.periodic(); // Displays angles, PID, and FF values for ACP
+		m_robotContainer.shintakeSubsystem.periodic(); // Displays vortex velocities, target velocities, intake sensor state (false = detecting something), and if the shintake is in motion
 	}
 
 	/** This function is called once when the robot is first started up. */
