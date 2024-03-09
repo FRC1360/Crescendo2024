@@ -47,7 +47,7 @@ public class RotateForShot extends Command {
 
         double rotPIDOut = this.swerveSubsystem.calculatePIDAngleOutput(targetAngle); 
 
-        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()), rotPIDOut, true, true);
+        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()), rotPIDOut, true, false);
     }
 
     @Override

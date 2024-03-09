@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.AlignmentConstants;
 import frc.robot.Constants.Swerve;
 import frc.robot.autos.PathfindAuto;
@@ -116,8 +117,8 @@ public class AssemblySchedulerCommand extends Command {
                                 //);
                     break;
                 case SUBWOOFER_DEFENDED: 
-                    this.assemblyCommand = new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER))); 
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
                     break; 
                 default:
                     break;
@@ -165,8 +166,8 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SUBWOOFER_DEFENDED: 
-                    this.assemblyCommand = new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER))); 
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
                     break; 
                 default:
                     break;
