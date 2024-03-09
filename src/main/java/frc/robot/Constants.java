@@ -83,8 +83,8 @@ public final class Constants {
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 5800; //6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 5800; //6250;
+        public static final double SHOOT_VELOCITY_FRONT = 6000; //6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6000; //6250;
         public static final double AMP_VELOCITY_FRONT = 3000; 
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;

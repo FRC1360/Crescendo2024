@@ -163,9 +163,9 @@ public class ShintakePivotSubsystem extends SubsystemBase {
      * Sets arm voltage based off 0.0 - 12.0
      */
     public void setSTPVoltage(double voltage) {
-        // if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
-        //         || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
-        //     voltage = 0.0;
+        if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+                || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
+            voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
 
