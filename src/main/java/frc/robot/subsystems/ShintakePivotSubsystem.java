@@ -119,7 +119,14 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.targetAngle = this.getSTPAngle(); 
         
         this.shintakePivotDistanceAngleMap = new InterpolatingDoubleTreeMap(); 
-        this.shintakePivotDistanceAngleMap.put(0.5, 50.0); 
+        // Calc by inverse tan((2.045-0.9017)/(dist-0.248)) <-- target speaker height - height of shooter / dist - offset of speaker from center of bot
+        this.shintakePivotDistanceAngleMap.put(0.5, 77.56); 
+        this.shintakePivotDistanceAngleMap.put(1.0, 56.67); 
+        this.shintakePivotDistanceAngleMap.put(1.5, 42.40); 
+        this.shintakePivotDistanceAngleMap.put(2.0, 33.127); 
+        this.shintakePivotDistanceAngleMap.put(2.5, 26.916); 
+        this.shintakePivotDistanceAngleMap.put(3.0, 22.56); 
+
     }
 
     public double getMotorRotations() {
