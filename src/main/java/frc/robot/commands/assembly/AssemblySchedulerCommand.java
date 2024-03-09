@@ -69,19 +69,19 @@ public class AssemblySchedulerCommand extends Command {
                 case PODIUM_LEFT:
                     // this.assemblyCommand = new AssemblyPodiumPositionCommand(chassisPivot,
                     // shintakePivot, led, sm);
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_STAGE_LEFT).getCommand(), noPathFind)
-                            .andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_STAGE_LEFT).getCommand(), noPathFind); 
+                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case PODIUM_RIGHT:
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.BLUE_STAGE_RIGHT).getCommand(), noPathFind)
-                            .andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.BLUE_STAGE_RIGHT).getCommand(), noPathFind);
+                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case PODIUM_FAR:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.BLUE_STAGE_FAR)
-                            .getCommand(), noPathFind)
-                            .andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            .getCommand(), noPathFind);
+                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case SUBWOOFER:
@@ -89,7 +89,7 @@ public class AssemblySchedulerCommand extends Command {
                     // shintakePivot, led, sm);
                     this.assemblyCommand = 
                     new ConditionalCommand(
-                        new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand(),
+                        new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER, true).getCommand(),
                         noPathFind)
                             .alongWith(
                                 new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm)
@@ -128,20 +128,20 @@ public class AssemblySchedulerCommand extends Command {
             switch (level.get()) {
                 case PODIUM_LEFT:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_LEFT)
-                            .getCommand(), noPathFind)
-                            .andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            .getCommand(), noPathFind);
+                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case PODIUM_RIGHT:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_RIGHT)
-                            .getCommand(), noPathFind)
-                            .andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            .getCommand(), noPathFind);
+                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case PODIUM_FAR:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_FAR)
-                            .getCommand(), noPathFind)
-                            .andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            .getCommand(), noPathFind);
+                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case SUBWOOFER:

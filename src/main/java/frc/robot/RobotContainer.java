@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -14,12 +15,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autos.FetchPath;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
 import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
+import frc.robot.commands.ShintakePivot.STPMoveManual;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
 import frc.robot.commands.assembly.AssemblyHomePositionCommand;
@@ -99,6 +103,14 @@ public class RobotContainer {
 
 	public void loadAllAutos() {
 		this.tempInitAutos.clear(); // in case if robot is not power cycled, data within class are typically cached
+		
+		NamedCommands.registerCommand("SubwooferShoot", 
+			new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
+				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
+				.andThen(new ShootSpeakerCommand(shintakeSubsystem))
+		);
+		
 		System.out.println(AutoBuilder.getAllAutoNames());
 		for (String pathName : AutoBuilder.getAllAutoNames()) {
 			this.tempInitAutos.add(new FetchPath(pathName).getCommand());
@@ -179,10 +191,10 @@ public class RobotContainer {
 
 		left_controller.button(2).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
-		// left_controller.button(3)
-		// .whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-		// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())
-		// .alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
+		left_controller.button(3)
+			.whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+				shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())
+			.alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
 
 		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
@@ -234,12 +246,12 @@ public class RobotContainer {
 			
 
 		// // NOTE! The assembly commands will be activated after the driver schedules through assembly scheduler
-		// operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL =
-		// ASSEMBLY_LEVEL.PODIUM_FAR));
-		// operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL =
-		// ASSEMBLY_LEVEL.PODIUM_LEFT));
-		// operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL =
-		// ASSEMBLY_LEVEL.PODIUM_RIGHT));
+		operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL =
+		ASSEMBLY_LEVEL.PODIUM_FAR));
+		operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL =
+		ASSEMBLY_LEVEL.PODIUM_LEFT));
+		operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL =
+		ASSEMBLY_LEVEL.PODIUM_RIGHT));
 
 		// // left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
 
@@ -248,8 +260,8 @@ public class RobotContainer {
 		// // operator_controller.x().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 		// // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-		// operator_controller.leftBumper().whileTrue(new ACPMoveManual(armChassisPivotSubsystem, () -> operator_controller.getRightY())); 
-		// operator_controller.rightBumper().whileTrue(new STPMoveManual(shintakePivotSubsystem, () -> operator_controller.getRightY())); 
+		operator_controller.leftBumper().whileTrue(new ACPMoveManual(armChassisPivotSubsystem, () -> operator_controller.getRightY(), operator_controller)); 
+		operator_controller.rightBumper().whileTrue(new STPMoveManual(shintakePivotSubsystem, () -> operator_controller.getRightY(), operator_controller)); 
 		// // new Trigger(m_exampleSubsystem::exampleCondition)
 		// // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
@@ -266,8 +278,8 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// An example command will be run in autonomous
-		//return this.autoChooser.getSelected();
-		return new RepeatCommand(new DefaultDriveCommand(swerveSubsystem, () -> -0.25, () -> 0.0, () -> 0.0, right_controller)); 
+		return this.autoChooser.getSelected();
+		//return new RepeatCommand(new DefaultDriveCommand(swerveSubsystem, () -> -0.25, () -> 0.0, () -> 0.0, right_controller)); 
 	}
 
 	private static double deadband(double value, double deadband) {

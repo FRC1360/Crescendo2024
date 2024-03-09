@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -40,10 +41,10 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
-	private double XkP = 0.05; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+	private double XkP = 2.0; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
     private double XkI = 0.00001;
     private double XkD = 0.0000;
-    private double YkP = 0.05; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double YkP = 2.0; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
     private double YkI = 0.00001;
     private double YkD = 0.0000;
 	private double AkP = 0.023; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
@@ -106,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.initDouble("Swerve Angle kI", this.AkI);
 		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
-		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED, 1.0); 
+		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED, 4.0); 
 		this.driveMotionProfile = new TrapezoidProfile(driveConstraints); 
 		this.driveMotionProfileXStartState = new TrapezoidProfile.State(0.0, 0.0); 
 		this.driveMotionProfileXEndState = new TrapezoidProfile.State(0.0, 0.0); 
@@ -142,6 +143,9 @@ public class SwerveSubsystem extends SubsystemBase {
 		for (SwerveModuleCustom mod : swerveModules) {
 			mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
 		}
+
+		Logger.recordOutput("DriveTranslation", translation);
+		Logger.recordOutput("DriveRotation", rotation);
 	}
 
 	public void updateAbsAngleSmartDashboard() { 

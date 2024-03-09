@@ -15,6 +15,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
@@ -57,7 +59,9 @@ public class Robot extends LoggedRobot {
 
 		m_robotContainer = new RobotContainer();
 
-		/*Pathfinding.setPathfinder(new LocalADStar());
+		Pathfinding.setPathfinder(new LocalADStar());
+
+		NamedCommands.registerCommand("", m_autonomousCommand);
 
 		m_robotContainer.loadAllAutos();
 
@@ -66,7 +70,7 @@ public class Robot extends LoggedRobot {
 													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 		SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
 		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);*/
+		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
 	}
 
 	private void loggerInit() {

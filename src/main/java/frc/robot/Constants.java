@@ -102,7 +102,7 @@ public final class Constants {
         public static final int STP_MOTOR_SLAVE = 43;
         public static final double STP_MAX_ANGLE = 360.0;
         public static final double STP_MIN_ANGLE = -180.0;
-        public static final int STP_ENCODER_CHANNEL = 4;
+        public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double STP_ENCODER_OFFSET = 0.650;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
@@ -122,7 +122,10 @@ public final class Constants {
         public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
+        public static final double ACP_SLOP_OCCUR_ANGLE = 65.0; 
     } 
+
+    public static final boolean SHOOT_ONLY_WITH_ACP = true; 
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
     public static final double START_POSITION_ACP = 40.0;
@@ -138,6 +141,9 @@ public final class Constants {
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0; //0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; //50.0;
+
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; //0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; //50.0;
 
     // NOTE_SCORE_TRAP_POSITION
     public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
@@ -298,7 +304,7 @@ public final class Constants {
      */
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
-    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 1 /
+    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 /
             Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
     // SDS Module Configurations

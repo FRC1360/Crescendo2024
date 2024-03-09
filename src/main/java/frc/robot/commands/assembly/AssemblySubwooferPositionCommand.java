@@ -18,22 +18,40 @@ public class AssemblySubwooferPositionCommand extends SequentialCommandGroup {
 
     public AssemblySubwooferPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, ShintakeSubsystem shintake, StateMachine sm) {
-        addCommands(
-                new InstantCommand(() -> sm.setAtSpeakerSubwooferScore()),
-                new InstantCommand(ledSubsystem::setLEDDisable),
+        if (Constants.SHOOT_ONLY_WITH_ACP) { 
+                addCommands(
+                        new InstantCommand(() -> sm.setAtSpeakerSubwooferScore()),
+                        new InstantCommand(ledSubsystem::setLEDDisable),
 
-                // Command 1
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP, STPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 2")))//,
-                // Command 2
+                        // Command 1
+                        new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP_2, STPSubsystem)
+                                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 2"))),//,
+                        // Command 2
+                new ShootSpeakerFullCommand(shintake, ACPSubsystem), 
+                        new InstantCommand(ledSubsystem::setLEDScoring),
+                        new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "DONE")),
+                        new InstantCommand(() -> sm.setAtSpeakerSubwooferScore())
+                );
+        }
+        else { 
+                addCommands(
+                        new InstantCommand(() -> sm.setAtSpeakerSubwooferScore()),
+                        new InstantCommand(ledSubsystem::setLEDDisable),
 
-                .alongWith(
-                new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_STP, ACPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 3")))//,
-                ),
-               new ShootSpeakerFullCommand(shintake, ACPSubsystem), 
-                new InstantCommand(ledSubsystem::setLEDScoring),
-                new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "DONE")),
-                new InstantCommand(() -> sm.setAtSpeakerSubwooferScore()));
+                        // Command 1
+                        new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP, STPSubsystem)
+                                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 2")))//,
+                        // Command 2
+
+                        .alongWith(
+                        new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_STP, ACPSubsystem)
+                                .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 3")))//,
+                        ),
+                new ShootSpeakerFullCommand(shintake, ACPSubsystem), 
+                        new InstantCommand(ledSubsystem::setLEDScoring),
+                        new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "DONE")),
+                        new InstantCommand(() -> sm.setAtSpeakerSubwooferScore())
+                );
+        }
     }
 }

@@ -42,6 +42,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public TrapezoidProfile.Constraints ACPMotionProfileConstraints; 
 
+    private TrapezoidProfile slowProfile; 
+    private TrapezoidProfile.State slowProfileStartState; 
+    private TrapezoidProfile.State slowProfileEndState; 
+
     private double angularVelocity; // angular velocity in deg / second
     private double lastAngle;
     private double lastTime;
@@ -52,12 +56,18 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
+    private double cacheOffset = 0.0;
+
     private double kP = 0.0325;
     private double kI = 0.0;
     private double kD = 0.0;
     private double kS = 0.0;
     private double kG = 0.0;
     private double kV = 0.0;
+
+    private double slowMaxVelocity; 
+    private boolean slowInit = false;
+    private OrbitTimer slowTimer; 
 
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
@@ -93,6 +103,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(60, 60); 
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
 
+        this.slowMaxVelocity = 15; 
+        this.slowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(this.slowMaxVelocity, 7.5)); 
+
         Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
         Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getI()); 
         Preferences.initDouble("ACP_Move_D_Gain", this.movePIDController.getD());
@@ -109,8 +122,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.timer = new OrbitTimer(); 
         this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); //this.getACPAngle(), 0.0); 
         this.motionProfileEndState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); 
+        
+        this.slowProfileStartState = new TrapezoidProfile.State(70.0, 0.0); 
+        this.slowProfileEndState = new TrapezoidProfile.State(90.0, 0.0); 
 
         this.targetAngle = this.getACPAngle(); //Constants.HOME_POSITION_ACP;
+        this.slowTimer = new OrbitTimer(); 
     }
 
     public double getMotorRotations() {
@@ -128,6 +145,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
          * speed = 0.0;
          */
         this.ACPMotorMaster.set(speed);
+    }
+
+    public void setCacheOffset(double offset) { 
+        this.cacheOffset = offset; 
     }
 
     public void resetMotorRotations() 
@@ -172,16 +193,34 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setTargetAngle(double targetAngle) {
+        targetAngle = targetAngle + this.cacheOffset; 
         if (this.targetAngle == targetAngle)
         {
             return;
         }
+        else if (this.getACPAngle() < Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
+            this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+            this.motionProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.slowMaxVelocity);
+
+            this.slowProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.getAngularVelocity()); 
+            this.slowProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
+            slowInit = false; 
+        }
+        else if (this.getACPAngle() > Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle <= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
+            this.slowProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+            this.slowProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.slowMaxVelocity);
+
+            this.motionProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.getAngularVelocity()); 
+            this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
+            slowInit = false;
+        }
+        else {
+            this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+            this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0);
+        } 
         this.targetAngle = targetAngle;
 
         this.movePIDController.reset();
-
-        this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
-        this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
         this.timer.start(); 
 
         System.out.println("Target angle for ACP scheduled for: " + targetAngle); 
@@ -235,6 +274,14 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double calculateControlLoopOutput() { 
         TrapezoidProfile.State profileTarget = this.acpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileStartState,
                                                                                      this.motionProfileEndState);
+
+        if (this.getACPAngle() >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
+            if (!slowInit)  { 
+                slowInit = true; 
+                this.slowTimer.start(); 
+            }
+            profileTarget = this.slowProfile.calculate(this.slowTimer.getTimeDeltaSec(), this.slowProfileStartState, this.slowProfileEndState); 
+        }
 
         double target = profileTarget.position; 
         double input = this.getACPAngle(); 

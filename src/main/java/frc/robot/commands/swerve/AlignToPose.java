@@ -12,9 +12,16 @@ public class AlignToPose extends Command {
     private SwerveSubsystem swerveSubsystem;
     private Pose2d target;
 
+    private boolean allowEnd;
+
     public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target) {
+        this(swerveSubsystem, target, false);
+    }
+
+    public AlignToPose(SwerveSubsystem swerveSubsystem, Pose2d target, boolean allowEnd) {
         this.swerveSubsystem = swerveSubsystem;
         this.target = target;
+        this.allowEnd = allowEnd;
 
         addRequirements(swerveSubsystem);
     }
@@ -32,7 +39,7 @@ public class AlignToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return this.swerveSubsystem.drivePIDAtTarget(); 
+        return allowEnd && (this.swerveSubsystem.drivePIDAtTarget() || Math.abs(this.swerveSubsystem.calculateDistanceToTarget(this.target)) < 0.1); 
     }
 
     @Override
