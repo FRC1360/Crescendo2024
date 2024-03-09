@@ -204,7 +204,7 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.3, 0.0000, 0.0045);
+        public static final PIDConstants drivePID = new PIDConstants(0.4, 0.0000, 0.0045);
         // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
         public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3, 1.11); //ka = 0.4
         public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
