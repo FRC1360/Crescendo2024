@@ -25,7 +25,6 @@ public class RetractCommand extends Command {
     @Override
     public void initialize() {
       climb.stopClimber();
-      climb.setIsSafe(true);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +39,7 @@ public class RetractCommand extends Command {
     public void end(boolean interrupted) {
       climb.stopClimber();
       climb.setIsExtended(false);
+      climb.setIsSafe(true);
     }
 
     // Returns true when the command should end.

@@ -329,6 +329,11 @@ public class SwerveSubsystem extends SubsystemBase {
 		return new PIDSwerveValues(driveXOut, driveYOut, this.calculatePIDAngleOutput(target.getRotation().getDegrees())); 
 	}
 
+	public double calculateDistanceToTarget(Pose2d target) { 
+		Pose2d curPose = this.currentPose(); 
+		return Math.hypot(Math.abs(target.getX() - curPose.getX()), Math.abs(target.getY() - curPose.getY())); 
+	}
+
 	@Override
 	public void periodic() {
 		// Estimator update

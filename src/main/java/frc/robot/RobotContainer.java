@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
@@ -35,6 +37,7 @@ import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ShintakeSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.util.StateMachine;
@@ -75,6 +78,9 @@ public class RobotContainer {
 	public SendableChooser<Command> autoChooser;
 
 	public ArrayList<Command> tempInitAutos;
+    public ClimberSubsystem climberSubsystem;
+
+	public InterpolatingDoubleTreeMap shintakePivotDistanceAngleMap; // distance in meters
 
 
 	// public final EventLoop loop = new EventLoop();
@@ -91,6 +97,9 @@ public class RobotContainer {
 		configureBindings();
 
 		this.tempInitAutos = new ArrayList<Command>();
+		this.shintakePivotDistanceAngleMap = new InterpolatingDoubleTreeMap(); 
+
+		this.shintakePivotDistanceAngleMap.put(0.5, 50.0);
 	}
 
 	public void loadAllAutos() {
@@ -151,7 +160,8 @@ public class RobotContainer {
 		.and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP))
 		.whileTrue(new AmpScoreCommand(shintakeSubsystem, ledSubsystem, sm));
 		//operator_controller.x().onTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem, operator_controller)); 
-		right_controller.button(1).and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)).whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
+		right_controller.button(1).and(() -> (this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER) || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)))
+												.whileTrue(new ShootSpeakerCommand(shintakeSubsystem)); 
 
 		//operator_controller.leftBumper().whileTrue(new InstantCommand(() -> shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() * 2800, operator_controller.getLeftTriggerAxis() *  2800)));  
 		swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
@@ -170,7 +180,7 @@ public class RobotContainer {
 		// // Right Controller Button 1 (trigger) will be intake
 		left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean(), shintakePivotDistanceAngleMap)));
 
 		left_controller.button(2).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
@@ -181,13 +191,13 @@ public class RobotContainer {
 
 		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean(), shintakePivotDistanceAngleMap)));
 
 		left_controller.button(4).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
 		left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean(), shintakePivotDistanceAngleMap)));
 
 		left_controller.button(5).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 

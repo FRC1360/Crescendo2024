@@ -36,14 +36,19 @@ public class ClimberSubsystem extends SubsystemBase {
 	}
 
 	public void goToPosition(double pos, double speed) {
-		m_climbMotorLead.set(speed);
+		if (pos > getEncoderPosition()) {
+			m_climbMotorLead.set(speed);
+		}
+		if (pos < getEncoderPosition()) {
+			m_climbMotorLead.set(-speed);
+		}
 		if (climbMotorReady(pos)) {
 			stopClimber();
 		}
 	}
 
 	public boolean climbMotorReady(double targetPos) {
-		return getEncoderPosition() != 0 && Math.abs(getEncoderPosition()
+		return !(getEncoderPosition() < 0) && Math.abs(getEncoderPosition()
 		 - targetPos) <= 0.5; 
 		 //this is in rotations so the deadband number is much smaller
 		}

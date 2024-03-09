@@ -123,6 +123,12 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	public void setVelocity(double rightVelocity, double leftVelocity) {
 		System.out.println("Setting velocity to: " + rightVelocity);
+		if (leftVelocity >= 6700) {
+			m_left.set(0.0);
+		}
+		if (rightVelocity >= 6700) {
+			m_right.set(0.0);
+		}
 		if (this.leftVelocity != leftVelocity)
 		{
 			this.leftVelocity = leftVelocity;
