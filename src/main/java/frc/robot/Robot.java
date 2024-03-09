@@ -47,7 +47,6 @@ public class Robot extends LoggedRobot {
 	private Command m_autonomousCommand;
 
 	private RobotContainer m_robotContainer;
-
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any
@@ -139,7 +138,7 @@ public class Robot extends LoggedRobot {
 	/** This function is called once each time the robot enters Disabled mode. */
 	@Override
 	public void disabledInit() {
-		// new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
+		new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
 	}
 
 	@Override

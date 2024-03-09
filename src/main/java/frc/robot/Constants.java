@@ -35,7 +35,7 @@ public final class Constants {
     public static final boolean isReplay = true; // only used if sim
 
     public static class LED {
-        public static final int LEDPort = 2;
+        public static final int LEDPort = 0;
         public static final float ENABLED_COLOR = 0.87f; // BLUE
         public static final float DISABLED_COLOR = 0.77f; // GREEN
         public static final float NOTE_COLOR = 0.6f; // ORANGE
