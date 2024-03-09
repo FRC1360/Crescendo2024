@@ -83,8 +83,8 @@ public final class Constants {
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 5800; //6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 5800; //6250;
+        public static final double SHOOT_VELOCITY_FRONT = 6000; //6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6000; //6250;
         public static final double AMP_VELOCITY_FRONT = 3000; 
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
@@ -204,7 +204,7 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.3, 0.0000, 0.0045);
+        public static final PIDConstants drivePID = new PIDConstants(0.4, 0.0000, 0.0045);
         // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
         public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3, 1.11); //ka = 0.4
         public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
