@@ -357,10 +357,13 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         // SmartDashboard.putNumber("STP_Angular_Velocity", this.getAngularVelocity().doubleValue());
     }
-
     
+    public void resetSTPTargetAngle() { 
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0); //this.getSTPAngle(), 0.0);
+        this.motionProfileEndState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0);
 
-    
+        this.targetAngle = this.getSTPAngle(); 
+    }
     
 
 }

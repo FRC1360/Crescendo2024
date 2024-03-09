@@ -83,8 +83,8 @@ public final class Constants {
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 6000; //6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6000; //6250;
+        public static final double SHOOT_VELOCITY_FRONT = 6200; //6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6200; //6250;
         public static final double AMP_VELOCITY_FRONT = 3000; 
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
@@ -136,8 +136,8 @@ public final class Constants {
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 73.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0; //0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; //50.0;
 
     // NOTE_SCORE_TRAP_POSITION
     public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
@@ -269,8 +269,8 @@ public final class Constants {
             public static final double maxAcceleration = 16; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); // deg/s^2
-            public static final double positionTolerance = 0.025;
-            public static final double angleTolerance = Math.toRadians(1);
+            public static final double positionTolerance = 0.025 * 20;
+            public static final double angleTolerance = Math.toRadians(1) * 10;
         }
 
     }

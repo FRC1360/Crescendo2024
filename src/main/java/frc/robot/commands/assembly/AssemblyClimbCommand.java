@@ -25,7 +25,7 @@ public class AssemblyClimbCommand extends SequentialCommandGroup {
                 
                 .alongWith(
                 // Command 2
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.CLIMB_POSITION_ACP)
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.CLIMB_POSITION_ACP, STPSubsystem)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Climb stage", "STAGE 3")))
                 ), 
                 // Command 3 add climber stuff here

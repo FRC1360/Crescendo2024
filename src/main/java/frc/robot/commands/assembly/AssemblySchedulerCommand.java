@@ -89,12 +89,12 @@ public class AssemblySchedulerCommand extends Command {
                     // this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot,
                     // shintakePivot, led, sm);
                     this.assemblyCommand = 
-                    // new ConditionalCommand(
-                    //     new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand(),
-                    //     noPathFind)
-                            //.andThen(
-                                new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm); 
-                                //);
+                    new ConditionalCommand(
+                        new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand(),
+                        noPathFind)
+                            .alongWith(
+                                new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm)
+                                );
                     break;
 
                 case AMP:

@@ -35,8 +35,8 @@ public class PathfindAuto {
     public Command getCommand() {
         if (!this.swerveSubsystem.manualDrive)
             return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
-                    .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 20.0,
-                            AutoConstants.angleTolerance * 10))
+                    .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance,
+                            AutoConstants.angleTolerance))
                     .alongWith(new InstantCommand(() -> System.out.println("Pathfinding to: " + this.targetPose)))
                     .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", this.targetPose)))
                     .andThen(new AlignToPose(this.swerveSubsystem, targetPose))

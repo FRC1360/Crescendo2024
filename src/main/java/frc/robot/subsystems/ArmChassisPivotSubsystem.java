@@ -148,7 +148,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             System.out.println("Failed to reset ACP Rotations");
             SmartDashboard.putBoolean("ACP_Encoder_Updated", false);
         }
-
     }
 
     /*
@@ -308,5 +307,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
          * movePIDController.kD);
          */
         //ACPFeedForward = new ArmFeedforward(0, SmartDashboard.getNumber("ACPMoveKg", ACPFeedForward.kg), 0);
+    }
+
+    public void resetArmTargetAngle() { 
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); //this.getACPAngle(), 0.0); 
+        this.motionProfileEndState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); 
+
+        this.targetAngle = this.getACPAngle(); //Constants.HOME_POSITION_ACP;
     }
 }
