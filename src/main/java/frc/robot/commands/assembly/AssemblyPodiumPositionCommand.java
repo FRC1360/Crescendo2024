@@ -28,7 +28,7 @@ public class AssemblyPodiumPositionCommand extends SequentialCommandGroup {
                         new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP, ACPSubsystem)
                                 .alongWith(new InstantCommand(() -> SmartDashboard.putString("Podium stage", "STAGE 3")))
                 ), 
-                new InstantCommand(ledSubsystem::setLEDScoring),
+                new InstantCommand(() -> ledSubsystem.setLEDScoring()),
                 new InstantCommand(() -> SmartDashboard.putString("Podium stage", "DONE")),
                 new InstantCommand(() -> sm.setAtSpeakerPodiumScore()));
     }

@@ -31,7 +31,7 @@ public class AssemblyDefendedPositionCommand extends SequentialCommandGroup {
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Defended stage", "STAGE 3"))),
                 //),
                 new ShootSpeakerFullCommand(shintake, ACPSubsystem),  
-                new InstantCommand(ledSubsystem::setLEDScoring),
+                new InstantCommand(() -> ledSubsystem.setLEDScoring()),
                 new InstantCommand(() -> SmartDashboard.putString("Defended stage", "DONE")),
                 new InstantCommand(() -> sm.setAtSpeakerDefendedScore()));
     }
