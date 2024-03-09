@@ -214,10 +214,11 @@ public class Robot extends LoggedRobot {
 	@Override
 	public void testPeriodic() {
 		
-		m_test.acpAngle = SmartDashboard.getNumber("TEST_ACP_ANGLE", m_test.acpAngle);
-		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle);
-		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel);
-		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
+		m_test.acpAngle = SmartDashboard.getNumber("TEST_ACP_ANGLE", m_test.acpAngle); // Degrees | Min = 0, Max = 80.0
+		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle); // Degrees | Min = -180, Max = 360
+		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel); // RPM | limit is 6784
+		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel); // RPM | limit is 6784
+
 		
 		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle);
 		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle);
