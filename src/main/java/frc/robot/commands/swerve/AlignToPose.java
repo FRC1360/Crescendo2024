@@ -27,7 +27,7 @@ public class AlignToPose extends Command {
     public void execute() {
         PIDSwerveValues pidOutput = this.swerveSubsystem.calculatePIDDriveOutput(this.target); 
         
-        this.swerveSubsystem.drive(new Translation2d(pidOutput.xOut, pidOutput.yOut), pidOutput.rotationOut, true, true);
+        this.swerveSubsystem.drive(new Translation2d(pidOutput.xOut, pidOutput.yOut), pidOutput.rotationOut, true, false);
     }
 
     @Override

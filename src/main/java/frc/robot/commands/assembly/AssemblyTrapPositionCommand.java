@@ -19,7 +19,7 @@ public class AssemblyTrapPositionCommand extends SequentialCommandGroup {
                 new InstantCommand(ledSubsystem::setLEDDisable),
 
                 // Command 1
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_ACP)
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_TRAP_POSITION_ACP, STPSubsystem)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Trap stage", "STAGE 2")))
                 // Command 2
                 .alongWith(

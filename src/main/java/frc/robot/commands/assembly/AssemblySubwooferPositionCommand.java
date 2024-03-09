@@ -23,14 +23,14 @@ public class AssemblySubwooferPositionCommand extends SequentialCommandGroup {
                 new InstantCommand(ledSubsystem::setLEDDisable),
 
                 // Command 1
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 2"))),
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP, STPSubsystem)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 2")))//,
                 // Command 2
 
-                //.alongWith(
+                .alongWith(
                 new STPGoToPositionCommand(STPSubsystem, Constants.NOTE_SCORE_SPEAKER_POSITION_STP, ACPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 3"))),
-               // ),
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "STAGE 3")))//,
+                ),
                new ShootSpeakerFullCommand(shintake, ACPSubsystem), 
                 new InstantCommand(ledSubsystem::setLEDScoring),
                 new InstantCommand(() -> SmartDashboard.putString("Subwoofer stage", "DONE")),

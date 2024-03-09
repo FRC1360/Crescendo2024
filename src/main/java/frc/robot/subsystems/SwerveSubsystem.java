@@ -38,12 +38,12 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
-	private double XkP = 1.25; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
-    private double XkI = 0.0;
-    private double XkD = 0.0;
-    private double YkP = 1.25; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
-    private double YkI = 0.0;
-    private double YkD = 0.0;
+	private double XkP = 1.2; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double XkI = 0.0001;
+    private double XkD = 0.0001;
+    private double YkP = 1.2; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double YkI = 0.0001;
+    private double YkD = 0.0001;
 	private double AkP = 0.023; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
     private double AkI = 0.000001;
     private double AkD = 0.0;
@@ -321,6 +321,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
         double driveXOut = this.driveXPID.calculate(currentPose.getX(), target.getX());
         double driveYOut = this.driveYPID.calculate(currentPose.getY(), target.getY());
+
+		SmartDashboard.putNumber("Cur Pose Y", this.currentPose().getY()); 
+		SmartDashboard.putNumber("Target Y", target.getY()); 
 
         System.out.println("Current Pose: " + this.currentPose());
 

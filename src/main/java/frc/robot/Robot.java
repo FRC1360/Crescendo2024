@@ -143,7 +143,9 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 		m_robotContainer.swerveSubsystem.resetModuleZeros();
 		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
+		m_robotContainer.armChassisPivotSubsystem.resetArmTargetAngle();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
+		m_robotContainer.shintakePivotSubsystem.resetSTPTargetAngle();
         m_robotContainer.shintakePivotSubsystem.resetMotorRotations();
 	}
 

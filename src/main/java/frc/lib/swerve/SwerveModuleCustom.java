@@ -137,7 +137,6 @@ public class SwerveModuleCustom {
             double percentOutput = desiredState.speedMetersPerSecond / Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND;
             driveMotor.set(percentOutput);
         } else {
-            System.out.println("In control loop"); 
             this.targetSpeed = desiredState.speedMetersPerSecond;
             SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber, desiredState.speedMetersPerSecond); 
             SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber, this.getSpeed()); 
