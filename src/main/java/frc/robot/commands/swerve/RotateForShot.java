@@ -37,12 +37,12 @@ public class RotateForShot extends Command {
         Pose2d curPose = swerveSubsystem.currentPose(); 
 
         double targetAngle = convertDeltaYToAngle(curPose.getY() - AlignmentConstants.BLUE_SPEAKER.getY())
-                                + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees(); 
+                                + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees() - 180.0; 
 
         if (DriverStation.getAlliance().isPresent() 
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) { 
             targetAngle = -convertDeltaYToAngle(curPose.getY() - AlignmentConstants.RED_SPEAKER.getY()) 
-                            + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); 
+                            + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees() + 180.0; 
         }
 
         double rotPIDOut = this.swerveSubsystem.calculatePIDAngleOutput(targetAngle); 

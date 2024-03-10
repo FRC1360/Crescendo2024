@@ -39,7 +39,7 @@ public class AlignToPose extends Command {
 
     @Override
     public boolean isFinished() {
-        return allowEnd && (this.swerveSubsystem.drivePIDAtTarget() || Math.abs(this.swerveSubsystem.calculateDistanceToTarget(this.target)) < 0.1); 
+        return allowEnd && (this.swerveSubsystem.drivePIDAtTarget() || Math.abs(this.swerveSubsystem.calculateDistanceToTarget(this.target)) < 0.2); 
     }
 
     @Override

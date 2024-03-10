@@ -30,7 +30,9 @@ public class AssemblySchedulerCommand extends Command {
         SUBWOOFER,
         SUBWOOFER_DEFENDED, 
         AMP,
-        SOURCE
+        SOURCE_LEFT, 
+        SOURCE_CENTER, 
+        SOURCE_RIGHT
     }
 
     private Command assemblyCommand;
@@ -67,8 +69,6 @@ public class AssemblySchedulerCommand extends Command {
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
             switch (level.get()) {
                 case PODIUM_LEFT:
-                    // this.assemblyCommand = new AssemblyPodiumPositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_STAGE_LEFT).getCommand(), noPathFind); 
                             //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
@@ -85,8 +85,6 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SUBWOOFER:
-                    // this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
                     this.assemblyCommand = 
                     new ConditionalCommand(
                         new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER, true).getCommand(),
@@ -97,25 +95,35 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case AMP:
-                    // this.assemblyCommand = new AssemblyAmpPositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
                     this.assemblyCommand = 
-                    // new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand(), noPathFind)
-                    //         .andThen(
-                                new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm); 
-                                // );
+                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand(), noPathFind)
+                            .alongWith(
+                                new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm) 
+                                );
                     break;
 
-                case SOURCE:
-                    // this.assemblyCommand = new AssemblySourcePositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
+                case SOURCE_CENTER:
                     this.assemblyCommand = 
-                    // new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE)
-                    //          .getCommand(), noPathFind)
-                           // .andThen(
-                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm);
-                                //);
+                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER, true)
+                             .getCommand(), noPathFind)
+                           .alongWith(
+                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
+                                );
                     break;
+                case SOURCE_LEFT: 
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_LEFT, true)
+                             .getCommand(), noPathFind)
+                           .alongWith(
+                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
+                                );
+                    break;  
+                case SOURCE_RIGHT: 
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_RIGHT, true)
+                             .getCommand(), noPathFind)
+                           .alongWith(
+                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
+                                );
+                    break; 
                 case SUBWOOFER_DEFENDED: 
                     this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
                                                 shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
@@ -129,42 +137,44 @@ public class AssemblySchedulerCommand extends Command {
                 case PODIUM_LEFT:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_LEFT)
                             .getCommand(), noPathFind);
-                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            //.alongWith(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case PODIUM_RIGHT:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_RIGHT)
                             .getCommand(), noPathFind);
-                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            //.alongWith(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case PODIUM_FAR:
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(this.swerveSubsystem, AlignmentConstants.RED_STAGE_FAR)
                             .getCommand(), noPathFind);
-                            //.andThen(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            //.alongWith(new AssemblyPodiumPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case SUBWOOFER:
-                    // this.assemblyCommand = new AssemblySubwooferPositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SPEAKER).getCommand(), noPathFind)
-                            .andThen(new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm));
+                            .alongWith(new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake, sm));
                     break;
 
                 case AMP:
-                    // this.assemblyCommand = new AssemblyAmpPositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_AMP).getCommand(), noPathFind)
-                            .andThen(new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
+                            .alongWith(new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
-                case SOURCE:
-                    // this.assemblyCommand = new AssemblySourcePositionCommand(chassisPivot,
-                    // shintakePivot, led, sm);
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand(), noPathFind)
-                            .andThen(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                case SOURCE_CENTER:
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER, true).getCommand(), noPathFind)
+                            .alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
+                case SOURCE_LEFT: 
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_LEFT, true).getCommand(), noPathFind)
+                            .alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                    break; 
+                case SOURCE_RIGHT: 
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_RIGHT, true).getCommand(), noPathFind)
+                            .alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)); 
+                    break; 
                 case SUBWOOFER_DEFENDED: 
                     this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
                                                 shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
