@@ -160,7 +160,7 @@ public class RobotContainer {
 		//operator_controller.a().whileTrue(new AssemblySourcePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 		// operator_controller.a().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 150.0));
 		// operator_controller.b().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 60.0));
-		operator_controller.y().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 90.0, armChassisPivotSubsystem));
+		//operator_controller.y().onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 90.0, armChassisPivotSubsystem));
 
 		//operator_controller.b().whileTrue(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 		
