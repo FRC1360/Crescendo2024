@@ -122,6 +122,16 @@ public class RobotContainer {
 		SmartDashboard.putData(this.autoChooser);
 	}
 
+	public void pollButtonsForSmartDashboard() { 
+		SmartDashboard.putBoolean("PODIUM_FAR_SCH", this.LEVEL == ASSEMBLY_LEVEL.PODIUM_FAR);
+		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", this.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT);
+		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", this.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT);
+
+		SmartDashboard.putBoolean("SOURCE_LEFT", operator_controller.x().getAsBoolean());
+		SmartDashboard.putBoolean("SOURCE_CENTER", !operator_controller.x().getAsBoolean() && !operator_controller.b().getAsBoolean());
+		SmartDashboard.putBoolean("SOURCE_RIGHT", operator_controller.b().getAsBoolean());
+	}
+
 	/**
 	 * Use this method to define your trigger->command mappings. Triggers can be
 	 * created via the
@@ -202,17 +212,17 @@ public class RobotContainer {
 
 		left_controller.button(4).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
-		left_controller.button(5).and(() -> (!right_controller.button(4).getAsBoolean() && !right_controller.button(5).getAsBoolean()))
+		left_controller.button(5).and(() -> (!operator_controller.x().getAsBoolean() && !operator_controller.b().getAsBoolean()/*!right_controller.button(4).getAsBoolean() && !right_controller.button(5).getAsBoolean()*/))
 				.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_CENTER)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
-		left_controller.button(5).and(() -> right_controller.button(4).getAsBoolean())
+		left_controller.button(5).and(() -> operator_controller.x().getAsBoolean()/*() -> right_controller.button(4).getAsBoolean()*/)
 			.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_LEFT)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
-		left_controller.button(5).and(() -> right_controller.button(5).getAsBoolean())
+		left_controller.button(5).and(() -> operator_controller.b().getAsBoolean()/*() -> right_controller.button(5).getAsBoolean()*/)
 			.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_RIGHT)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
@@ -262,11 +272,12 @@ public class RobotContainer {
 			
 
 		// // NOTE! The assembly commands will be activated after the driver schedules through assembly scheduler
-		operator_controller.y().onTrue(new InstantCommand(() -> this.LEVEL =
+		// Previously y, x, b
+		operator_controller.povUp().onTrue(new InstantCommand(() -> this.LEVEL =
 		ASSEMBLY_LEVEL.PODIUM_FAR));
-		operator_controller.x().onTrue(new InstantCommand(() -> this.LEVEL =
+		operator_controller.povLeft().onTrue(new InstantCommand(() -> this.LEVEL =
 		ASSEMBLY_LEVEL.PODIUM_LEFT));
-		operator_controller.b().onTrue(new InstantCommand(() -> this.LEVEL =
+		operator_controller.povRight().onTrue(new InstantCommand(() -> this.LEVEL =
 		ASSEMBLY_LEVEL.PODIUM_RIGHT));
 
 		// // left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));

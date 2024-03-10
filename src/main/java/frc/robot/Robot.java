@@ -194,9 +194,7 @@ public class Robot extends LoggedRobot {
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		SmartDashboard.putBoolean("PODIUM_FAR_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_FAR);
-		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT);
+		m_robotContainer.pollButtonsForSmartDashboard();
 
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 	}
