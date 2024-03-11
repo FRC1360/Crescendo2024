@@ -36,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean manualDrive = false; 
 
-  private PhotonCameraWrapper pCameraWrapper;
+  // private PhotonCameraWrapper pCameraWrapper;
 
   @AutoLogOutput(key = "Swerve/CurrentVelocity")
   public Translation2d currentVelocity = new Translation2d(0, 0);
@@ -46,7 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
     navX = new NavX();
     navX.setInverted(Constants.Swerve.isGyroInverted);
 
-    pCameraWrapper = new PhotonCameraWrapper(); 
+    // pCameraWrapper = new PhotonCameraWrapper(); 
     // Swerve module setup
     swerveModules = new SwerveModuleCustom[] {
         new SwerveModuleCustom(0, Constants.Swerve.Mod0.constants),
@@ -233,12 +233,12 @@ public class SwerveSubsystem extends SubsystemBase {
     Pose2d odoPose = swerveDrivePoseEstimator.getEstimatedPosition();
     
     // Vision update
-    Optional<EstimatedRobotPose> result = pCameraWrapper.getEstimatedGlobalPose(odoPose);
-    if (result.isPresent()) {
-        double timestamp = result.get().timestampSeconds;
-        Pose2d camPose = result.get().estimatedPose.toPose2d();
-        swerveDrivePoseEstimator.addVisionMeasurement(camPose, timestamp);
-    }
+    // Optional<EstimatedRobotPose> result = pCameraWrapper.getEstimatedGlobalPose(odoPose);
+    // if (result.isPresent()) {
+    //     double timestamp = result.get().timestampSeconds;
+    //     Pose2d camPose = result.get().estimatedPose.toPose2d();
+    //     swerveDrivePoseEstimator.addVisionMeasurement(camPose, timestamp);
+    // }
 
     // Calculate current speed
     long currentTime = System.currentTimeMillis();

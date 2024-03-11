@@ -8,8 +8,6 @@ import frc.robot.autos.FetchPath;
 import frc.robot.autos.PathfindAuto;
 
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.assembly.AssemblySchedulerCommand;
-import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.swerve.LockWheels;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -40,7 +38,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final CommandJoystick left_controller = new CommandJoystick(0);
   private final CommandJoystick right_controller = new CommandJoystick(1);
-  private final XboxController operator_controller = new XboxController(2); 
+  private final CommandXboxController  operator_controller = new CommandXboxController (2); 
 
   public SwerveSubsystem swerveSubsystem; 
   
@@ -48,8 +46,6 @@ public class RobotContainer {
 
   public ArrayList<Command> tempInitAutos;
   
-  public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.SUBWOOFER; 
-
   public final EventLoop loop = new EventLoop(); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -87,48 +83,22 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    
     swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
         swerveSubsystem,
-        () -> -modifyAlliance(modifyAxis(left_controller.getY())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
-        () -> -modifyAlliance(modifyAxis(left_controller.getX())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
-        () -> -modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-        right_controller));
+        () -> -modifyAlliance(modifyAxis(operator_controller.getLeftY())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+        () -> -modifyAlliance(modifyAxis(operator_controller.getLeftX())) * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
+        () -> -modifyAxis(operator_controller.getRightX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+        operator_controller));
 
     //left_controller.button(1).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
 
     // Left controller Button 1 (trigger) will become shoot (outake)
     // Right Controller Button 1 (trigger) will be intake 
-    left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-                                          .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
+    operator_controller.a().whileTrue(new LockWheels(swerveSubsystem)); 
+    operator_controller.b().onTrue(new InstantCommand(swerveSubsystem::zeroGyro)); 
+    // right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive)); 
 
-    left_controller.button(3).whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem).alongWith(new InstantCommand(() -> System.out.println(this.LEVEL)))); 
-
-    left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
-
-    left_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
-                                                  .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem)));
-
-    //left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE).getCommand()); 
-
-    // left_controller.button(3).whileTrue(new PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
-
-    //left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER).getCommand()); 
-
-    left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem)); 
-    right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro)); 
-    right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive)); 
-
-    // Debounce makes for more stability
-    new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)
-                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR;
-                                          });
-    new BooleanEvent(loop, operator_controller::getXButton).debounce(0.1)
-                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT;
-                                          });
-    new BooleanEvent(loop, operator_controller::getBButton).debounce(0.1)
-                          .ifHigh(() -> {this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT;
-                                          });
   }
 
   /**
