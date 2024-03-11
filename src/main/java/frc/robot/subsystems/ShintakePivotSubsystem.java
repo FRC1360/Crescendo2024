@@ -247,11 +247,6 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.timer.start(); 
 
         System.out.println("Target angle for STP scheduled for: " + targetAngle); 
-
-        if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
-                || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE) {
-                    setSTPSpeed(0.0);
-                }
     }
 
 
