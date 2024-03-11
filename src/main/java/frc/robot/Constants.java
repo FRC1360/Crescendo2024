@@ -52,6 +52,7 @@ public final class Constants {
         public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.9;
         public static final double CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS = 0;
         public static final double CLIMBER_ENCODER_CLIMBED_HEIGHT_IN_ROTATIONS = 0;
+        public static final double HOME_POSITION_IN_ROTATIONS = 0.0;
     }
 
     public static class OperatorConstants {

@@ -172,7 +172,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.setACPVoltage(voltage * 12.0); // Should probably change this to a constant somewhere for ARM_VOLTAGE
     }
 
-    public void setTargetAngle(double targetAngle) {
+    public void setTargetAngle(double targetAngle) { // Degrees | Sets target angle for the ACP to go to | Min = 0, Max = 80.0
         if (this.targetAngle == targetAngle)
         {
             return;
@@ -186,6 +186,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.timer.start(); 
 
         System.out.println("Target angle for ACP scheduled for: " + targetAngle); 
+
+        if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
+                || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) {
+                    setACPSpeed(0.0);
+        }
     }
 
     public double getTargetAngle() {
@@ -254,7 +259,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
+    public void periodic() { // Displays angles, PID, and FF values for STP (also updates angular Velocity)
         updateAngularVelocity();
         updateSmartDashboard();
         //this.movePIDController = new PIDController(kP, kI, kD); // added this here to make sure it updates on the fly
