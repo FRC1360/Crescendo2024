@@ -137,7 +137,6 @@ public class SwerveModuleCustom {
             double percentOutput = desiredState.speedMetersPerSecond / Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND;
             driveMotor.set(percentOutput);
         } else {
-            System.out.println("In control loop"); 
             this.targetSpeed = desiredState.speedMetersPerSecond;
             SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber, desiredState.speedMetersPerSecond); 
             SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber, this.getSpeed()); 
@@ -152,9 +151,10 @@ public class SwerveModuleCustom {
     private void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents jittering.
 
-        double angle = desiredState.angle.getDegrees();
+        double angle = desiredState.angle.getDegrees() % 360.0;
         if (desiredState.speedMetersPerSecond != 0.0 
                 && (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))) { 
+                    System.out.println("IN Last angle"); 
                     angle = lastAngle; 
         }
 

@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -41,7 +42,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private Double lastAngle;
     
 
-    //private double cacheOffset;
+    private double cacheOffset = 0.0;
 
     private DutyCycleEncoder absoluteEncoder;
     
@@ -50,6 +51,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private double STPOffset = Constants.STPConstants.STP_ENCODER_OFFSET;
 
+    public InterpolatingDoubleTreeMap shintakePivotDistanceAngleMap; 
 
     private double kP = 0.025;
     private double kI = 0.0;
@@ -111,16 +113,28 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         resetMotorRotations();
 
         this.timer = new OrbitTimer();
-        this.motionProfileStartState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0); //this.getSTPAngle(), 0.0);
-        this.motionProfileEndState = new TrapezoidProfile.State(Constants.HOME_POSITION_STP, 0.0);
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0); //this.getSTPAngle(), 0.0);
+        this.motionProfileEndState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0);
 
-        //commented out for testing purposes
-        //this.targetAngle = Constants.HOME_POSITION_STP; 
+        this.targetAngle = this.getSTPAngle(); 
         
+        this.shintakePivotDistanceAngleMap = new InterpolatingDoubleTreeMap(); 
+        // Calc by inverse tan((2.045-0.9017)/(dist-0.248)) <-- target speaker height - height of shooter / dist - offset of speaker from center of bot
+        this.shintakePivotDistanceAngleMap.put(0.5, 90-77.56); 
+        this.shintakePivotDistanceAngleMap.put(1.0, 90-56.67); 
+        this.shintakePivotDistanceAngleMap.put(1.5, 90-42.40); 
+        this.shintakePivotDistanceAngleMap.put(2.0, 90-33.127); 
+        this.shintakePivotDistanceAngleMap.put(2.5, 90-26.916); 
+        this.shintakePivotDistanceAngleMap.put(3.0, 90-22.56); 
+
     }
 
     public double getMotorRotations() {
         return this.STPMotorMaster.getEncoder().getPosition();
+    }
+
+    public void setCacheOffset(double offset) { 
+        this.cacheOffset = offset;
     }
 
     // Returns the ShintakePivot GLOBAL angle. The global angle is the angle
@@ -130,8 +144,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
 
     public void setSTPSpeed(double speed) {
-        if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
-                || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
+        // if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+        //         || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
             speed = 0.0;
         this.STPMotorMaster.set(speed);
     }
@@ -146,7 +160,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("New Pos", newPos);
 
         if (this.STPMotorMaster.getEncoder().setPosition(newPos) == REVLibError.kOk) {
-            System.out.println("Reset STP Rotations");
+            //System.out.println("Reset STP Rotations");
             SmartDashboard.putBoolean("STP_Encoder_Updated", true);
         } else {
             System.out.println("Failed to reset STP Rotations");
@@ -163,8 +177,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
      * Sets arm voltage based off 0.0 - 12.0
      */
     public void setSTPVoltage(double voltage) {
-        if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
-                || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
+        // if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+        //         || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
             voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
@@ -224,6 +238,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         {
             return;
         }
+        targetAngle = targetAngle + this.cacheOffset; 
         this.targetAngle = targetAngle;
 
         this.movePIDController.reset();
@@ -363,10 +378,13 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         // SmartDashboard.putNumber("STP_Angular_Velocity", this.getAngularVelocity().doubleValue());
     }
-
     
+    public void resetSTPTargetAngle() { 
+        this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0); //this.getSTPAngle(), 0.0);
+        this.motionProfileEndState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0);
 
-    
+        this.targetAngle = this.getSTPAngle(); 
+    }
     
 
 }

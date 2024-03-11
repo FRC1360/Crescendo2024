@@ -15,6 +15,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
@@ -45,7 +47,6 @@ public class Robot extends LoggedRobot {
 	private Command m_autonomousCommand;
 
 	private RobotContainer m_robotContainer;
-
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any
@@ -57,7 +58,9 @@ public class Robot extends LoggedRobot {
 
 		m_robotContainer = new RobotContainer();
 
-		/*Pathfinding.setPathfinder(new LocalADStar());
+		Pathfinding.setPathfinder(new LocalADStar());
+
+		NamedCommands.registerCommand("", m_autonomousCommand);
 
 		m_robotContainer.loadAllAutos();
 
@@ -66,7 +69,7 @@ public class Robot extends LoggedRobot {
 													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 		SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
 		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);*/
+		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
 	}
 
 	private void loggerInit() {
@@ -135,7 +138,7 @@ public class Robot extends LoggedRobot {
 	/** This function is called once each time the robot enters Disabled mode. */
 	@Override
 	public void disabledInit() {
-		// new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
+		new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
 	}
 
 	@Override
@@ -143,7 +146,10 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 		m_robotContainer.swerveSubsystem.resetModuleZeros();
 		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
+		m_robotContainer.armChassisPivotSubsystem.resetArmTargetAngle();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
+		m_robotContainer.shintakePivotSubsystem.resetSTPTargetAngle();
+        m_robotContainer.shintakePivotSubsystem.resetMotorRotations();
 	}
 
 	/**
@@ -160,6 +166,7 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
+		m_robotContainer.getHoming().schedule();
 	}
 
 	/** This function is called periodically during autonomous. */
@@ -176,19 +183,18 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		m_robotContainer.getHoming().schedule();
 		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
 													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 
-		m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
-		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
+		// m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
+		// m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
 	}
 
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		SmartDashboard.putBoolean("PODIUM_FAR_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_FAR);
-		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT);
+		m_robotContainer.pollButtonsForSmartDashboard();
 
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 	}

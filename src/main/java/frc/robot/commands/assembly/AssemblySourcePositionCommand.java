@@ -21,15 +21,15 @@ public class AssemblySourcePositionCommand extends SequentialCommandGroup {
                 new InstantCommand(ledSubsystem::setLEDDisable),
 
                 // Command 1
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.SOURCE_POSITION_ACP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 2"))),
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.SOURCE_POSITION_ACP, STPSubsystem)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 2")))//,
                 // Command 2
-                //.alongWith(
+                .alongWith(
                 new STPGoToPositionCommand(STPSubsystem, Constants.SOURCE_POSITION_STP, ACPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 3"))),
-               // ),
-                new InstantCommand(ledSubsystem::setLEDSource),
-                new InstantCommand(() -> SmartDashboard.putString("Source stage", "DONE")),
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Source stage", "STAGE 3")))//,
+               ),
+               new InstantCommand(() -> ledSubsystem.setLEDSource()),
+               new InstantCommand(() -> SmartDashboard.putString("Source stage", "DONE")),
                 new InstantCommand(() -> sm.setAtSource()));
     }
 }

@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.5740411480822979,
+      "y": 2.150993532756296
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer lineup from source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Speaker",
+  "choreoAuto": false
+}

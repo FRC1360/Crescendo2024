@@ -35,7 +35,7 @@ public final class Constants {
     public static final boolean isReplay = true; // only used if sim
 
     public static class LED {
-        public static final int LEDPort = 2;
+        public static final int LEDPort = 0;
         public static final float ENABLED_COLOR = 0.87f; // BLUE
         public static final float DISABLED_COLOR = 0.77f; // GREEN
         public static final float NOTE_COLOR = 0.6f; // ORANGE
@@ -84,8 +84,8 @@ public final class Constants {
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 6000; //6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6000; //6250;
+        public static final double SHOOT_VELOCITY_FRONT = 6200; //6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6200; //6250;
         public static final double AMP_VELOCITY_FRONT = 3000; 
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
@@ -103,7 +103,7 @@ public final class Constants {
         public static final int STP_MOTOR_SLAVE = 43;
         public static final double STP_MAX_ANGLE = 360.0;
         public static final double STP_MIN_ANGLE = -180.0;
-        public static final int STP_ENCODER_CHANNEL = 4;
+        public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
         public static final double STP_ENCODER_OFFSET = 0.650;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
@@ -123,22 +123,28 @@ public final class Constants {
         public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
+        public static final double ACP_SLOP_OCCUR_ANGLE = 65.0; 
     } 
+
+    public static final boolean SHOOT_ONLY_WITH_ACP = true; 
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
     public static final double START_POSITION_ACP = 40.0;
     
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
-    public static final double HOME_POSITION_ACP = 21.0;
+    public static final double HOME_POSITION_ACP = 17.0;
 
     // NOTE_SCORE_AMP_POSITION
     public static final double NOTE_SCORE_AMP_POSITION_STP = 220.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 73.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0; //0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; //50.0;
+
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; //0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; //50.0;
 
     // NOTE_SCORE_TRAP_POSITION
     public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
@@ -153,7 +159,7 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop  335
     public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION
@@ -270,8 +276,8 @@ public final class Constants {
             public static final double maxAcceleration = 16; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); // deg/s^2
-            public static final double positionTolerance = 0.025;
-            public static final double angleTolerance = Math.toRadians(1);
+            public static final double positionTolerance = 0.025 * 20;
+            public static final double angleTolerance = Math.toRadians(1) * 10;
         }
 
     }
@@ -299,7 +305,7 @@ public final class Constants {
      */
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
-    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 1 /
+    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 /
             Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
     // SDS Module Configurations

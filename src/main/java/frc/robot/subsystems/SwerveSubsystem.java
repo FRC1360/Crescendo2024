@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -19,6 +20,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +28,7 @@ import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveAutoConfig;
+import frc.robot.util.OrbitTimer;
 import frc.robot.util.PIDSwerveValues;
 import swervelib.math.SwerveModuleState2;
 
@@ -38,16 +41,15 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
-	private double XkP = 1.25; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
-    private double XkI = 0.0;
-    private double XkD = 0.0;
-    private double YkP = 1.25; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
-    private double YkI = 0.0;
-    private double YkD = 0.0;
+	private double XkP = 2.0; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double XkI = 0.00001;
+    private double XkD = 0.0000;
+    private double YkP = 2.0; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double YkI = 0.00001;
+    private double YkD = 0.0000;
 	private double AkP = 0.023; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
     private double AkI = 0.000001;
     private double AkD = 0.0;
-
 	public boolean manualDrive = false;
 
 	private PhotonCameraWrapper pCameraWrapper;
@@ -57,6 +59,17 @@ public class SwerveSubsystem extends SubsystemBase {
 	private PIDController driveYPID = new PIDController(YkP, YkI, YkD); 
 
 	private PIDController anglePID = new PIDController(AkP, AkI, AkD); 
+
+	private TrapezoidProfile.Constraints driveConstraints;
+	private TrapezoidProfile driveMotionProfile; 
+
+	private TrapezoidProfile.State driveMotionProfileXStartState; 
+	private TrapezoidProfile.State driveMotionProfileXEndState; 
+
+	private TrapezoidProfile.State driveMotionProfileYStartState; 
+	private TrapezoidProfile.State driveMotionProfileYEndState; 
+
+	private OrbitTimer timer; 
 
 	@AutoLogOutput(key = "Swerve/CurrentVelocity")
 	public Translation2d currentVelocity = new Translation2d(0, 0);
@@ -94,6 +107,14 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.initDouble("Swerve Angle kI", this.AkI);
 		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
+		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED, 4.0); 
+		this.driveMotionProfile = new TrapezoidProfile(driveConstraints); 
+		this.driveMotionProfileXStartState = new TrapezoidProfile.State(0.0, 0.0); 
+		this.driveMotionProfileXEndState = new TrapezoidProfile.State(0.0, 0.0); 
+
+		this.driveMotionProfileYStartState = new TrapezoidProfile.State(0.0, 0.0); 
+		this.driveMotionProfileYEndState = new TrapezoidProfile.State(0.0, 0.0); 
+		this.timer = new OrbitTimer(); 
 	}
 
 	public void toggleManualDrive() {
@@ -122,6 +143,9 @@ public class SwerveSubsystem extends SubsystemBase {
 		for (SwerveModuleCustom mod : swerveModules) {
 			mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
 		}
+
+		Logger.recordOutput("DriveTranslation", translation);
+		Logger.recordOutput("DriveRotation", rotation);
 	}
 
 	public void updateAbsAngleSmartDashboard() { 
@@ -304,7 +328,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		return this.driveXPID.atSetpoint() && this.driveYPID.atSetpoint() && this.anglePID.atSetpoint(); 
 	}
 
-	public PIDSwerveValues calculatePIDDriveOutput(Pose2d target) {
+	public PIDSwerveValues calculateControlLoopDriveOutput(Pose2d target) {
 		if (target.getX() != prevTargetPose.getX() || 
 			target.getY() != prevTargetPose.getY() || 
 			target.getRotation().getDegrees() != prevTargetPose.getRotation().getDegrees()) 
@@ -312,15 +336,40 @@ public class SwerveSubsystem extends SubsystemBase {
 			this.driveXPID.reset();
 			this.driveYPID.reset();
 			this.anglePID.reset();
+
+			Pose2d curPose = this.currentPose(); 
+
+			this.driveMotionProfileXStartState = new TrapezoidProfile.State(curPose.getX(), this.currentVelocity.getX()); 
+			this.driveMotionProfileXEndState = new TrapezoidProfile.State(target.getX(), 0.0);
+
+			this.driveMotionProfileYStartState = new TrapezoidProfile.State(curPose.getY(), this.currentVelocity.getY()); 
+			this.driveMotionProfileYEndState = new TrapezoidProfile.State(target.getY(), 0.0);
+
+			this.timer.start();
+
 			this.prevTargetPose = target; 
 		}  
 		System.out.print("Aligning to pose: ");
         System.out.println(target);
 
+		TrapezoidProfile.State profileTargetXPos = this.driveMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileXStartState,
+																		this.driveMotionProfileXEndState);
+
+		TrapezoidProfile.State profileTargetYPos = this.driveMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileYStartState,
+																		this.driveMotionProfileYEndState);
+
+		double profilePositionTargetX = profileTargetXPos.position; 
+		double profilePositionTargetY = profileTargetYPos.position; 
+
+		SmartDashboard.putNumber("Cur Pose Y", this.currentPose().getY()); 
+		SmartDashboard.putNumber("Profile Target Y Position", profilePositionTargetY); 
+		SmartDashboard.putNumber("Current velocity Drive Y", this.currentVelocity.getY()); 
+		SmartDashboard.putNumber("Target Profile Velocity Y", profileTargetYPos.velocity); 
+
 		Pose2d currentPose = this.currentPose();
 
-        double driveXOut = this.driveXPID.calculate(currentPose.getX(), target.getX());
-        double driveYOut = this.driveYPID.calculate(currentPose.getY(), target.getY());
+        double driveXOut = this.driveXPID.calculate(currentPose.getX(), profilePositionTargetX);
+        double driveYOut = this.driveYPID.calculate(currentPose.getY(), profilePositionTargetY);
 
         System.out.println("Current Pose: " + this.currentPose());
 
