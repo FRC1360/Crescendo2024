@@ -224,6 +224,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.timer.start(); 
 
         System.out.println("Target angle for ACP scheduled for: " + targetAngle); 
+
+        if (this.getACPAngle() > Constants.ACPConstants.MAX_ACP_ANGLE
+                || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE) {
+                    setACPSpeed(0.0);
+                }
     }
 
     public double getTargetAngle() {
