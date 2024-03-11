@@ -108,7 +108,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 		return m_back.getEncoder().getPosition();
 	}
 
-	public boolean getShooterReady(double prev) {
+	public boolean getShooterReady(double prev) { // Sets speed of intake [.set()] | NO Max or Min
 		varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
 		if (-(getBackEncoder() - prev) > (58.095 - 57.548)) {
 			stopIntake();
@@ -121,14 +121,13 @@ public class ShintakeSubsystem extends SubsystemBase {
 		m_counter.reset();
 	}
 
-	public void setVelocity(double rightVelocity, double leftVelocity) {
+	public void setVelocity(double rightVelocity, double leftVelocity) { // RPM | Sets the velocity of the shooter wheels | limit is 6784 RPM
 		System.out.println("Setting velocity to: " + rightVelocity);
-		if (leftVelocity >= 6700) {
+		if (leftVelocity >= 6700 || leftVelocity <= -6700 || rightVelocity >= 6700 || rightVelocity <= -6700) {
 			m_left.set(0.0);
-		}
-		if (rightVelocity >= 6700) {
 			m_right.set(0.0);
 		}
+
 		if (this.leftVelocity != leftVelocity)
 		{
 			this.leftVelocity = leftVelocity;
@@ -195,7 +194,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void periodic() {
+	public void periodic() { // Displays vortex velocities, target velocities, intake sensor state (false = detecting something), and if the shintake is in motion
 		SmartDashboard.putBoolean("Intake in motion: ",
 				!(m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0));
 		SmartDashboard.putBoolean("intake sensor state", m_digital.get());

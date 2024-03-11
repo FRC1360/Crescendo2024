@@ -31,7 +31,7 @@ public class RetractCommand extends Command {
     @Override
     public void execute() {
       if (climb.getIsExtended())
-        climb.goToPosition(Constants.ClimbConstants.CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS, Constants.ClimbConstants.LEAD_CLIMBER_MOTOR__SPEED);
+        climb.goToPosition();
     }
 
     // Called once the command ends or is interrupted.

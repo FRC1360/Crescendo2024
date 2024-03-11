@@ -18,6 +18,7 @@ public class ClimberSubsystem extends SubsystemBase {
 	private final CANSparkMax m_climbMotorSlave;
 	private Boolean isSafe = true;
 	private boolean isExtended = false;
+	private double targetHeight = 0.0;
 
 	public ClimberSubsystem() {
 		this.m_climbMotorLead = new CANSparkMax(Constants.ClimbConstants.CLIMBER_LEAD_CAN_ID, MotorType.kBrushless);
@@ -35,16 +36,24 @@ public class ClimberSubsystem extends SubsystemBase {
 		m_climbMotorLead.set(0);
 	}
 
-	public void goToPosition(double pos, double speed) {
-		if (pos > getEncoderPosition()) {
-			m_climbMotorLead.set(speed);
+	public void goToPosition() { // Rotations | Goes to the target position set with no limitations currently
+		if (this.targetHeight > getEncoderPosition()) {
+			m_climbMotorLead.set(Constants.ClimbConstants.LEAD_CLIMBER_MOTOR__SPEED);
 		}
-		if (pos < getEncoderPosition()) {
-			m_climbMotorLead.set(-speed);
+		if (this.targetHeight < getEncoderPosition()) {
+			m_climbMotorLead.set(-Constants.ClimbConstants.LEAD_CLIMBER_MOTOR__SPEED);
 		}
-		if (climbMotorReady(pos)) {
+		if (climbMotorReady(this.targetHeight)) {
 			stopClimber();
 		}
+	}
+
+	public void setTargetHeight(double targetHeight) { // sets the target height for the climber to go to
+		this.targetHeight = targetHeight;
+	}
+
+	public double gettargetHeight() {
+		return this.targetHeight;
 	}
 
 	public boolean climbMotorReady(double targetPos) {
@@ -71,11 +80,11 @@ public class ClimberSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void periodic() {
+	public void periodic() { // displays if it is extended, if it is safe, the current height in rotations, and sets the position to the target Height
 		SmartDashboard.putBoolean("Is extended ", isExtended);
 		SmartDashboard.putBoolean("Is climber safe", isSafe);
 		SmartDashboard.putNumber("Climber height in rotations", getEncoderPosition());
-		SmartDashboard.putNumber("Climb motor velocity", m_climbMotorLead.getEncoder().getVelocity());
+		goToPosition();
 
 	}
 }

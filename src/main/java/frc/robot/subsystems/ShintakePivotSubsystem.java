@@ -233,7 +233,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     //     return this.cacheOffset;
     // }
 
-    public void setTargetAngle(double targetAngle) {
+    public void setTargetAngle(double targetAngle) { // Degrees | Sets the target angle for the STP to go to | Min is -180 and Max is 360
         if (this.targetAngle == targetAngle)
         {
             return;
@@ -247,6 +247,11 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.timer.start(); 
 
         System.out.println("Target angle for STP scheduled for: " + targetAngle); 
+
+        if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
+                || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE) {
+                    setSTPSpeed(0.0);
+                }
     }
 
 
@@ -322,7 +327,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     }
     
     @Override
-    public void periodic() {
+    public void periodic() { // Displays angles, PID, and FF values for STP (also updates angular Velocity)
         updateAngularVelocity();
         updateSmartDashboard(); 
             
