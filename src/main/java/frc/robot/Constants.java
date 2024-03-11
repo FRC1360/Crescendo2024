@@ -100,7 +100,7 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 360.0;
+        public static final double STP_MAX_ANGLE = 350.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at 360
         public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
@@ -125,7 +125,7 @@ public final class Constants {
         public static final double ACP_SLOP_OCCUR_ANGLE = 65.0; 
     } 
 
-    public static final boolean SHOOT_ONLY_WITH_ACP = true; 
+    public static final boolean SHOOT_ONLY_WITH_ACP = false; 
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
     public static final double START_POSITION_ACP = 40.0;
@@ -139,7 +139,7 @@ public final class Constants {
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 73.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0; //0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0 + 10.0; //0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; //50.0;
 
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; //0.0;
@@ -158,7 +158,7 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop  335
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop  335 // added 30, potentially remove
     public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION
@@ -210,14 +210,14 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.4, 0.0000, 0.0045);
+        public static final PIDConstants drivePID = new PIDConstants(0.37, 0.000001, 0.0045);
         // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
-        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3, 1.11); //ka = 0.4
+        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.2, 3.0, 1.8); 
         public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
 
         /* Custom PID Controllers */
         //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
-        public static final PIDConstants driveAlignPID = new PIDConstants(1.25, 0, 0);
+        public static final PIDConstants driveAlignPID = new PIDConstants(1.1, 0, 0.001);
 
         /* Front Left Module - Module 0 */
         public static final class Mod0 {

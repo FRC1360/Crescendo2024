@@ -31,6 +31,7 @@ import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
 import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
+import frc.robot.commands.assembly.AssemblySchedulerCommand.SOURCE_SIDE;
 import frc.robot.commands.shintake.AmpScoreCommand;
 import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.shintake.OutakeCommand;
@@ -64,6 +65,8 @@ import java.util.function.BooleanSupplier;
  */
 public class RobotContainer {
 	public ASSEMBLY_LEVEL LEVEL = ASSEMBLY_LEVEL.AMP;
+	public SOURCE_SIDE SRC_SIDE = SOURCE_SIDE.CENTER; 
+	
 	// The robot's subsystems and commands are defined here...
 	public final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
 	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem();
@@ -127,9 +130,9 @@ public class RobotContainer {
 		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", this.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT);
 		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", this.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT);
 
-		SmartDashboard.putBoolean("SOURCE_LEFT", operator_controller.x().getAsBoolean());
-		SmartDashboard.putBoolean("SOURCE_CENTER", !operator_controller.x().getAsBoolean() && !operator_controller.b().getAsBoolean());
-		SmartDashboard.putBoolean("SOURCE_RIGHT", operator_controller.b().getAsBoolean());
+		SmartDashboard.putBoolean("SOURCE_LEFT", this.SRC_SIDE == SOURCE_SIDE.LEFT);
+		SmartDashboard.putBoolean("SOURCE_CENTER", this.SRC_SIDE == SOURCE_SIDE.CENTER);
+		SmartDashboard.putBoolean("SOURCE_RIGHT", this.SRC_SIDE == SOURCE_SIDE.RIGHT);
 	}
 
 	/**
@@ -212,17 +215,17 @@ public class RobotContainer {
 
 		left_controller.button(4).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
-		left_controller.button(5).and(() -> (!operator_controller.x().getAsBoolean() && !operator_controller.b().getAsBoolean()/*!right_controller.button(4).getAsBoolean() && !right_controller.button(5).getAsBoolean()*/))
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER)/*!right_controller.button(4).getAsBoolean() && !right_controller.button(5).getAsBoolean()*/))
 				.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_CENTER)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
-		left_controller.button(5).and(() -> operator_controller.x().getAsBoolean()/*() -> right_controller.button(4).getAsBoolean()*/)
+		left_controller.button(5).and(() -> this.SRC_SIDE.equals(SOURCE_SIDE.LEFT)/*() -> right_controller.button(4).getAsBoolean()*/)
 			.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_LEFT)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
-		left_controller.button(5).and(() -> operator_controller.b().getAsBoolean()/*() -> right_controller.button(5).getAsBoolean()*/)
+		left_controller.button(5).and(() -> this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT)/*() -> right_controller.button(5).getAsBoolean()*/)
 			.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_RIGHT)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
@@ -230,7 +233,7 @@ public class RobotContainer {
 
 		left_controller.button(5).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
-		right_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
+		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())
 						.alongWith(
@@ -240,6 +243,10 @@ public class RobotContainer {
 																			* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND)))
 						); 
 		
+		operator_controller.x().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.LEFT)); 
+		operator_controller.x().onFalse(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER)); 
+		operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.RIGHT)); 
+		operator_controller.b().onFalse(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER)); 
 		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.RED_SOURCE).getCommand());
 
@@ -257,7 +264,7 @@ public class RobotContainer {
 		// 				* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND));
 
 		// right_controller.button(11).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
-		right_controller.button(10).onTrue(new InstantCommand(swerveSubsystem::toggleManualDrive));
+		right_controller.button(10).onTrue(new InstantCommand(() -> swerveSubsystem.toggleManualDrive()));
 
 		// // Debounce makes for more stability
 		// // new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)

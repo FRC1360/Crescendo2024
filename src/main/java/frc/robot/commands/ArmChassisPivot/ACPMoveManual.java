@@ -13,6 +13,8 @@ public class ACPMoveManual extends Command {
     private final ArmChassisPivotSubsystem armChassisPivot;
     private CommandXboxController xboxController; 
 
+    private double curTarget; 
+
     public ACPMoveManual(ArmChassisPivotSubsystem armChassisPivot, DoubleSupplier joystick, CommandXboxController xboxController) {
         this.armChassisPivot = armChassisPivot;
         this.joystick = joystick;
@@ -22,10 +24,15 @@ public class ACPMoveManual extends Command {
     }
 
     @Override
+    public void initialize() { 
+        curTarget = armChassisPivot.getTargetAngle(); 
+    }
+
+    @Override
     public void execute() {
         double joystickValue = joystick.getAsDouble();
         double offset = joystickValue * 10; 
-        double adjustedAngle = armChassisPivot.getTargetAngle() + offset; //* 0.5; // Adjust as needed
+        double adjustedAngle = curTarget + offset; //* 0.5; // Adjust as needed
         armChassisPivot.setTargetAngle(adjustedAngle);
         SmartDashboard.putNumber("ArmChassisPivot_Raw_Output", offset);
 

@@ -16,7 +16,7 @@ public class AlignmentConstants {
     public static final Pose2d BLUE_SOURCE_CENTER = new Pose2d(15.36, 1.04, Rotation2d.fromDegrees(-57.69)); // ID 1 & 2
     public static final Pose2d BLUE_SOURCE_RIGHT = new Pose2d(14.79, 0.73, Rotation2d.fromDegrees(-57.69));
 
-    public static final Pose2d BLUE_AMP = new Pose2d(1.86, 7.60, Rotation2d.fromDegrees(90.0)); // ID 6
+    public static final Pose2d BLUE_AMP = new Pose2d(1.86, 7.60, Rotation2d.fromDegrees(-90.0)); // ID 6
 
     public static final Pose2d BLUE_SPEAKER = new Pose2d(1.34, 5.53, Rotation2d.fromDegrees(180.0)); // ID 7 & 8 ** 180 needs to be added NEED TO FACE AWAY FOR SHOT 
 
@@ -34,7 +34,7 @@ public class AlignmentConstants {
 
     public static final Pose2d RED_SPEAKER = new Pose2d(15.12, 5.56, Rotation2d.fromDegrees(0.0)); // ID 3 & 4
 
-    public static final Pose2d RED_AMP = new Pose2d(14.70, 7.60, Rotation2d.fromDegrees(90.0)); // ID 5
+    public static final Pose2d RED_AMP = new Pose2d(14.70, 7.60, Rotation2d.fromDegrees(-90.0)); // ID 5
 
     // STAGE with respect to red alliance (far is cannot be seen)
     public static final Pose2d RED_STAGE_FAR = new Pose2d(9.90, 4.10, Rotation2d.fromDegrees(0.0)); // ID 13

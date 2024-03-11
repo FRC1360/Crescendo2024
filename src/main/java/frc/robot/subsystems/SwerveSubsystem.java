@@ -69,7 +69,11 @@ public class SwerveSubsystem extends SubsystemBase {
 	private TrapezoidProfile.State driveMotionProfileYStartState; 
 	private TrapezoidProfile.State driveMotionProfileYEndState; 
 
-	private OrbitTimer timer; 
+	private OrbitTimer timer;
+
+	@AutoLogOutput(key = "Swerve/CurrentAcceleration")
+	public Translation2d currentAcceleration = new Translation2d(0, 0);  
+	private Translation2d prevVelocity = new Translation2d(0, 0); 
 
 	@AutoLogOutput(key = "Swerve/CurrentVelocity")
 	public Translation2d currentVelocity = new Translation2d(0, 0);
@@ -118,6 +122,7 @@ public class SwerveSubsystem extends SubsystemBase {
 	}
 
 	public void toggleManualDrive() {
+		System.out.println("Toggling Manual Drive"); 
 		manualDrive = !manualDrive;
 	}
 
@@ -402,6 +407,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		long deltaTime = currentTime - lastPoseTimestamp;
 		currentVelocity = new Translation2d((currentPose().getX() - lastPose.getX()) / (deltaTime / 1000d),
 				(currentPose().getY() - lastPose.getY()) / (deltaTime / 1000d));
+	
 		lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
 		lastPoseTimestamp = System.currentTimeMillis();
 

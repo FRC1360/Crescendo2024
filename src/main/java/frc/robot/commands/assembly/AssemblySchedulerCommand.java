@@ -35,6 +35,12 @@ public class AssemblySchedulerCommand extends Command {
         SOURCE_RIGHT
     }
 
+    public static enum SOURCE_SIDE { 
+        LEFT, 
+        CENTER, 
+        RIGHT
+    }
+
     private Command assemblyCommand;
 
     private SwerveSubsystem swerveSubsystem;
@@ -96,10 +102,10 @@ public class AssemblySchedulerCommand extends Command {
 
                 case AMP:
                     this.assemblyCommand = 
-                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand(), noPathFind)
-                            .alongWith(
-                                new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm) 
-                                );
+                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand(), noPathFind); 
+                            // .alongWith(
+                            //     new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm) 
+                            //     );
                     break;
 
                 case SOURCE_CENTER:

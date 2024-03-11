@@ -54,6 +54,10 @@ public class SwerveModuleCustom {
 
     private SwerveModuleState targetState = new SwerveModuleState();
 
+    private double currentAcceleration;
+    private double prevSpeed = 0.0; 
+    private double prevTime = -1; 
+
     public SwerveModuleCustom(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
 
@@ -138,13 +142,23 @@ public class SwerveModuleCustom {
             driveMotor.set(percentOutput);
         } else {
             this.targetSpeed = desiredState.speedMetersPerSecond;
+            if (this.prevTime == -1) { 
+                this.prevTime = System.currentTimeMillis(); 
+            }
+            // if (Math.abs(desiredState.speedMetersPerSecond) > Constants.Swerve.MAX_SPEED * 0.01) { 
+            double deltaTime = (System.currentTimeMillis() / 1000d) - (this.prevTime / 1000d); 
+            this.currentAcceleration = (desiredState.speedMetersPerSecond - this.prevSpeed) / deltaTime; 
+            this.prevTime = System.currentTimeMillis(); 
+            this.prevSpeed = desiredState.speedMetersPerSecond; 
+            // }
             SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber, desiredState.speedMetersPerSecond); 
             SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber, this.getSpeed()); 
+           // System.out.println("Accel: " + this.currentAcceleration); 
             driveController.setReference(
                     desiredState.speedMetersPerSecond,
                     ControlType.kVelocity,
                     0,
-                    feedforward.calculate(desiredState.speedMetersPerSecond));
+                    feedforward.calculate(desiredState.speedMetersPerSecond, this.currentAcceleration));
         }
     }
 
