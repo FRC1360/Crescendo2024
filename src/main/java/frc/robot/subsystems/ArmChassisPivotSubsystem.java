@@ -148,7 +148,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setCacheOffset(double offset) { 
-        this.cacheOffset = offset; 
+        this.cacheOffset += offset; 
     }
 
     public void resetMotorRotations() 
@@ -197,6 +197,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         if (this.targetAngle == targetAngle)
         {
             return;
+        }
+        else if (this.targetAngle >= Constants.ACPConstants.MAX_ACP_ANGLE || this.targetAngle <= Constants.ACPConstants.MIN_ACP_ANGLE) { 
+            DriverStation.reportError("Tried to set ACP to above or below max or min; Target: " +  this.targetAngle, true);
+            System.exit(1); 
         }
         else if (this.getACPAngle() < Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
             this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());

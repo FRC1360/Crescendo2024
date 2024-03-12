@@ -140,7 +140,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     // Returns the ShintakePivot GLOBAL angle. The global angle is the angle
     // relative to the shoulder
     public double getSTPAngle() {
-        return this.rotationsToAngleConversion(this.getMotorRotations());  //- this.cacheOffset;
+        return this.rotationsToAngleConversion(this.getMotorRotations());
     }
 
     public void setSTPSpeed(double speed) {
@@ -238,6 +238,11 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         {
             return;
         }
+        else if (this.targetAngle >= Constants.STPConstants.STP_MAX_ANGLE || this.targetAngle <= Constants.STPConstants.STP_MIN_ANGLE) { 
+            DriverStation.reportError("Tried to set STP to above or below max or min; Target: " +  this.targetAngle, true);
+            System.exit(1); 
+        }
+        targetAngle = targetAngle + this.cacheOffset; 
         this.targetAngle = targetAngle;
 
         this.movePIDController.reset();

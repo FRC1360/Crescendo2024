@@ -105,7 +105,7 @@ public final class Constants {
         public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.650;
+        public static final double STP_ENCODER_OFFSET = 0.272;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -211,9 +211,9 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.37, 0.000001, 0.0045);
+        public static final PIDConstants drivePID = new PIDConstants(0.34, 0.000001, 0.0045);
         // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
-        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.2, 3.0, 1.8); 
+        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.2, 3.0, 0.9); 
         public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
 
         /* Custom PID Controllers */

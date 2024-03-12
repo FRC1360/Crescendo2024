@@ -38,7 +38,7 @@ public class STPMoveManual extends Command {
         SmartDashboard.putNumber("shintakePivot_Raw_Output", offset);
 
         if (xboxController.a().getAsBoolean()) {
-            System.out.println("Setting STP offset to: " + offset); 
+            System.out.println("Setting relative STP offset to: " + offset); 
             this.shintakePivot.setCacheOffset(offset);
         }
     }

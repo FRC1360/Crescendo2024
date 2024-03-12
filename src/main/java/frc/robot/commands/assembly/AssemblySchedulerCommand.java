@@ -111,24 +111,24 @@ public class AssemblySchedulerCommand extends Command {
                 case SOURCE_CENTER:
                     this.assemblyCommand = 
                     new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER, true)
-                             .getCommand(), noPathFind)
-                           .alongWith(
-                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
-                                );
+                             .getCommand(), noPathFind);
+                        //    .alongWith(
+                        //         new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
+                        //         );
                     break;
                 case SOURCE_LEFT: 
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_LEFT, true)
-                             .getCommand(), noPathFind)
-                           .alongWith(
-                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
-                                );
+                             .getCommand(), noPathFind);
+                        //    .alongWith(
+                        //         new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
+                        //         );
                     break;  
                 case SOURCE_RIGHT: 
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_RIGHT, true)
-                             .getCommand(), noPathFind)
-                           .alongWith(
-                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
-                                );
+                             .getCommand(), noPathFind); 
+                        //    .alongWith(
+                        //         new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
+                        //         );
                     break; 
                 case SUBWOOFER_DEFENDED: 
                     this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
@@ -169,17 +169,17 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SOURCE_CENTER:
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER, true).getCommand(), noPathFind)
-                            .alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER, true).getCommand(), noPathFind);
+                            //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
                 case SOURCE_LEFT: 
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_LEFT, true).getCommand(), noPathFind)
-                            .alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_LEFT, true).getCommand(), noPathFind); 
+                            //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
                     break; 
                 case SOURCE_RIGHT: 
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_RIGHT, true).getCommand(), noPathFind)
-                            .alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)); 
+                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_RIGHT, true).getCommand(), noPathFind); 
+                            //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)); 
                     break; 
                 case SUBWOOFER_DEFENDED: 
                     this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
