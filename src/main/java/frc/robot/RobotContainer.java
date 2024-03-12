@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autos.FetchPath;
+import frc.robot.autos.PathfindAuto;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ArmChassisPivot.ACPGoToPositionCommand;
 import frc.robot.commands.ArmChassisPivot.ACPMoveManual;
@@ -50,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
 import java.util.function.BooleanSupplier;
@@ -135,6 +137,29 @@ public class RobotContainer {
 		SmartDashboard.putBoolean("SOURCE_RIGHT", this.SRC_SIDE == SOURCE_SIDE.RIGHT);
 	}
 
+	private boolean isBlue() { 
+		return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue; 
+	}
+
+	private void bindSourcePathfinding() { 
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER) && isBlue()))
+				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER).getCommand());
+
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.LEFT) && isBlue()))
+				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_LEFT).getCommand());
+
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT) && isBlue()))
+				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_RIGHT).getCommand());
+
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER) && !isBlue()))
+				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER).getCommand());
+
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.LEFT) && !isBlue()))
+				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_LEFT).getCommand());
+		
+		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT) && !isBlue()))
+				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_RIGHT).getCommand());
+	}
 	/**
 	 * Use this method to define your trigger->command mappings. Triggers can be
 	 * created via the
@@ -196,8 +221,7 @@ public class RobotContainer {
 		left_controller.button(7).onTrue(new
 		InstantCommand(swerveSubsystem::zeroGyro));
 
-		// // Left controller Button 1 (trigger) will become shoot (outake)
-		// // Right Controller Button 1 (trigger) will be intake
+		// Right controller Button 4 is score trap
 		left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
@@ -215,21 +239,11 @@ public class RobotContainer {
 
 		left_controller.button(4).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER)/*!right_controller.button(4).getAsBoolean() && !right_controller.button(5).getAsBoolean()*/))
-				.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_CENTER)
-				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
-
-		left_controller.button(5).and(() -> this.SRC_SIDE.equals(SOURCE_SIDE.LEFT)/*() -> right_controller.button(4).getAsBoolean()*/)
-			.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_LEFT)
-				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
-
-		left_controller.button(5).and(() -> this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT)/*() -> right_controller.button(5).getAsBoolean()*/)
-			.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE_RIGHT)
-				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
+		bindSourcePathfinding();
 		
+		right_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
+				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
 		left_controller.button(5).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
@@ -245,9 +259,8 @@ public class RobotContainer {
 		
 		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 		operator_controller.x().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.LEFT)); 
-		operator_controller.x().onFalse(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER)); 
 		operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.RIGHT)); 
-		operator_controller.b().onFalse(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER)); 
+		operator_controller.y().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER)); 
 		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.RED_SOURCE).getCommand());
 
