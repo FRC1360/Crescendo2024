@@ -47,7 +47,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private double YkP = 2.0; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
     private double YkI = 0.00001;
     private double YkD = 0.0000;
-	private double AkP = 0.023; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
+	private double AkP = 0.018; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
     private double AkI = 0.000001;
     private double AkD = 0.0;
 	public boolean manualDrive = false;
