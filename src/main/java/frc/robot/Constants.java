@@ -52,18 +52,23 @@ public final class Constants {
                                 0, 
                                 Math.toRadians(-32.0),
                                 0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-        // from center.
-        public static final String cameraName = "Camera_Module_v1";
-        public static final double maxNoiseError = 0.25; // meters
-    }
+      // from center.
+          public static final String cameraName = "Camera_Module_v1";
+          public static final double maxNoiseError = 0.25; // meters
+      }
 
     /*
      * Swerve Constants (newly added ones)
      */
     public static final class Swerve {
         /* Module Specific Constants */
-        public static final String[] MODULE_NAMES = { "Front Left", "Front Right", "Back Left", "Back Right" }; // module
-                                                                                                                // #0,
+        public static final String[] MODULE_NAMES = {
+            "Front Left",
+            "Front Right",
+            "Back Left",
+            "Back Right"
+        }; // module
+        // #0,
         // #1, #2, #3
 
         public static int PEAK_CURRENT_LIMIT = 40;
@@ -79,10 +84,10 @@ public final class Constants {
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
         public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-                new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-                new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-                new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-                new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
+            new Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+            new Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+            new Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+            new Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0));
 
         /* Drive Motor Conversion Factors */
         public static final double DRIVE_GEAR_RATIO = (6.75 / 1.0); // 6.75:1
@@ -111,7 +116,7 @@ public final class Constants {
             public static final int canCoderID = 12;
             public static final double angleOffset = 360.0-218.93+180.0; //130.0; // Always reversed direction, add 180
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Front Right Module - Module 1 */
@@ -122,7 +127,7 @@ public final class Constants {
             public static final double angleOffset = 360.0-195.46; //40.3;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Back Left Module - Module 2 */
@@ -132,7 +137,7 @@ public final class Constants {
             public static final int canCoderID = 32;
             public static final double angleOffset = 360.0-158.73; //252.2;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         /* Back Right Module - Module 3 */
@@ -143,7 +148,7 @@ public final class Constants {
             public static final double angleOffset = 360.0-50.18; //326.85;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
-                    canCoderID, angleOffset, anglePID, drivePID, driveSVA);
+                canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
 
         public static final class AutoConstants {
@@ -175,7 +180,7 @@ public final class Constants {
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.61; // FIXME Measure and set wheelbase
 
     public static final double ROBOT_MAX_VELOCITY_METERS_PER_SECOND = 14.5 / 3.28084; // ft/s divide ft/m to convert to
-                                                                                      // m/s
+    // m/s
 
     /**
      * The maximum angular velocity of the robot in radians per second.
@@ -185,14 +190,14 @@ public final class Constants {
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 1 /
-            Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
+        Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
     // SDS Module Configurations
     public static final double SWERVE_WHEEL_DIAMETER = 0.10033; // in meters
     public static final double SWERVE_DRIVE_GEAR_RATIO = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
     public static final double SWERVE_STEER_GEAR_RATIO = (14.0 / 50.0) * (10.0 / 60.0);
     public static final double SWERVE_DRIVE_MOTOR_RAMP_RATE = 1.0; // Time is seconds for acceleration from 0 to full
-                                                                   // speed
+    // speed
     public static final double SWERVE_STEER_MOTOR_RAMP_RATE = 1.0;
     public static final int SWERVE_ENCODER_PULSE_PER_REV = 1;
 
@@ -200,13 +205,13 @@ public final class Constants {
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 11; // FIXME Set front left module steer motor ID
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 0; // FIXME Set front left steer encoder ID
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -(218.4075 + 90.0); // FIXME Measure and set front left
-                                                                                    // steer offset
+    // steer offset
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 20; // FIXME Set front right drive motor ID
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 21; // FIXME Set front right steer motor ID
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 1; // FIXME Set front right steer encoder ID
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -(310.588 + 90.0); // FIXME Measure and set front right
-                                                                                    // steer offset
+    // steer offset
     // 2, 72.098
     // 1, 40.341
 
@@ -214,13 +219,13 @@ public final class Constants {
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 31; // FIXME Set back left steer motor ID
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 2; // FIXME Set back left steer encoder ID
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -(342.0 + 90.0); // FIXME Measure and set back left steer
-                                                                                // offset
+    // offset
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 40; // FIXME Set back right drive motor ID
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 41; // FIXME Set back right steer motor ID
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3; // FIXME Set back right steer encoder ID
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -(54.767 + 180.0 + 90.0); // FIXME Measure and set back
-                                                                                          // right steer offset
+    // right steer offset
 
     public static final class Drivetrain {
         public static final double DRIVE_MOTION_PROFILE_MAX_VELOCITY = 4.000;
