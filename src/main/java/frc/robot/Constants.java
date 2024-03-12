@@ -218,7 +218,7 @@ public final class Constants {
 
         /* Custom PID Controllers */
         //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
-        public static final PIDConstants driveAlignPID = new PIDConstants(1.1, 0, 0.001);
+        public static final PIDConstants driveAlignPID = new PIDConstants(0.9, 0, 0.001);
 
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
