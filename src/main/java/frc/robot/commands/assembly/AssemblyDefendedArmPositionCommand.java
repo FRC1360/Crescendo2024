@@ -1,5 +1,7 @@
 package frc.robot.commands.assembly;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,13 +19,13 @@ import frc.robot.util.StateMachine;
 public class AssemblyDefendedArmPositionCommand extends SequentialCommandGroup {
 
     public AssemblyDefendedArmPositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
-            ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, ShintakeSubsystem shintake, StateMachine sm, double targetArmAngle) {
+            ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, ShintakeSubsystem shintake, StateMachine sm, DoubleSupplier targetArmAngle) {
         addCommands(
                 new InstantCommand(() -> sm.setAtSpeakerDefendedScore()),
                 new InstantCommand(ledSubsystem::setLEDDisable),
 
                 // Command 1
-                new ACPGoToPositionCommand(ACPSubsystem, targetArmAngle, STPSubsystem)
+                new ACPGoToPositionCommand(ACPSubsystem, targetArmAngle.getAsDouble(), STPSubsystem)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Defended stage", "STAGE 2")))
                 // Command 2
                 .alongWith(
