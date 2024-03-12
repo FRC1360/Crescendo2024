@@ -33,14 +33,16 @@ public class STPMoveManual extends Command {
     public void execute() {
         double joystickValue = joystick.getAsDouble();
         double offset = joystickValue * 30;
-        double adjustedAngle = curTarget + offset; // Adjust as needed
-        shintakePivot.setTargetAngle(adjustedAngle);
+        //double adjustedAngle = curTarget + offset; // Adjust as needed
+        //shintakePivot.setTargetAngle(adjustedAngle);
         SmartDashboard.putNumber("shintakePivot_Raw_Output", offset);
 
         if (xboxController.a().getAsBoolean()) {
             System.out.println("Setting relative STP offset to: " + offset); 
             this.shintakePivot.setCacheOffset(offset);
         }
+
+        shintakePivot.setTargetAngle(curTarget);
     }
 
     @Override
