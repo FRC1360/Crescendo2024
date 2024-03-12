@@ -4,7 +4,6 @@ import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.AlignmentConstants;
-import frc.robot.Constants.Swerve;
 import frc.robot.autos.PathfindAuto;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
@@ -102,19 +100,19 @@ public class AssemblySchedulerCommand extends Command {
 
                 case AMP:
                     this.assemblyCommand = 
-                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP).getCommand(), noPathFind); 
-                            // .alongWith(
-                            //     new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm) 
-                            //     );
+                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP, true).getCommand(), noPathFind)
+                            .alongWith(
+                                new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm) 
+                                );
                     break;
 
                 case SOURCE_CENTER:
                     this.assemblyCommand = 
-                    new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER, true)
-                             .getCommand(), noPathFind);
-                        //    .alongWith(
-                        //         new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
-                        //         );
+                    // new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER, true)
+                    //          .getCommand(), noPathFind)
+                    //        .alongWith(
+                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm); 
+                                //);
                     break;
                 case SOURCE_LEFT: 
                     this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_LEFT, true)
@@ -131,8 +129,11 @@ public class AssemblySchedulerCommand extends Command {
                         //         );
                     break; 
                 case SUBWOOFER_DEFENDED: 
-                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
+                    // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                    //                             shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
+                    
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                chassisPivot.armFarShotMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))));                            
                     break; 
                 default:
                     break;
@@ -182,8 +183,11 @@ public class AssemblySchedulerCommand extends Command {
                             //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)); 
                     break; 
                 case SUBWOOFER_DEFENDED: 
-                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
+                    // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                    //                             shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
+
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                chassisPivot.armFarShotMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER)))); 
                     break; 
                 default:
                     break;

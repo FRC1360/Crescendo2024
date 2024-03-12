@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -68,6 +69,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double slowMaxVelocity; 
     private boolean slowInit = false;
     private OrbitTimer slowTimer; 
+
+    public InterpolatingDoubleTreeMap armFarShotMap;
 
     public ArmChassisPivotSubsystem() {
         // this.holdPIDController = new OrbitPID(0.035, 0.0000075, 0.0); //kP = 0.045
@@ -128,6 +131,20 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         this.targetAngle = this.getACPAngle(); //Constants.HOME_POSITION_ACP;
         this.slowTimer = new OrbitTimer(); 
+
+        this.armFarShotMap = new InterpolatingDoubleTreeMap(); 
+
+        this.armFarShotMap.put(0.5, 76.2);
+        this.armFarShotMap.put(0.75, 57.6);
+        this.armFarShotMap.put(1.00, 48.1);
+        this.armFarShotMap.put(1.25, 41.8);
+        this.armFarShotMap.put(1.5, 37.3); 
+        this.armFarShotMap.put(1.75, 33.8);
+        this.armFarShotMap.put(2.0, 30.9);
+        this.armFarShotMap.put(2.25, 28.5);
+        this.armFarShotMap.put(2.50, 26.5);
+        this.armFarShotMap.put(2.75, 24.7);
+        this.armFarShotMap.put(3.00, 23.2);
     }
 
     public double getMotorRotations() {

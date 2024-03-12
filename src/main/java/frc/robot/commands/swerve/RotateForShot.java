@@ -25,7 +25,7 @@ public class RotateForShot extends Command {
     }
 
     public double convertDeltaYToAngle(double deltaY) { 
-        return deltaY * 60; // 6.3-5.5 in y change would yield a 48 deg change from straight up
+        return deltaY * 40; // 6.3-5.5 in y change would yield a 48 deg change from straight up
     }
 
     @Override 
@@ -37,12 +37,12 @@ public class RotateForShot extends Command {
         Pose2d curPose = swerveSubsystem.currentPose(); 
 
         double targetAngle = convertDeltaYToAngle(curPose.getY() - AlignmentConstants.BLUE_SPEAKER.getY())
-                                + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees() - 180.0; 
+                                + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees(); //- 180.0; 
 
         if (DriverStation.getAlliance().isPresent() 
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) { 
             targetAngle = -convertDeltaYToAngle(curPose.getY() - AlignmentConstants.RED_SPEAKER.getY()) 
-                            + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees() + 180.0; 
+                            + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); //+ 180.0; 
         }
 
         double rotPIDOut = this.swerveSubsystem.calculatePIDAngleOutput(targetAngle); 

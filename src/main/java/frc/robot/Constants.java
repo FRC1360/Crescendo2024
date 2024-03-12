@@ -79,7 +79,7 @@ public final class Constants {
 
     public static class ShintakeConstants {
         public static final double UNFEED_SPEED_BACK = 0.1;
-        public static final double INTAKE_SPEED_BACK = 0.1;
+        public static final double INTAKE_SPEED_BACK = 0.15;
         public static final double INITIAL_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
@@ -105,7 +105,7 @@ public final class Constants {
         public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.272;
+        public static final double STP_ENCODER_OFFSET = 0.302;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -119,7 +119,7 @@ public final class Constants {
 
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 80.0;
+        public static final double MAX_ACP_ANGLE = 90.0;
         public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
@@ -136,8 +136,8 @@ public final class Constants {
     public static final double HOME_POSITION_ACP = 17.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 220.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 73.0; //80.0;
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 235.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; //80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0 + 10.0; //0.0;

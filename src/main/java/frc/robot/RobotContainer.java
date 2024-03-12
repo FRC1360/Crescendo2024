@@ -238,11 +238,12 @@ public class RobotContainer {
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())
 						.alongWith(
 							new RotateForShot(swerveSubsystem, () -> -modifyAlliance(modifyAxis(left_controller.getY()))
-																		* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
+																		* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2, // Modify axis also for alliance color
 																() -> -modifyAlliance(modifyAxis(left_controller.getX()))
-																			* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND)))
+																			* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2)))
 						); 
 		
+		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 		operator_controller.x().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.LEFT)); 
 		operator_controller.x().onFalse(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER)); 
 		operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.RIGHT)); 
