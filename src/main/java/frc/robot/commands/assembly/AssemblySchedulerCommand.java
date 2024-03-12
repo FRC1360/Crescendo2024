@@ -28,9 +28,7 @@ public class AssemblySchedulerCommand extends Command {
         SUBWOOFER,
         SUBWOOFER_DEFENDED, 
         AMP,
-        SOURCE_LEFT, 
-        SOURCE_CENTER, 
-        SOURCE_RIGHT
+        SOURCE
     }
 
     public static enum SOURCE_SIDE { 
@@ -111,7 +109,7 @@ public class AssemblySchedulerCommand extends Command {
                                 );
                     break;
 
-                case SOURCE_CENTER:
+                case SOURCE:
                     this.assemblyCommand = 
                     // conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER, true)
                     //          .getCommand(), noPathFind)
@@ -119,20 +117,6 @@ public class AssemblySchedulerCommand extends Command {
                                 new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm); 
                                 //);
                     break;
-                case SOURCE_LEFT: 
-                    this.assemblyCommand = conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_LEFT, true)
-                             .getCommand(), noPathFind);
-                        //    .alongWith(
-                        //         new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
-                        //         );
-                    break;  
-                case SOURCE_RIGHT: 
-                    this.assemblyCommand = conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_RIGHT, true)
-                             .getCommand(), noPathFind); 
-                        //    .alongWith(
-                        //         new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)
-                        //         );
-                    break; 
                 case SUBWOOFER_DEFENDED: 
                     // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
                     //                             shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
@@ -174,19 +158,12 @@ public class AssemblySchedulerCommand extends Command {
                             .alongWith(new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
                     break;
 
-                case SOURCE_CENTER:
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER, true).getCommand(), noPathFind);
-                            //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                case SOURCE:
+                    this.assemblyCommand = //new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER, true).getCommand(), noPathFind);
+                            //.alongWith(
+                                new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm); 
+                                //);
                     break;
-
-                case SOURCE_LEFT: 
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_LEFT, true).getCommand(), noPathFind); 
-                            //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
-                    break; 
-                case SOURCE_RIGHT: 
-                    this.assemblyCommand = new ConditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_RIGHT, true).getCommand(), noPathFind); 
-                            //.alongWith(new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm)); 
-                    break; 
                 case SUBWOOFER_DEFENDED: 
                     // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
                     //                             shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
