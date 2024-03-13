@@ -60,6 +60,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     private double kG = 0.0;
     private double kV = 0.0;
 
+    private double maxVelocity; 
+
     public ShintakePivotSubsystem() {
         this.movePIDController = new PIDController(kP, kI, kD); // TODO - Tune || 0.025, 0.0, 0.4
 
@@ -92,8 +94,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.STP_ENCODER_CHANNEL);
 
-
-        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(180, 100); // TODO - Tune
+        this.maxVelocity = 200.0; 
+        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 100); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.STPMotionProfileConstraints);
 
         //this.cacheOffset = 0.0;
@@ -180,6 +182,10 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
                 || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
             voltage = 0.0;
+        else if (this.getAngularVelocity() > this.maxVelocity + 25.0) { 
+            DriverStation.reportError("Tried to send STP faster than " + this.maxVelocity + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
+            System.exit(1); 
+        }
         this.STPMotorMaster.setVoltage(voltage);
     }
 

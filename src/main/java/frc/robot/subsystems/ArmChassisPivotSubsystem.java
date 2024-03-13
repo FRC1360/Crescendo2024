@@ -58,6 +58,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double absoluteEncoderOffset = Constants.ACPConstants.ACP_ENCODER_OFFSET;
 
     private double cacheOffset = 0.0;
+    private boolean goingUp = true; 
+    private boolean specialCase = false;
 
     private double kP = 0.0325;
     private double kI = 0.0;
@@ -69,6 +71,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double slowMaxVelocity; 
     private boolean slowInit = false;
     private OrbitTimer slowTimer; 
+    private double timeElapsed; 
+
+    private double maxVelocity; 
 
     public InterpolatingDoubleTreeMap armFarShotMap;
 
@@ -102,11 +107,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
 
+        this.maxVelocity = 60.0; 
         // This units are deg / second for velocity and deg / sec^2 for acceleration
-        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(60, 60); 
+        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 60); 
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints); 
 
-        this.slowMaxVelocity = 35.0; 
+        this.slowMaxVelocity = 25.0; 
         this.slowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(this.slowMaxVelocity, 15.0)); 
 
         Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
@@ -196,6 +202,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         || this.getACPAngle() < Constants.ACPConstants.MIN_ACP_ANGLE){
              voltage = 0.0;
         }
+        else if (this.getAngularVelocity() > this.maxVelocity + 15.0) { 
+            DriverStation.reportError("Tried to send ACP faster than " + this.maxVelocity + 15.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
+            System.exit(1); 
+        }
        
 
         this.ACPMotorMaster.setVoltage(voltage);
@@ -218,25 +228,30 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             DriverStation.reportError("Tried to set ACP to above or below max or min; Target: " +  this.targetAngle, true);
             System.exit(1); 
         }
-        // else if (this.getACPAngle() < Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
-        //     this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
-        //     this.motionProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.slowMaxVelocity);
+        else if (this.getACPAngle() < Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
+            this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+            this.motionProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.slowMaxVelocity);
 
-        //     this.slowProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.getAngularVelocity()); 
-        //     this.slowProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
-        //     slowInit = false; 
-        // }
-        // else if (this.getACPAngle() > Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle <= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
-        //     this.slowProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
-        //     this.slowProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.slowMaxVelocity);
+            this.slowProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.getAngularVelocity()); 
+            this.slowProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
+            slowInit = false; 
+            goingUp = true; 
+            specialCase = true; 
+        }
+        else if (this.getACPAngle() > Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE && targetAngle <= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) { 
+            this.slowProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
+            this.slowProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.slowMaxVelocity);
 
-        //     this.motionProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.getAngularVelocity()); 
-        //     this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
-        //     slowInit = false;
-        // }
+            this.motionProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE, this.getAngularVelocity()); 
+            this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
+            slowInit = false;
+            goingUp = false;
+            specialCase = true; 
+        }
         else {
             this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
             this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0);
+            specialCase = false;
         } 
         this.targetAngle = targetAngle;
 
@@ -294,15 +309,28 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private double calculateControlLoopOutput() { 
         TrapezoidProfile.State profileTarget = this.acpMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.motionProfileStartState,
                                                                                      this.motionProfileEndState);
+        if (specialCase) { 
+            if (goingUp) { 
+                if (this.acpMotionProfile.isFinished(this.timer.getTimeDeltaSec()) && !slowInit) { 
+                    timeElapsed = this.timer.getTimeDeltaSec(); 
+                    slowInit = true; 
+                }
+                if (slowInit) { 
+                    profileTarget = this.slowProfile.calculate(this.timer.getTimeDeltaSec() - timeElapsed, this.slowProfileStartState, this.slowProfileEndState); 
+                }
+            }
+            else { 
+                profileTarget = this.slowProfile.calculate(this.timer.getTimeDeltaSec(), this.slowProfileStartState, this.slowProfileEndState); 
 
-        // if (this.getACPAngle() >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE - 4.0) { 
-        //     if (!slowInit)  { 
-        //         slowInit = true; 
-        //         this.slowTimer.start(); 
-        //     }
-        //     profileTarget = this.slowProfile.calculate(this.slowTimer.getTimeDeltaSec(), this.slowProfileStartState, this.slowProfileEndState); 
-        // }
-        //else if (this.getACPAngle()) { }
+                if (!slowInit && this.slowProfile.isFinished(this.timer.getTimeDeltaSec())) { 
+                    timeElapsed = this.timer.getTimeDeltaSec(); 
+                    slowInit = true; 
+                }
+                if (slowInit) { 
+                    profileTarget = this.acpMotionProfile.calculate(this.timer.getTimeDeltaSec() - timeElapsed, this.motionProfileStartState, this.motionProfileEndState); 
+                }
+            }
+        }
 
         double target = profileTarget.position; 
         double input = this.getACPAngle(); 
