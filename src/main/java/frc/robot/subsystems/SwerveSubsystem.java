@@ -47,9 +47,9 @@ public class SwerveSubsystem extends SubsystemBase {
     private double YkP = 0.9; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
     private double YkI = 0.00001;
     private double YkD = 0.001;
-	private double AkP = 0.02; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
-    private double AkI = 0.000001;
-    private double AkD = 0.0001;
+	private double AkP = 0.02; // 0.4? // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
+    private double AkI = 0.000000;
+    private double AkD = 0.001; // 0.01?
 	public boolean manualDrive = false;
 
 	private PhotonCameraWrapper pCameraWrapper;
@@ -70,6 +70,8 @@ public class SwerveSubsystem extends SubsystemBase {
 	private TrapezoidProfile.State driveMotionProfileYEndState; 
 
 	private OrbitTimer timer;
+
+	private boolean motionProfileInit = false; 
 
 	@AutoLogOutput(key = "Swerve/CurrentAcceleration")
 	public Translation2d currentAcceleration = new Translation2d(0, 0);  
@@ -128,6 +130,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
 	public void zeroGyro() {
 		this.navX.resetGyro();
+	}
+
+	public void setMotionProfileInit(boolean init) { 
+		this.motionProfileInit = init; 
 	}
 
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -336,7 +342,7 @@ public class SwerveSubsystem extends SubsystemBase {
 	public PIDSwerveValues calculateControlLoopDriveOutput(Pose2d target) {
 		if (target.getX() != prevTargetPose.getX() || 
 			target.getY() != prevTargetPose.getY() || 
-			target.getRotation().getDegrees() != prevTargetPose.getRotation().getDegrees()) 
+			target.getRotation().getDegrees() != prevTargetPose.getRotation().getDegrees() || !this.motionProfileInit) 
 		{ 
 			this.driveXPID.reset();
 			this.driveYPID.reset();
@@ -353,6 +359,7 @@ public class SwerveSubsystem extends SubsystemBase {
 			this.timer.start();
 
 			this.prevTargetPose = target; 
+			this.motionProfileInit = true; 
 		}  
 		System.out.print("Aligning to pose: ");
         System.out.println(target);

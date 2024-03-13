@@ -211,11 +211,12 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.33, 0.0000001, 0.006);
+        //public static final PIDConstants drivePID = new PIDConstants(0.33, 0.0000001, 0.006); // Our tuned
+        public static final PIDConstants drivePID = new PIDConstants(0.00023, 0.0000002, 1.0); // YAGSL suggested
         // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
         public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3.0, 0.9); 
         public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
-
+        //public static final PIDConstants anglePID = new PIDConstants(0.004, 0.0000, 1.5); <-- YAGSL
         /* Custom PID Controllers */
         //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
         

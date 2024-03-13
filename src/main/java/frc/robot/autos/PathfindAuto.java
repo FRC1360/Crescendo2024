@@ -46,6 +46,7 @@ public class PathfindAuto {
                             AutoConstants.angleTolerance))
                     .alongWith(new InstantCommand(() -> System.out.println("Pathfinding to: " + this.targetPose)))
                     .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", this.targetPose)))
+                    .andThen(new InstantCommand(() -> swerveSubsystem.setMotionProfileInit(false)))
                     .andThen(new AlignToPose(this.swerveSubsystem, targetPose, allowEnd))
                     .andThen(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", new Pose2d())));
 
