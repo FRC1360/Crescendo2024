@@ -26,7 +26,7 @@ public class STPMoveManual extends Command {
 
     @Override
     public void initialize() { 
-        curTarget = shintakePivot.getTargetAngle();
+        curTarget = shintakePivot.getSTPAngle();
     }
 
     @Override

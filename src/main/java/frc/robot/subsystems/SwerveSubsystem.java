@@ -41,15 +41,15 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
-	private double XkP = 2.0; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+	private double XkP = 0.9; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
     private double XkI = 0.00001;
-    private double XkD = 0.0000;
-    private double YkP = 2.0; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double XkD = 0.001;
+    private double YkP = 0.9; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
     private double YkI = 0.00001;
-    private double YkD = 0.0000;
-	private double AkP = 0.018; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
+    private double YkD = 0.001;
+	private double AkP = 0.02; // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
     private double AkI = 0.000001;
-    private double AkD = 0.0;
+    private double AkD = 0.0001;
 	public boolean manualDrive = false;
 
 	private PhotonCameraWrapper pCameraWrapper;
@@ -111,7 +111,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.initDouble("Swerve Angle kI", this.AkI);
 		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
-		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED, 4.0); 
+		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED - 2.0, 1.0); 
 		this.driveMotionProfile = new TrapezoidProfile(driveConstraints); 
 		this.driveMotionProfileXStartState = new TrapezoidProfile.State(0.0, 0.0); 
 		this.driveMotionProfileXEndState = new TrapezoidProfile.State(0.0, 0.0); 
@@ -385,6 +385,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
 	public double calculateDistanceToTarget(Pose2d target) { 
 		Pose2d curPose = this.currentPose(); 
+		System.out.println("Distance away: " + Math.hypot(Math.abs(target.getX() - curPose.getX()), Math.abs(target.getY() - curPose.getY()))); 
 		return Math.hypot(Math.abs(target.getX() - curPose.getX()), Math.abs(target.getY() - curPose.getY())); 
 	}
 

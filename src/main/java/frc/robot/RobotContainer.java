@@ -245,7 +245,7 @@ public class RobotContainer {
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> right_controller.button(3).getAsBoolean())));
 
-		left_controller.button(5).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
+		right_controller.button(5).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm)); 
 
 		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,

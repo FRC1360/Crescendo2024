@@ -25,7 +25,7 @@ public class ACPMoveManual extends Command {
 
     @Override
     public void initialize() { 
-        curTarget = armChassisPivot.getTargetAngle(); 
+        curTarget = armChassisPivot.getACPAngle(); 
     }
 
     @Override

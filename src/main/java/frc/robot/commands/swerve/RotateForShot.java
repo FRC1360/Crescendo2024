@@ -34,7 +34,7 @@ public class RotateForShot extends Command {
             deltaY = robotPose.getY() - AlignmentConstants.INTO_RED_SPEAKER.getY();
             return -Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); //+ 180.0;;
         }
-        return Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees(); //- 180.0;
+        return Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees() - 180.0;
     }
 
     @Override 

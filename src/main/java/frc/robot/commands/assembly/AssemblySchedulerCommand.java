@@ -67,6 +67,16 @@ public class AssemblySchedulerCommand extends Command {
         return condition.getAsBoolean() ? onTrue : onFalse;
     }
 
+    private double calculateArmAngle(double distanceToCenter) { 
+        double f = 5.5 * (2.54/100); 
+        double y = 2.10 - (9 * (2.54/100)); 
+        double x = distanceToCenter + (9.75 * (2.54/100)); 
+        double d = Math.hypot(x, y); 
+
+        double theta = Math.toDegrees(Math.atan(y/x)) + Math.toDegrees(Math.acos(f/d)) - 90; 
+        return theta; 
+    }
+
     @Override
     public void initialize() {
         SmartDashboard.putString("SCHEDULER GOING TO", level.get().name());
@@ -118,11 +128,13 @@ public class AssemblySchedulerCommand extends Command {
                                 //);
                     break;
                 case SUBWOOFER_DEFENDED: 
-                    // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                    //                             shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.BLUE_SPEAKER)))); 
+                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                                                shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)))); 
+                    SmartDashboard.putNumber("Target angle", shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))); 
                     
-                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                () -> chassisPivot.armFarShotMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))));                            
+                    //this.assemblyCommand = new InstantCommand(); 
+                    // new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                    //                             () -> chassisPivot.armFarShotMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))));                            
                     break; 
                 default:
                     break;
@@ -164,19 +176,26 @@ public class AssemblySchedulerCommand extends Command {
                                 new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm); 
                                 //);
                     break;
-                case SUBWOOFER_DEFENDED: 
-                    // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                    //                             shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
+                // case SUBWOOFER_DEFENDED: 
+                //     // this.assemblyCommand = new RepeatCommand(new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                //     //                             shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER)))); 
 
-                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
-                                                () -> chassisPivot.armFarShotMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER)))); 
-                    break; 
+                //     this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led, shintake, sm, 
+                //                                 () -> chassisPivot.armFarShotMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER)))); 
+                //     break; 
                 default:
                     break;
             }
         }
 
         this.assemblyCommand.schedule();
+    }
+    
+    @Override
+    public void execute() { 
+        // if (level.get() == ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED) { 
+        //     chassisPivot.setTargetAngle(calculateArmAngle(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
+        // }
     }
 
     @Override

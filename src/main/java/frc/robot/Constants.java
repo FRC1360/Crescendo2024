@@ -105,7 +105,7 @@ public final class Constants {
         public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.302;
+        public static final double STP_ENCODER_OFFSET = 0.313;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -123,7 +123,7 @@ public final class Constants {
         public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
         
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
-        public static final double ACP_SLOP_OCCUR_ANGLE = 65.0; 
+        public static final double ACP_SLOP_OCCUR_ANGLE = 75.0; 
     } 
 
     public static final boolean SHOOT_ONLY_WITH_ACP = false; 
@@ -160,7 +160,7 @@ public final class Constants {
 
     // SOURCE_POSITION
     public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop  335 // added 30, potentially remove
-    public static final double SOURCE_POSITION_ACP = 30.0;
+    public static final double SOURCE_POSITION_ACP = 40.0;
 
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
@@ -211,9 +211,9 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.34, 0.000001, 0.0045);
+        public static final PIDConstants drivePID = new PIDConstants(0.33, 0.0000001, 0.006);
         // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
-        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.2, 3.0, 0.9); 
+        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3.0, 0.9); 
         public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
 
         /* Custom PID Controllers */
