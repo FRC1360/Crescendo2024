@@ -210,7 +210,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setTargetAngle(double targetAngle) {
-        targetAngle = targetAngle + this.cacheOffset; 
         if (this.targetAngle == targetAngle)
         {
             return;

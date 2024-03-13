@@ -242,7 +242,6 @@ public class ShintakePivotSubsystem extends SubsystemBase {
             DriverStation.reportError("Tried to set STP to above or below max or min; Target: " +  this.targetAngle, true);
             System.exit(1); 
         }
-        targetAngle = targetAngle + this.cacheOffset; 
         this.targetAngle = targetAngle;
 
         this.movePIDController.reset();
