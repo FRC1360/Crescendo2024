@@ -86,7 +86,7 @@ public class NavX {
         yawOffset = gyro.getFusedHeading();
         pitchOffset = gyro.getPitch();
         rollOffset = gyro.getRoll();
-        System.out.println("NavX Reset"); 
+        System.out.println("NavX Reset");
     }
 
 }

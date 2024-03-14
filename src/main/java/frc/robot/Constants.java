@@ -114,7 +114,7 @@ public final class Constants {
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
-            public static final double angleOffset = 360.0-218.93+180.0; //130.0; // Always reversed direction, add 180
+            public static final double angleOffset = 321.07;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
@@ -124,7 +124,7 @@ public final class Constants {
             public static final int driveMotorID = 20;
             public static final int angleMotorID = 21;
             public static final int canCoderID = 22;
-            public static final double angleOffset = 360.0-195.46; //40.3;
+            public static final double angleOffset = 164.54;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -135,7 +135,7 @@ public final class Constants {
             public static final int driveMotorID = 30;
             public static final int angleMotorID = 31;
             public static final int canCoderID = 32;
-            public static final double angleOffset = 360.0-158.73; //252.2;
+            public static final double angleOffset = 201.27;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
         }
@@ -145,7 +145,7 @@ public final class Constants {
             public static final int driveMotorID = 40;
             public static final int angleMotorID = 41;
             public static final int canCoderID = 42;
-            public static final double angleOffset = 360.0-50.18; //326.85;
+            public static final double angleOffset = 309.82;
 
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                 canCoderID, angleOffset, anglePID, drivePID, driveSVA);
@@ -157,7 +157,7 @@ public final class Constants {
             public static final com.pathplanner.lib.util.PIDConstants translation = new com.pathplanner.lib.util.PIDConstants(1, 0, 0.0045);
             public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(0.05, 0.000001, 0);
             public static final double maxSpeed = 4; // m/s
-            public static final double maxAcceleration = 16; // m/s^2
+            public static final double maxAcceleration = 12; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
             public static final double maxAngularAcceleration = Units.degreesToRadians(720);  // deg/s^2
             public static final double positionTolerance = 0.025;
