@@ -121,23 +121,22 @@ public class ShintakeSubsystem extends SubsystemBase {
 		m_counter.reset();
 	}
 
-	public void setVelocity(double rightVelocity, double leftVelocity) { // RPM | Sets the velocity of the shooter wheels | limit is 6784 RPM
+	public void setVelocity(double rightVelocity, double leftVelocity) { // RPM | Sets the velocity of the shooter
+																			// wheels | limit is 6784 RPM
 		System.out.println("Setting velocity to: " + rightVelocity);
 		if (leftVelocity >= 6700 || leftVelocity <= -6700 || rightVelocity >= 6700 || rightVelocity <= -6700) {
 			m_left.set(0.0);
 			m_right.set(0.0);
 		}
 
-		if (this.leftVelocity != leftVelocity)
-		{
+		if (this.leftVelocity != leftVelocity) {
 			this.leftVelocity = leftVelocity;
 			leftWheelPID.setReference(this.leftVelocity, CANSparkFlex.ControlType.kVelocity);
 		}
-		
-		if (this.rightVelocity != rightVelocity)
-		{
+
+		if (this.rightVelocity != rightVelocity) {
 			this.rightVelocity = rightVelocity;
-			rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);	
+			rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);
 		}
 	}
 
@@ -157,8 +156,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	// Stops both motors
 	public void stopShooter() {
-		this.leftVelocity = 0.0; 
-		this.rightVelocity = 0.0; 
+		this.leftVelocity = 0.0;
+		this.rightVelocity = 0.0;
 		m_left.set(0.0);
 		m_right.set(0.0);
 	}
@@ -194,7 +193,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void periodic() { // Displays vortex velocities, target velocities, intake sensor state (false = detecting something), and if the shintake is in motion
+	public void periodic() { // Displays vortex velocities, target velocities, intake sensor state (false =
+								// detecting something), and if the shintake is in motion
 		SmartDashboard.putBoolean("Intake in motion: ",
 				!(m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0));
 		SmartDashboard.putBoolean("intake sensor state", m_digital.get());

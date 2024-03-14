@@ -38,7 +38,7 @@ public final class Constants {
         public static final int LEDPort = 0;
         public static final float ENABLED_COLOR = 0.87f; // BLUE
         public static final float DISABLED_COLOR = 0.77f; // GREEN
-        public static final float NOTE_COLOR = 0.6f; // ORANGE
+        public static final float NOTE_COLOR = 0.81f; // ORANGE
         public static final float SOURCE_COLOR = 0.93f; // WHITE
         public static final float SCORING_COLOR = 0.61f; // RED
     }
@@ -67,7 +67,7 @@ public final class Constants {
                                 Units.inchesToMeters(13.5),
                                 Units.inchesToMeters(-6.5),
                                 Units.inchesToMeters(9.0)), // forward is positive X, left is positive Y, and up is
-                                                           // positive Z.
+                                                            // positive Z.
                         new Rotation3d(
                                 0,
                                 Math.toRadians(-45.0),
@@ -84,9 +84,9 @@ public final class Constants {
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 6200; //6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6200; //6250;
-        public static final double AMP_VELOCITY_FRONT = 3000; 
+        public static final double SHOOT_VELOCITY_FRONT = 6200; // 6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6200; // 6250;
+        public static final double AMP_VELOCITY_FRONT = 3000;
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
         public static final int RIGHT_SHOOTAKE_CAN_ID = 37;
@@ -101,7 +101,8 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 350.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at 360
+        public static final double STP_MAX_ANGLE = 350.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at
+                                                          // 360
         public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
@@ -120,31 +121,32 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 90.0;
-        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
-        
-        public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
-        public static final double ACP_SLOP_OCCUR_ANGLE = 75.0; 
-    } 
+        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0;
 
-    public static final boolean SHOOT_ONLY_WITH_ACP = false; 
+        public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
+        public static final double ACP_SLOP_OCCUR_ANGLE = 75.0;
+    }
+
+    public static final boolean SHOOT_ONLY_WITH_ACP = false;
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
     public static final double START_POSITION_ACP = 40.0;
-    
+
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
     public static final double HOME_POSITION_ACP = 17.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 235.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; //80.0;
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 235.0; // -140.0 - 70.0; // Must go positive, wires will
+                                                                    // break going negative
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0 + 10.0; //0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; //50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0 + 10.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; // 50.0;
 
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; //0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; //50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; // 50.0;
 
     // NOTE_SCORE_TRAP_POSITION
     public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
@@ -159,7 +161,7 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop  335 // added 30, potentially remove
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop 335 // added 30, potentially remove
     public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION
@@ -211,15 +213,22 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        //public static final PIDConstants drivePID = new PIDConstants(0.33, 0.0000001, 0.006); // Our tuned
-        public static final PIDConstants drivePID = new PIDConstants(0.00018, 0.0000002, 0.5); // YAGSL suggested // kD = 1.0 // kP = 0.00023 //kD=0.65
-        // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage / maxAcceleration <-- practically is the coefficient of friction * 9.81 causing accel
-        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3.0, 0.9); 
-        public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
-        //public static final PIDConstants anglePID = new PIDConstants(0.004, 0.0000, 1.5); <-- YAGSL
+        // public static final PIDConstants drivePID = new PIDConstants(0.33, 0.0000001,
+        // 0.006); // Our tuned
+        public static final PIDConstants drivePID = new PIDConstants(0.00018, 0.0000002, 0.5); // YAGSL suggested // kD
+                                                                                               // = 1.0 // kP = 0.00023
+                                                                                               // //kD=0.65
+        // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage /
+        // maxAcceleration <-- practically is the coefficient of friction * 9.81 causing
+        // accel
+        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3.0, 0.9);
+        public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); // p=0.023
+        // public static final PIDConstants anglePID = new PIDConstants(0.004, 0.0000,
+        // 1.5); <-- YAGSL
         /* Custom PID Controllers */
-        //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
-        
+        // public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0,
+        // 0.00005);
+
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
             public static final int driveMotorID = 10;
@@ -235,7 +244,7 @@ public final class Constants {
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
             public static final int driveMotorID = 15;
-            public static final int angleMotorID = 16; 
+            public static final int angleMotorID = 16;
             public static final int canCoderID = 17;
 
             public static final double angleOffset = 264.72;
