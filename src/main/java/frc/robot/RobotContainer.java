@@ -214,6 +214,9 @@ public class RobotContainer {
     // IntakeCommand(shintakeSubsystem, ledSubsystem));
     left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem, ledSubsystem));
 
+    left_controller.button(9).whileTrue(new InstantCommand(() -> shintakeSubsystem.setVelocity(600, 600)));
+    left_controller.button(9).whileFalse(new InstantCommand(() -> shintakeSubsystem.setVelocity(0,0)));
+
     // operator_controller.x().whileTrue(new OutakeCommand(shintakeSubsystem));
 
     // operator_controller.povUp().whileTrue(new

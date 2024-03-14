@@ -142,8 +142,8 @@ public final class Constants {
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0 + 10.0; // 0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; // 50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 25.0 + 10.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 25.0; // 50.0;
 
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; // 50.0;
@@ -161,8 +161,8 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop 335 // added 30, potentially remove
-    public static final double SOURCE_POSITION_ACP = 30.0;
+    public static final double SOURCE_POSITION_STP = 25.0; // 180.0 + 155.0 // Lots of slop 335 // added 30, potentially remove
+    public static final double SOURCE_POSITION_ACP = 25.0;
 
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
