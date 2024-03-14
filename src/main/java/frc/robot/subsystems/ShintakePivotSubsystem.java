@@ -284,18 +284,13 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         double currentTime = (System.currentTimeMillis() / 1000.0);
         double currentAngle = this.getSTPAngle();
 
-        // if (this.lastTime != -1 && !this.lastAngle.isNaN()) {
-        //     double deltaTime = currentTime - this.lastTime;
+        if(lastTime != -1) {
+            double deltaTime = (currentTime - lastTime); /// 1000.0;
 
-        //     double deltaAngle = currentAngle - this.lastAngle.doubleValue();
-
-        //     this.angularVelocity = deltaAngle / ((double) deltaTime);
-        // }
-        
-        double deltaTime = (currentTime - lastTime); /// 1000.0;
-
-        this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
-        this.lastAngle = currentAngle;
+            this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
+            this.lastAngle = currentAngle;
+        }
+    
         this.lastTime = currentTime;
     }
 
