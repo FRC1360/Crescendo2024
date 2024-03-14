@@ -12,21 +12,23 @@ public class STPMoveManual extends Command {
 
     private final DoubleSupplier joystick;
     private final ShintakePivotSubsystem shintakePivot;
-    private CommandXboxController xboxController; 
+    private CommandXboxController xboxController;
 
-    private double curTarget; 
+    private double curTarget;
 
-    public STPMoveManual(ShintakePivotSubsystem shintakePivot, DoubleSupplier joystick, CommandXboxController xboxController) {
+    public STPMoveManual(ShintakePivotSubsystem shintakePivot, DoubleSupplier joystick,
+            CommandXboxController xboxController) {
         this.shintakePivot = shintakePivot;
         this.joystick = joystick;
-        this.xboxController = xboxController; 
+        this.xboxController = xboxController;
 
         addRequirements(shintakePivot);
     }
 
     @Override
-    public void initialize() { 
+    public void initialize() {
         curTarget = shintakePivot.getSTPAngle();
+        shintakePivot.setCacheOffset(0.0);
     }
 
     @Override
@@ -38,11 +40,9 @@ public class STPMoveManual extends Command {
         SmartDashboard.putNumber("shintakePivot_Raw_Output", offset);
 
         if (xboxController.a().getAsBoolean()) {
-            System.out.println("Setting relative STP offset to: " + offset); 
+            System.out.println("Setting relative STP offset to: " + offset);
             this.shintakePivot.setCacheOffset(offset);
         }
-
-        shintakePivot.setTargetAngle(curTarget);
     }
 
     @Override

@@ -106,7 +106,7 @@ public final class Constants {
         public static final double STP_MIN_ANGLE = -180.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.327;
+        public static final double STP_ENCODER_OFFSET = 0.307;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 

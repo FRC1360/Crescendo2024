@@ -45,56 +45,61 @@ public class DefaultDriveCommand extends Command {
 
         // double curAngle = m_drivetrainSubsystem.navX.getYaw().getDegrees() % 360.0;
 
-        // double curAngle2 = (m_drivetrainSubsystem.navX.getYaw().getDegrees() + 180.0) % 360.0;
+        // double curAngle2 = (m_drivetrainSubsystem.navX.getYaw().getDegrees() + 180.0)
+        // % 360.0;
 
         // 2 -> 0 (180deg in alternative frame of reference)
         // 5 -> 90
         // 3 -> 180
         // 4 -> 270
 
-        Pose2d curPose = this.m_drivetrainSubsystem.currentPose(); 
+        Pose2d curPose = this.m_drivetrainSubsystem.currentPose();
 
-        double targetAngle = curPose.getRotation().getDegrees(); 
+        double targetAngle = curPose.getRotation().getDegrees();
 
         if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(3).getAsBoolean() && !pressed) {
-            pressed = true; 
-            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
-            targetAngle = 180.0; 
-            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(180.0); 
+            pressed = true;
+            this.m_drivetrainSubsystem.setMotionProfileInit(false);
+            targetAngle = 45.0;
+            // rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(180.0);
         }
-            //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle);
+        // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle);
         else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(2).getAsBoolean() && !pressed) {
-            pressed = true; 
-            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
-            targetAngle = 0.0; 
-            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0); 
-            //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
+            pressed = true;
+            this.m_drivetrainSubsystem.setMotionProfileInit(false);
+            targetAngle = 315.0;
+            // rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0);
+            // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
         }
-        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(5).getAsBoolean() && !pressed) { 
-            pressed = true; 
-            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
-            targetAngle = 45.0; 
-            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(45.0); 
-            //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(90.0, curAngle);
-        }
-        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(4).getAsBoolean() && !pressed) {
-            pressed = true; 
-            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
-            targetAngle = 315.0; 
-            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(315.0); 
-            // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(270.0,
-            //         curAngle + (Math.abs(270 - curAngle) > 180 ? 360 : 0));
-        }
+        // } else if (this.m_drivetrainSubsystem.manualDrive &&
+        // this.rotationJoystick.button(5).getAsBoolean()
+        // && !pressed) {
+        // pressed = true;
+        // this.m_drivetrainSubsystem.setMotionProfileInit(false);
+        // targetAngle = 45.0;
+        // // rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(45.0);
+        // // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(90.0, curAngle);
+        // } else if (this.m_drivetrainSubsystem.manualDrive &&
+        // this.rotationJoystick.button(4).getAsBoolean()
+        // && !pressed) {
+        // pressed = true;
+        // this.m_drivetrainSubsystem.setMotionProfileInit(false);
+        // targetAngle = 315.0;
+        // // rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(315.0);
+        // // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(270.0,
+        // // curAngle + (Math.abs(270 - curAngle) > 180 ? 360 : 0));
+        // }
 
-        pressed = this.m_drivetrainSubsystem.manualDrive && (this.rotationJoystick.button(3).getAsBoolean() || 
-                                                                this.rotationJoystick.button(2).getAsBoolean() || 
-                                                               this.rotationJoystick.button(5).getAsBoolean() || 
-                                                                this.rotationJoystick.button(4).getAsBoolean()); 
+        pressed = this.m_drivetrainSubsystem.manualDrive && (this.rotationJoystick.button(3).getAsBoolean() ||
+                this.rotationJoystick.button(2).getAsBoolean() // ||
+        // this.rotationJoystick.button(5).getAsBoolean() ||
+        // this.rotationJoystick.button(4).getAsBoolean()
+        );
 
-        if (pressed) { 
-            rotSpeed =
-                this.m_drivetrainSubsystem.calculateControlLoopDriveOutput(
-                        new Pose2d(new Translation2d(curPose.getX(), curPose.getY()), Rotation2d.fromDegrees(targetAngle))).rotationOut;
+        if (pressed) {
+            rotSpeed = this.m_drivetrainSubsystem.calculateControlLoopDriveOutput(
+                    new Pose2d(new Translation2d(curPose.getX(), curPose.getY()),
+                            Rotation2d.fromDegrees(targetAngle))).rotationOut;
         }
 
         m_drivetrainSubsystem.drive(
