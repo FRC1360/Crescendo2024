@@ -40,7 +40,7 @@ public class ShootSpeakerCommand extends Command {
 			ready2 = true;
 			timer.start();
 		}
-		if (timer.getTimeDeltaMillis() >= 250 && ready2)
+		if (/*timer.getTimeDeltaMillis() >= 250 &&*/ ready2)
 			m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
 	}
 

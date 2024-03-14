@@ -41,12 +41,12 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
-	private double XkP = 0.9; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
-    private double XkI = 0.00001;
-    private double XkD = 0.001;
-    private double YkP = 0.9; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
-    private double YkI = 0.00001;
-    private double YkD = 0.001;
+	private double XkP = 1.0; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double XkI = 0.00000;
+    private double XkD = 0.000;
+    private double YkP = 1.0; // for driveYPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
+    private double YkI = 0.00000;
+    private double YkD = 0.000;
 	private double AkP = 0.02; // 0.4? // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p, Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
     private double AkI = 0.000000;
     private double AkD = 0.001; // 0.01?
@@ -113,7 +113,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.initDouble("Swerve Angle kI", this.AkI);
 		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
-		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED - 2.0, 1.0); 
+		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED - 2.0, 0.5); 
 		this.driveMotionProfile = new TrapezoidProfile(driveConstraints); 
 		this.driveMotionProfileXStartState = new TrapezoidProfile.State(0.0, 0.0); 
 		this.driveMotionProfileXEndState = new TrapezoidProfile.State(0.0, 0.0); 
@@ -377,6 +377,8 @@ public class SwerveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Profile Target Y Position", profilePositionTargetY); 
 		SmartDashboard.putNumber("Current velocity Drive Y", this.currentVelocity.getY()); 
 		SmartDashboard.putNumber("Target Profile Velocity Y", profileTargetYPos.velocity); 
+		SmartDashboard.putNumber("Current velocity Drive X", this.currentVelocity.getX()); 
+		SmartDashboard.putNumber("Target Profile Velocity X", profileTargetXPos.velocity); 
 
 		Pose2d currentPose = this.currentPose();
 

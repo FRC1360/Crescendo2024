@@ -182,10 +182,10 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         if (this.getSTPAngle() > Constants.STPConstants.STP_MAX_ANGLE
                 || this.getSTPAngle() < Constants.STPConstants.STP_MIN_ANGLE)
             voltage = 0.0;
-        else if (this.getAngularVelocity() > this.maxVelocity + 25.0) { 
-            DriverStation.reportError("Tried to send STP faster than " + this.maxVelocity + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
-            System.exit(1); 
-        }
+        // else if (this.getAngularVelocity() > this.maxVelocity + 25.0) { 
+        //     DriverStation.reportError("Tried to send STP faster than " + this.maxVelocity + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
+        //     System.exit(1); 
+        // }
         this.STPMotorMaster.setVoltage(voltage);
     }
 

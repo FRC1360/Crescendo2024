@@ -49,7 +49,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     private double angularVelocity; // angular velocity in deg / second
     private double lastAngle;
-    private double lastTime;
+    private double lastTime = -1;
 
     private DutyCycleEncoder absoluteEncoder;
 
@@ -158,7 +158,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public double getACPAngle() {
-        return this.rotationsToAngleConversion(this.getMotorRotations());
+        return this.rotationsToAngleConversion(this.getMotorRotations()) + Constants.HOME_POSITION_ACP;
     }
 
     public void setACPSpeed(double speed) {
@@ -278,9 +278,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private void updateAngularVelocity() {
         double currentTime = (System.currentTimeMillis() / 1000.0);
 
-        double deltaTime = (currentTime - lastTime); /// 1000.0;
-
-        this.angularVelocity = (this.getACPAngle() - lastAngle) / deltaTime;
+        if (lastTime != -1) { 
+            double deltaTime = (currentTime - lastTime); /// 1000.0;
+        
+            this.angularVelocity = (this.getACPAngle() - lastAngle) / deltaTime;
+        }
         this.lastAngle = this.getACPAngle();
         this.lastTime = currentTime;
     }
