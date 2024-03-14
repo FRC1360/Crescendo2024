@@ -62,7 +62,8 @@ public class SwerveSubsystem extends SubsystemBase {
 	private PIDController anglePID = new PIDController(AkP, AkI, AkD); 
 
 	private TrapezoidProfile.Constraints driveConstraints;
-	private TrapezoidProfile driveMotionProfile; 
+	private TrapezoidProfile driveXMotionProfile; 
+	private TrapezoidProfile driveYMotionProfile; 
 
 	private TrapezoidProfile.State driveMotionProfileXStartState; 
 	private TrapezoidProfile.State driveMotionProfileXEndState; 
@@ -120,7 +121,8 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
 		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED - 2.0, 0.5); 
-		this.driveMotionProfile = new TrapezoidProfile(driveConstraints); 
+		this.driveXMotionProfile = new TrapezoidProfile(driveConstraints);
+		this.driveYMotionProfile = new TrapezoidProfile(driveConstraints); 
 		this.driveMotionProfileXStartState = new TrapezoidProfile.State(0.0, 0.0); 
 		this.driveMotionProfileXEndState = new TrapezoidProfile.State(0.0, 0.0); 
 
@@ -388,10 +390,10 @@ public class SwerveSubsystem extends SubsystemBase {
 		System.out.print("Aligning to pose: ");
         System.out.println(target);
 
-		TrapezoidProfile.State profileTargetXPos = this.driveMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileXStartState,
+		TrapezoidProfile.State profileTargetXPos = this.driveXMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileXStartState,
 																		this.driveMotionProfileXEndState);
 
-		TrapezoidProfile.State profileTargetYPos = this.driveMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileYStartState,
+		TrapezoidProfile.State profileTargetYPos = this.driveYMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileYStartState,
 																		this.driveMotionProfileYEndState);
 
 		TrapezoidProfile.State rotProfileTarget = this.rotMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.rotMotionProfileStartState, this.rotMotionProfileEndState); 
@@ -411,14 +413,28 @@ public class SwerveSubsystem extends SubsystemBase {
 
 		Pose2d currentPose = this.currentPose();
 
-        double driveXOut = this.driveXPID.calculate(currentPose.getX(), profilePositionTargetX);
-        double driveYOut = this.driveYPID.calculate(currentPose.getY(), profilePositionTargetY);
+        // double driveXOut = this.driveXPID.calculate(currentPose.getX(), profilePositionTargetX);
+        // double driveYOut = this.driveYPID.calculate(currentPose.getY(), profilePositionTargetY);
 
+		double driveXOut = profileTargetXPos.velocity; 
+		double driveYOut = profileTargetYPos.velocity; 
+		double rotOut = -rotProfileTarget.velocity; // Drive method CW +, robot angles CCW +
+
+		if (this.driveXMotionProfile.isFinished(this.timer.getTimeDeltaSec())) { 
+			driveXOut = this.driveXPID.calculate(currentPose.getX(), profilePositionTargetX);
+		}
+		if (this.driveYMotionProfile.isFinished(this.timer.getTimeDeltaSec())) { 
+			driveYOut = this.driveYPID.calculate(currentPose.getY(), profilePositionTargetY); 
+		}
+		if (this.rotMotionProfile.isFinished(this.timer.getTimeDeltaSec())) { 
+			rotOut = this.calculatePIDAngleOutput(profilePositionTargetRot); 
+		}
         System.out.println("Current Pose: " + this.currentPose());
 
         System.out.println("Error X: " + driveXPID.getPositionError() + " Error Y: " + driveYPID.getPositionError());
 
-		return new PIDSwerveValues(driveXOut, driveYOut, this.calculatePIDAngleOutput(profilePositionTargetRot)); 
+		//return new PIDSwerveValues(driveXOut, driveYOut, this.calculatePIDAngleOutput(profilePositionTargetRot)); 
+		return new PIDSwerveValues(driveXOut, driveYOut, rotOut); 
 	}
 
 	public double calculateDistanceToTarget(Pose2d target) { 

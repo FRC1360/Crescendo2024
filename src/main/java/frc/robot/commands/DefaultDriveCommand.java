@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +19,8 @@ public class DefaultDriveCommand extends Command {
     private final DoubleSupplier m_translationYSupplier;
     private final DoubleSupplier m_rotationSupplier;
     private final CommandJoystick rotationJoystick;
+
+    private boolean pressed = false;
 
     public DefaultDriveCommand(SwerveSubsystem drivetrainSubsystem,
             DoubleSupplier translationXSupplier,
@@ -48,19 +52,49 @@ public class DefaultDriveCommand extends Command {
         // 3 -> 180
         // 4 -> 270
 
-        if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(3).getAsBoolean())
-            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(180.0); 
+        Pose2d curPose = this.m_drivetrainSubsystem.currentPose(); 
+
+        double targetAngle = curPose.getRotation().getDegrees(); 
+
+        if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(3).getAsBoolean() && !pressed) {
+            pressed = true; 
+            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
+            targetAngle = 180.0; 
+            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(180.0); 
+        }
             //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle);
-        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(2).getAsBoolean())
-            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0); 
+        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(2).getAsBoolean() && !pressed) {
+            pressed = true; 
+            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
+            targetAngle = 0.0; 
+            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0); 
             //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
-        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(5).getAsBoolean())
-            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(45.0); 
+        }
+        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(5).getAsBoolean() && !pressed) { 
+            pressed = true; 
+            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
+            targetAngle = 45.0; 
+            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(45.0); 
             //rotSpeed = -Constants.Swerve.robotRotationPID.calculate(90.0, curAngle);
-        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(4).getAsBoolean()) {
-            rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(315.0); 
+        }
+        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(4).getAsBoolean() && !pressed) {
+            pressed = true; 
+            this.m_drivetrainSubsystem.setMotionProfileInit(false); 
+            targetAngle = 315.0; 
+            //rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(315.0); 
             // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(270.0,
             //         curAngle + (Math.abs(270 - curAngle) > 180 ? 360 : 0));
+        }
+
+        pressed = this.m_drivetrainSubsystem.manualDrive && (this.rotationJoystick.button(3).getAsBoolean() || 
+                                                                this.rotationJoystick.button(2).getAsBoolean() || 
+                                                               this.rotationJoystick.button(5).getAsBoolean() || 
+                                                                this.rotationJoystick.button(4).getAsBoolean()); 
+
+        if (pressed) { 
+            rotSpeed =
+                this.m_drivetrainSubsystem.calculateControlLoopDriveOutput(
+                        new Pose2d(new Translation2d(curPose.getX(), curPose.getY()), Rotation2d.fromDegrees(targetAngle))).rotationOut;
         }
 
         m_drivetrainSubsystem.drive(

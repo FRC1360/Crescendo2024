@@ -3,6 +3,7 @@ package frc.robot.commands.swerve;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,9 +43,11 @@ public class RotateForShot extends Command {
 
         double targetAngle = convertToAngle(); 
 
-        double rotPIDOut = this.swerveSubsystem.calculatePIDAngleOutput(targetAngle); 
+        Pose2d curPose = this.swerveSubsystem.currentPose(); 
 
-        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()), rotPIDOut, true, false);
+        double rotOut = this.swerveSubsystem.calculateControlLoopDriveOutput(new Pose2d(curPose.getTranslation(), Rotation2d.fromDegrees(targetAngle))).rotationOut; 
+
+        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()), rotOut, true, false);
     }
 
     @Override
