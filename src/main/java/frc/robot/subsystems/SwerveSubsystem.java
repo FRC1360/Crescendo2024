@@ -28,6 +28,7 @@ import frc.lib.swerve.SwerveModuleCustom;
 import frc.lib.util.NavX;
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveAutoConfig;
+import frc.robot.util.Angles;
 import frc.robot.util.OrbitTimer;
 import frc.robot.util.PIDSwerveValues;
 import swervelib.math.SwerveModuleState2;
@@ -38,7 +39,7 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Translation2d centerOfRotation = new Translation2d();
 	private final SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
-	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d());
+	private Pose2d lastPose = new Pose2d(0, 0, new Rotation2d(0.0));
 	private long lastPoseTimestamp = System.currentTimeMillis();
 
 	private double XkP = 1.0; // for driveXPID || replaces Constants.Swerve.driveAlignPID.p, Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
@@ -69,6 +70,11 @@ public class SwerveSubsystem extends SubsystemBase {
 	private TrapezoidProfile.State driveMotionProfileYStartState; 
 	private TrapezoidProfile.State driveMotionProfileYEndState; 
 
+	private TrapezoidProfile.State rotMotionProfileStartState; 
+	private TrapezoidProfile.State rotMotionProfileEndState; 
+
+	private TrapezoidProfile rotMotionProfile; 
+
 	private OrbitTimer timer;
 
 	private boolean motionProfileInit = false; 
@@ -78,7 +84,7 @@ public class SwerveSubsystem extends SubsystemBase {
 	private Translation2d prevVelocity = new Translation2d(0, 0); 
 
 	@AutoLogOutput(key = "Swerve/CurrentVelocity")
-	public Translation2d currentVelocity = new Translation2d(0, 0);
+	public Pose2d currentVelocity = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
 
 	private Pose2d prevTargetPose = new Pose2d(); 
 
@@ -120,6 +126,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
 		this.driveMotionProfileYStartState = new TrapezoidProfile.State(0.0, 0.0); 
 		this.driveMotionProfileYEndState = new TrapezoidProfile.State(0.0, 0.0); 
+
+		this.rotMotionProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(180.0, 45.0)); // in degrees/sec and deg/s^2
+
+		this.rotMotionProfileStartState = new TrapezoidProfile.State(0.0, 0.0);
+		this.rotMotionProfileEndState = new TrapezoidProfile.State(0.0, 0.0); 
+		
 		this.timer = new OrbitTimer(); 
 	}
 
@@ -302,17 +314,9 @@ public class SwerveSubsystem extends SubsystemBase {
 																						// < angleTolerance;
 	}
 
-	public double calculatePIDAngleOutput(double targetAngDeg) {
-		if (targetAngDeg != prevTargetPose.getRotation().getDegrees()) { 
-			this.anglePID.reset();
-			this.prevTargetPose = new Pose2d(0, 0, Rotation2d.fromDegrees(targetAngDeg)); 
-		} 
-		System.out.println("Aligning to angle: " + targetAngDeg); 
-
-		Pose2d currentPose = this.currentPose();
-
+	private Angles convertToAppropriateScope(double targetAngDeg) { 
 		// Constrain angles between 0 and 360
-
+		Pose2d currentPose = this.currentPose();
         double currentAngle = (currentPose.getRotation().getDegrees() + 360.0) % (360.0);
         double targetAngle = (targetAngDeg + 360.0) % (360.0);
 
@@ -322,8 +326,21 @@ public class SwerveSubsystem extends SubsystemBase {
             currentAngle = currentPose.getRotation().getDegrees();
             targetAngle = targetAngDeg;
         }
+		System.out.println("Current angle: " + currentAngle + " Target Angle: " + targetAngle);
 
-        System.out.println("Current angle: " + currentAngle + " Target Angle: " + targetAngle);
+		return new Angles(currentAngle, targetAngle); 
+	}
+
+	public double calculatePIDAngleOutput(double targetAngDeg) {
+		if (targetAngDeg != prevTargetPose.getRotation().getDegrees()) { 
+			this.anglePID.reset();
+			this.prevTargetPose = new Pose2d(0, 0, Rotation2d.fromDegrees(targetAngDeg)); 
+		} 
+		System.out.println("Aligning to angle: " + targetAngDeg); 
+
+		Angles result = convertToAppropriateScope(targetAngDeg); 
+		double currentAngle = result.currentAngle; 
+		double targetAngle = result.targetAngle; 
 
 		System.out.println("Error Angle" + anglePID.getPositionError());
 
@@ -356,6 +373,13 @@ public class SwerveSubsystem extends SubsystemBase {
 			this.driveMotionProfileYStartState = new TrapezoidProfile.State(curPose.getY(), this.currentVelocity.getY()); 
 			this.driveMotionProfileYEndState = new TrapezoidProfile.State(target.getY(), 0.0);
 
+			Angles convertScopeResult = convertToAppropriateScope(target.getRotation().getDegrees()); 
+			double currentAngle = convertScopeResult.currentAngle; 
+			double targetAngle = convertScopeResult.targetAngle; 
+
+			this.rotMotionProfileStartState = new TrapezoidProfile.State(currentAngle, this.currentVelocity.getRotation().getDegrees()); 
+			this.rotMotionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0); 
+
 			this.timer.start();
 
 			this.prevTargetPose = target; 
@@ -370,8 +394,11 @@ public class SwerveSubsystem extends SubsystemBase {
 		TrapezoidProfile.State profileTargetYPos = this.driveMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.driveMotionProfileYStartState,
 																		this.driveMotionProfileYEndState);
 
+		TrapezoidProfile.State rotProfileTarget = this.rotMotionProfile.calculate(this.timer.getTimeDeltaSec(), this.rotMotionProfileStartState, this.rotMotionProfileEndState); 
+
 		double profilePositionTargetX = profileTargetXPos.position; 
 		double profilePositionTargetY = profileTargetYPos.position; 
+		double profilePositionTargetRot = rotProfileTarget.position; 
 
 		SmartDashboard.putNumber("Cur Pose Y", this.currentPose().getY()); 
 		SmartDashboard.putNumber("Profile Target Y Position", profilePositionTargetY); 
@@ -379,6 +406,8 @@ public class SwerveSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Target Profile Velocity Y", profileTargetYPos.velocity); 
 		SmartDashboard.putNumber("Current velocity Drive X", this.currentVelocity.getX()); 
 		SmartDashboard.putNumber("Target Profile Velocity X", profileTargetXPos.velocity); 
+		SmartDashboard.putNumber("Current velocity Rot", this.currentVelocity.getRotation().getDegrees()); 
+		SmartDashboard.putNumber("Target Profile Velocity Rot", rotProfileTarget.velocity); 
 
 		Pose2d currentPose = this.currentPose();
 
@@ -389,7 +418,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         System.out.println("Error X: " + driveXPID.getPositionError() + " Error Y: " + driveYPID.getPositionError());
 
-		return new PIDSwerveValues(driveXOut, driveYOut, this.calculatePIDAngleOutput(target.getRotation().getDegrees())); 
+		return new PIDSwerveValues(driveXOut, driveYOut, this.calculatePIDAngleOutput(profilePositionTargetRot)); 
 	}
 
 	public double calculateDistanceToTarget(Pose2d target) { 
@@ -415,8 +444,9 @@ public class SwerveSubsystem extends SubsystemBase {
 		// Calculate current speed
 		long currentTime = System.currentTimeMillis();
 		long deltaTime = currentTime - lastPoseTimestamp;
-		currentVelocity = new Translation2d((currentPose().getX() - lastPose.getX()) / (deltaTime / 1000d),
-				(currentPose().getY() - lastPose.getY()) / (deltaTime / 1000d));
+		currentVelocity = new Pose2d(new Translation2d((currentPose().getX() - lastPose.getX()) / (deltaTime / 1000d),
+				(currentPose().getY() - lastPose.getY()) / (deltaTime / 1000d)), 
+					new Rotation2d((currentPose().getRotation().getDegrees() - lastPose.getRotation().getDegrees()) / (deltaTime / 1000d)));
 	
 		lastPose = swerveDrivePoseEstimator.getEstimatedPosition();
 		lastPoseTimestamp = System.currentTimeMillis();
