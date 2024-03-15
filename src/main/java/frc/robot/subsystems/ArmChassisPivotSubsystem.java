@@ -125,8 +125,11 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         Preferences.initDouble("ACP FeedForward kG", kG);
         Preferences.initDouble("ACP FeedForward kV", kV);
 
-        resetMotorRotations();
+        // resetMotorRotations();
 
+        if (this.ACPMotorMaster.getEncoder().setPosition(0.0) != REVLibError.kOk) {
+            DriverStation.reportError("Failed to set position on ACP NEO Encoder", true);
+        }
         // Initalize start and end states so the robot goes to target during startup
         this.timer = new OrbitTimer();
         this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), 0.0); // this.getACPAngle(), 0.0);
@@ -158,7 +161,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public double getACPAngle() {
-        return this.rotationsToAngleConversion(this.getMotorRotations()) + Constants.HOME_POSITION_ACP;
+        return this.rotationsToAngleConversion(this.getMotorRotations()) + Constants.ACPConstants.ACP_STARTING_ANGLE;
     }
 
     public void setACPSpeed(double speed) {
@@ -205,7 +208,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         } else if (this.getAngularVelocity() > this.maxVelocity + 15.0) {
             DriverStation.reportError("Tried to send ACP faster than " + this.maxVelocity + 15.0 + "; Actual velocity: "
                     + this.getAngularVelocity(), true);
-            System.exit(1);
+            // System.exit(1);
         }
 
         this.ACPMotorMaster.setVoltage(voltage);

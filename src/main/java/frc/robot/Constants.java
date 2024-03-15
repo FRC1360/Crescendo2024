@@ -92,7 +92,7 @@ public final class Constants {
         public static final int RIGHT_SHOOTAKE_CAN_ID = 37;
         public static final int LEFT_SHOOTAKE_CAN_ID = 38;
         public static final int BACK_SHOOTAKE_ID = 35;
-        public static final int SHINTAKE_SENSOR_PIN = 9;
+        public static final int SHINTAKE_SENSOR_PIN = 2;
         public static final double UNFEED_SPEED_FRONT = 0.05;
         public static final double OUTAKE_SPEED_BACK = 0.5;
         public static final double OUTAKE_SPEED_FRONT = 0.5;
@@ -106,8 +106,8 @@ public final class Constants {
         public static final double STP_MIN_ANGLE = 15.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.610;
-        public static final double STP_PERPENDICULAR_ANGLE = 90.0;
+        public static final double STP_ENCODER_OFFSET = 0.368;
+        public static final double STP_STARTING_ANGLE = 42.0;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -117,7 +117,8 @@ public final class Constants {
         public static final int ACP_MOTOR_SLAVE = 41;
         public static final int ACP_ENCODER_CHANNEL = 0;
 
-        public static final double ACP_ENCODER_OFFSET = 0.819;
+        public static final double ACP_ENCODER_OFFSET = 0.854;
+        public static final double ACP_STARTING_ANGLE = 32.0;
 
         public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
@@ -130,7 +131,7 @@ public final class Constants {
 
     public static final boolean SHOOT_ONLY_WITH_ACP = false;
     // START_POSITION
-    public static final double START_POSITION_STP = 0.0;
+    public static final double START_POSITION_STP = 20.0;
     public static final double START_POSITION_ACP = 40.0;
 
     // HOME_POSITION
@@ -162,8 +163,9 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop 335 // added 30, potentially remove
-    public static final double SOURCE_POSITION_ACP = 30.0 + 13.0;
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0 + 3.0; // Lots of slop 335 // added 30, potentially
+    // remove
+    public static final double SOURCE_POSITION_ACP = 30.0 + 3.0;
 
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;

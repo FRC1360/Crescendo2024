@@ -93,10 +93,10 @@ public class Robot extends LoggedRobot {
 		}
 
 		if (isReal()) { // real bot
-			Logger.addDataReceiver(new WPILOGWriter());
+			// Logger.addDataReceiver(new WPILOGWriter());
 			Logger.addDataReceiver(new NT4Publisher());
-			PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kRev);
-            powerDistribution.setSwitchableChannel(true);
+			PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+			powerDistribution.setSwitchableChannel(true);
 		} else if (!Constants.isReplay) { // regular sim
 			Logger.addDataReceiver(new NT4Publisher());
 		} else { // replay
@@ -110,7 +110,7 @@ public class Robot extends LoggedRobot {
 
 		Logger.registerURCL(URCL.startExternal());
 		Logger.start();
-		DataLogManager.start();
+		// DataLogManager.start();
 	}
 
 	/**
@@ -133,7 +133,6 @@ public class Robot extends LoggedRobot {
 		// robot's periodic
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
-		m_robotContainer.noteInSource(); // checks if note is in shintake when at source
 		// m_robotContainer.loop.poll();
 		// System.out.println("Podium scheduled: " + m_robotContainer.LEVEL);
 	}
@@ -152,7 +151,7 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.armChassisPivotSubsystem.resetArmTargetAngle();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
 		m_robotContainer.shintakePivotSubsystem.resetSTPTargetAngle();
-		m_robotContainer.shintakePivotSubsystem.resetMotorRotations();
+		// m_robotContainer.shintakePivotSubsystem.resetMotorRotations();
 	}
 
 	/**
@@ -200,6 +199,7 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.pollButtonsForSmartDashboard();
 
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
+		m_robotContainer.noteInSource(); // checks if note is in shintake when at source
 	}
 
 	private class TestContext {

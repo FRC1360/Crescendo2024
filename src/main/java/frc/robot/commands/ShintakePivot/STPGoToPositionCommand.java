@@ -32,10 +32,6 @@ public class STPGoToPositionCommand extends Command {
             this.ShintakePivot.setTargetAngle(angle);
             initalized = true;
         }
-        // else if (angle < 80.0 && !initalized) {
-        // this.ShintakePivot.setTargetAngle(angle);
-        // initalized = true;
-        // }
     }
 
     @Override

@@ -6,7 +6,7 @@ public class StateMachine {
         atHome, atSpeakerSubwooferScore, atSpeakerPodiumScore, atSpeakerDefendedScore, atAmpScore, atSource, atClimb
     }
 
-    private ArmPositionStates armPosState;
+    public ArmPositionStates armPosState;
 
     public StateMachine() {
         this.armPosState = ArmPositionStates.atHome;

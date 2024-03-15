@@ -36,6 +36,10 @@ public class ShootSpeakerCommand extends Command {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
+
+		SmartDashboard.putNumber("Left shooter velocity", m_shooter.getVelocityLeft());
+		SmartDashboard.putNumber("Right shooter velocity", m_shooter.getVelocityRight());
+
 		if (m_shooter.shooterWheelsReady() && !ready2) {
 			ready2 = true;
 			timer.start();

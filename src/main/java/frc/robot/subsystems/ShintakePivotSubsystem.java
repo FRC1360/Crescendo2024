@@ -107,7 +107,11 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.initDouble("Shintake Pivot FeedForward kG", kG);
         Preferences.initDouble("Shintake Pivot FeedForward kV", kV);
 
-        resetMotorRotations();
+        // resetMotorRotations();
+
+        if (this.STPMotorMaster.getEncoder().setPosition(0.0) != REVLibError.kOk) {
+            DriverStation.reportError("Failed to set position on STP NEO Encoder", true);
+        }
 
         this.timer = new OrbitTimer();
         this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0); // this.getSTPAngle(), 0.0);
@@ -138,8 +142,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     // Returns the ShintakePivot GLOBAL angle. The global angle is the angle
     // relative to the shoulder
     public double getSTPAngle() {
-        return this.rotationsToAngleConversion(this.getMotorRotations())
-                + Constants.STPConstants.STP_PERPENDICULAR_ANGLE;
+        return this.rotationsToAngleConversion(this.getMotorRotations()) + Constants.STPConstants.STP_STARTING_ANGLE;
     }
 
     public void setSTPSpeed(double speed) {

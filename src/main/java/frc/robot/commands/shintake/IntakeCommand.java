@@ -35,7 +35,7 @@ public class IntakeCommand extends Command {
 	@Override
 	public void execute() {
 		count = intake.getShintakeCount();
-		intake.resetShintakeCount();
+		// intake.resetShintakeCount();
 		if (count == 0)
 			intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
 		// count = intake.getShintakeCount();
@@ -43,7 +43,7 @@ public class IntakeCommand extends Command {
 		// intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
 		// }
 		else if (count >= 1) {
-			intake.varIntake(0.05);
+			// intake.varIntake(0.05);
 			ledSubsystem.setLEDNote();
 		}
 	}

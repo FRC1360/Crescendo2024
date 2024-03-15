@@ -10,6 +10,7 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.util.StateMachine;
+import frc.robot.util.StateMachine.ArmPositionStates;
 
 public class AssemblyHomePositionCommand extends SequentialCommandGroup {
 
@@ -27,7 +28,9 @@ public class AssemblyHomePositionCommand extends SequentialCommandGroup {
                                                                 // Command 2
                                                                 new ACPGoToPositionCommand(ACPSubsystem,
                                                                                 Constants.HOME_POSITION_ACP,
-                                                                                STPSubsystem)
+                                                                                STPSubsystem,
+                                                                                () -> sm.armPosState.equals(
+                                                                                                ArmPositionStates.atSource))
                                                                                 .alongWith(new InstantCommand(
                                                                                                 () -> SmartDashboard
                                                                                                                 .putString("Homing stage",

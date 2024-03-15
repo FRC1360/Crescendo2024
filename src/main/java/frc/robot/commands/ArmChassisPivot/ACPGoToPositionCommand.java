@@ -1,5 +1,7 @@
 package frc.robot.commands.ArmChassisPivot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmChassisPivotSubsystem;
 import frc.robot.subsystems.ShintakePivotSubsystem;
@@ -11,19 +13,19 @@ public class ACPGoToPositionCommand extends Command {
     double angle;
     boolean initalized = false;
 
-    boolean needsDelay;
+    BooleanSupplier needsDelay;
 
-    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem) {
+    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem,
+            BooleanSupplier needsDelay) {
         this.ACP = ACP;
         this.STP = STPSubsystem;
         this.angle = angle;
+        this.needsDelay = needsDelay;
         addRequirements(ACP);
     }
 
-    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem,
-            boolean needsDelay) {
-        this(ACP, angle, STPSubsystem);
-        this.needsDelay = needsDelay;
+    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem) {
+        this(ACP, angle, STPSubsystem, () -> false);
     }
 
     @Override
@@ -36,9 +38,15 @@ public class ACPGoToPositionCommand extends Command {
 
     @Override
     public void execute() {
-        if (/* this.STP.getSTPAngle() < 80.0 && */ !initalized) {
+        // System.out.println("Delay: " + needsDelay.getAsBoolean());
+        if (!initalized && this.STP.getSTPAngle() < 80.0) {
+            // if (needsDelay.getAsBoolean() && this.STP.getSTPAngle() < 80.0) {
             this.ACP.setTargetAngle(angle);
             initalized = true;
+            // } else if (!needsDelay.getAsBoolean()) {
+            // this.ACP.setTargetAngle(angle);
+            // initalized = true;
+            // }
         }
     }
 
