@@ -57,16 +57,16 @@ public class DefaultDriveCommand extends Command {
 
         double targetAngle = curPose.getRotation().getDegrees();
 
-        if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(3).getAsBoolean() && !pressed) {
+        if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(3).getAsBoolean()) {
             pressed = true;
-            this.m_drivetrainSubsystem.setMotionProfileInit(false);
+            // this.m_drivetrainSubsystem.setMotionProfileInit(false);
             targetAngle = 45.0;
             // rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(180.0);
         }
         // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle);
-        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(2).getAsBoolean() && !pressed) {
+        else if (this.m_drivetrainSubsystem.manualDrive && this.rotationJoystick.button(2).getAsBoolean()) {
             pressed = true;
-            this.m_drivetrainSubsystem.setMotionProfileInit(false);
+            // this.m_drivetrainSubsystem.setMotionProfileInit(false);
             targetAngle = 315.0;
             // rotSpeed = this.m_drivetrainSubsystem.calculatePIDAngleOutput(0.0);
             // rotSpeed = -Constants.Swerve.robotRotationPID.calculate(180.0, curAngle2);
