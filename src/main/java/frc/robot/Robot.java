@@ -95,7 +95,8 @@ public class Robot extends LoggedRobot {
 		if (isReal()) { // real bot
 			Logger.addDataReceiver(new WPILOGWriter());
 			Logger.addDataReceiver(new NT4Publisher());
-			PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
+			PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kRev);
+            powerDistribution.setSwitchableChannel(true);
 		} else if (!Constants.isReplay) { // regular sim
 			Logger.addDataReceiver(new NT4Publisher());
 		} else { // replay
