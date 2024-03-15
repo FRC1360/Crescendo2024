@@ -101,7 +101,8 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 350.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at
+        public static final double STP_MAX_ANGLE = 350.0; // Mod 360 taken out - MUST NOT GO PASS 360!! The STP angle
+                                                          // will report 0 when at
                                                           // 360
         public static final double STP_MIN_ANGLE = 15.0;
         public static final int STP_ENCODER_CHANNEL = 1;

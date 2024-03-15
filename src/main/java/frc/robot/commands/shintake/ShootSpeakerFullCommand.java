@@ -21,11 +21,14 @@ public class ShootSpeakerFullCommand extends SequentialCommandGroup {
 		// Add your commands in the addCommands() call, e.g.
 		// addCommands(new FooCommand(), new BarCommand());
 		addCommands(
-				new MoveBackNoteCommand(shooter),  
+				new MoveBackNoteCommand(shooter),
+				new InstantCommand(() -> shooter.clearFaults()),
 				new InstantCommand(() -> shooter.setVelocity(Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER,
 						Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER))
-						//.alongWith(new ACPGoToPositionCommand(ACP, Constants.NOTE_SCORE_SPEAKER_POSITION_ACP)/* REPLACE OUTAKE COMMAND WITH GO TO POSITION COMMAND */)
-						);
+		// .alongWith(new ACPGoToPositionCommand(ACP,
+		// Constants.NOTE_SCORE_SPEAKER_POSITION_ACP)/* REPLACE OUTAKE COMMAND WITH GO
+		// TO POSITION COMMAND */)
+		);
 	}
 
 }

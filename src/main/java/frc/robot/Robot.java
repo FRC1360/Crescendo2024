@@ -166,9 +166,9 @@ public class Robot extends LoggedRobot {
 		// Rotation2d.fromDegrees(90.0)));
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+			m_robotContainer.getHoming()
+					.andThen(m_autonomousCommand).schedule();
 		}
-		m_robotContainer.getHoming().schedule();
 	}
 
 	/** This function is called periodically during autonomous. */

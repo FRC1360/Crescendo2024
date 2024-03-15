@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -102,6 +103,12 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	public boolean isSwitchSet() {
 		return m_counter.get() > 0;
+	}
+
+	public void clearFaults() {
+		this.m_left.clearFaults();
+		this.m_right.clearFaults();
+		this.m_back.clearFaults();
 	}
 
 	public double getBackEncoder() {
@@ -204,6 +211,9 @@ public class ShintakeSubsystem extends SubsystemBase {
 				Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER);
 		SmartDashboard.putNumber("Target right Wheel Velocity",
 				Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER);
+
+		SmartDashboard.putBoolean("Left Shooter CAN Fault", this.m_left.getFault(FaultID.kCANRX));
+		SmartDashboard.putBoolean("Right Shooter CAN Fault", this.m_right.getFault(FaultID.kCANRX));
 		// SmartDashboard.putNumber("left Wheel kp", kp);
 		// leftWheelPID.setP()
 		// SmartDashboard.getNumber("right kP", rightkP);

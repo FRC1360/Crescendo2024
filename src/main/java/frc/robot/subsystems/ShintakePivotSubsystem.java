@@ -249,17 +249,17 @@ public class ShintakePivotSubsystem extends SubsystemBase {
                 || this.targetAngle <= Constants.STPConstants.STP_MIN_ANGLE) {
             DriverStation.reportError("Tried to set STP to above or below max or min; Target: " + this.targetAngle,
                     true);
-            System.exit(1);
+            // System.exit(1);
         }
         this.targetAngle = targetAngle + this.cacheOffset;
 
         this.movePIDController.reset();
 
         this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), this.getAngularVelocity());
-        this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0);
+        this.motionProfileEndState = new TrapezoidProfile.State(this.targetAngle, 0.0);
         this.timer.start();
 
-        System.out.println("Target angle for STP scheduled for: " + targetAngle);
+        System.out.println("Target angle for STP scheduled for: " + this.targetAngle);
     }
 
     public double getTargetAngle() {
@@ -273,7 +273,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // encoderPosition * 360.0 = angle of motor rotation
         // angle of motor rotation * GEAR_RATIO = ACP angle
         // ACP angle % 360 = keep range between 0-360
-        return (encoderPosition * 360.0) % 360;
+        return (encoderPosition * 360.0); // % 360;
     }
 
     public void updateAngularVelocity() {
