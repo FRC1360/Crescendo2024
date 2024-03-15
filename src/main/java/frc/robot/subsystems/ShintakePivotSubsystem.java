@@ -89,8 +89,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.STP_ENCODER_CHANNEL);
 
-        this.maxVelocity = 200.0;
-        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 100); // TODO - Tune
+        this.maxVelocity = 220.0;
+        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 120); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.STPMotionProfileConstraints);
 
         // this.cacheOffset = 0.0;
@@ -138,7 +138,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     // Returns the ShintakePivot GLOBAL angle. The global angle is the angle
     // relative to the shoulder
     public double getSTPAngle() {
-        return this.rotationsToAngleConversion(this.getMotorRotations());
+        return this.rotationsToAngleConversion(this.getMotorRotations())
+                + Constants.STPConstants.STP_PERPENDICULAR_ANGLE;
     }
 
     public void setSTPSpeed(double speed) {
@@ -165,6 +166,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("STP_Encoder_Updated", false);
         }
 
+        this.lastTime = -1;
     }
 
     public void setIdleMode(IdleMode mode) {

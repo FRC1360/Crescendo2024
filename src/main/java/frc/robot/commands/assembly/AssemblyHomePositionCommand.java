@@ -13,23 +13,29 @@ import frc.robot.util.StateMachine;
 
 public class AssemblyHomePositionCommand extends SequentialCommandGroup {
 
-    public AssemblyHomePositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
-            ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
-        addCommands(
-                new InstantCommand(() -> sm.setAtHome()),
-                new InstantCommand(ledSubsystem::setLEDDisable),
+        public AssemblyHomePositionCommand(ArmChassisPivotSubsystem ACPSubsystem,
+                        ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
+                addCommands(
+                                new InstantCommand(() -> sm.setAtHome()),
+                                new InstantCommand(ledSubsystem::setLEDDisable),
 
-                // Command 1
-                new STPGoToPositionCommand(STPSubsystem, Constants.HOME_POSITION_STP, ACPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Homing stage", "STAGE 2")))//, 
-                 .alongWith(
-                // Command 2
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.HOME_POSITION_ACP, STPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Homing stage", "STAGE 3")))//, 
-                 ), 
+                                // Command 1
+                                new STPGoToPositionCommand(STPSubsystem, Constants.HOME_POSITION_STP, ACPSubsystem)
+                                                .alongWith(new InstantCommand(() -> SmartDashboard
+                                                                .putString("Homing stage", "STAGE 2")))// ,
+                                                .alongWith(
+                                                                // Command 2
+                                                                new ACPGoToPositionCommand(ACPSubsystem,
+                                                                                Constants.HOME_POSITION_ACP,
+                                                                                STPSubsystem)
+                                                                                .alongWith(new InstantCommand(
+                                                                                                () -> SmartDashboard
+                                                                                                                .putString("Homing stage",
+                                                                                                                                "STAGE 3")))// ,
+                                                ),
 
-                new InstantCommand(ledSubsystem::setLEDEnable),
-                new InstantCommand(() -> SmartDashboard.putString("Homing stage", "DONE")),
-                new InstantCommand(() -> sm.setAtHome()));
-    }
+                                new InstantCommand(ledSubsystem::setLEDEnable),
+                                new InstantCommand(() -> SmartDashboard.putString("Homing stage", "DONE")),
+                                new InstantCommand(() -> sm.setAtHome()));
+        }
 }

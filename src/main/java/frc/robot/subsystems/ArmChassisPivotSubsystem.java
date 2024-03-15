@@ -191,6 +191,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             System.out.println("Failed to reset ACP Rotations");
             SmartDashboard.putBoolean("ACP_Encoder_Updated", false);
         }
+
+        this.lastTime = -1;
     }
 
     /*
@@ -229,7 +231,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
                 && targetAngle >= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) {
             this.motionProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
             this.motionProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE,
-                    this.slowMaxVelocity);
+                    0.0);
 
             this.slowProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE,
                     this.getAngularVelocity());
@@ -241,9 +243,10 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
                 && targetAngle <= Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE) {
             this.slowProfileStartState = new TrapezoidProfile.State(this.getACPAngle(), this.getAngularVelocity());
             this.slowProfileEndState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE,
-                    this.slowMaxVelocity);
+                    0.0);
 
-            this.motionProfileStartState = new TrapezoidProfile.State(Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE,
+            this.motionProfileStartState = new TrapezoidProfile.State(
+                    Constants.ACPConstants.ACP_SLOP_OCCUR_ANGLE,
                     this.getAngularVelocity());
             this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0);
             slowInit = false;

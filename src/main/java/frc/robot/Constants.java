@@ -103,10 +103,11 @@ public final class Constants {
         public static final int STP_MOTOR_SLAVE = 43;
         public static final double STP_MAX_ANGLE = 350.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at
                                                           // 360
-        public static final double STP_MIN_ANGLE = -180.0;
+        public static final double STP_MIN_ANGLE = 15.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.307;
+        public static final double STP_ENCODER_OFFSET = 0.610;
+        public static final double STP_PERPENDICULAR_ANGLE = 90.0;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -124,7 +125,7 @@ public final class Constants {
         public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0;
 
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
-        public static final double ACP_SLOP_OCCUR_ANGLE = 75.0;
+        public static final double ACP_SLOP_OCCUR_ANGLE = 68.0;
     }
 
     public static final boolean SHOOT_ONLY_WITH_ACP = false;
@@ -133,7 +134,7 @@ public final class Constants {
     public static final double START_POSITION_ACP = 40.0;
 
     // HOME_POSITION
-    public static final double HOME_POSITION_STP = 0.0;
+    public static final double HOME_POSITION_STP = 25.0;
     public static final double HOME_POSITION_ACP = 17.0;
 
     // NOTE_SCORE_AMP_POSITION
@@ -142,7 +143,7 @@ public final class Constants {
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 65.0 + 10.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 50.0; // 0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; // 50.0;
 
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;
@@ -162,7 +163,7 @@ public final class Constants {
 
     // SOURCE_POSITION
     public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop 335 // added 30, potentially remove
-    public static final double SOURCE_POSITION_ACP = 30.0;
+    public static final double SOURCE_POSITION_ACP = 30.0 + 13.0;
 
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
