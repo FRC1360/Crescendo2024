@@ -163,6 +163,10 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 0;
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
+    // NOTE_FEED_POSITION to throw notes across field to give to allies
+    public static final double NOTE_FEED_POSITION_STP = 35.0; // estimated value
+    public static final double NOTE_FEED_POSITION_ACP = 17.0;
+
     // SOURCE_POSITION
     public static final double SOURCE_POSITION_STP = 180.0 + 155.0 + 3.0; // Lots of slop 335 // added 30, potentially
     // remove
