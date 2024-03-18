@@ -283,23 +283,25 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // encoderPosition * 360.0 = angle of motor rotation
         // angle of motor rotation * GEAR_RATIO = ACP angle
         // ACP angle % 360 = keep range between 0-360
-        return (encoderPosition * 360.0) % 360;
+        return (encoderPosition * 360.0); // % 360;
     }
 
-    private void updateAngularVelocity() {
-        double currentTime = (System.currentTimeMillis() / 1000.0);
+    // private void updateAngularVelocity() {
+    // double currentTime = (System.currentTimeMillis() / 1000.0);
 
-        if (lastTime != -1) {
-            double deltaTime = (currentTime - lastTime); /// 1000.0;
+    // if (lastTime != -1) {
+    // double deltaTime = (currentTime - lastTime); /// 1000.0;
 
-            this.angularVelocity = (this.getACPAngle() - lastAngle) / deltaTime;
-        }
-        this.lastAngle = this.getACPAngle();
-        this.lastTime = currentTime;
-    }
-
+    // this.angularVelocity = (this.getACPAngle() - lastAngle) / deltaTime;
+    // }
+    // this.lastAngle = this.getACPAngle();
+    // this.lastTime = currentTime;
+    // }
     public double getAngularVelocity() {
-        return this.angularVelocity;
+        return this.rotationsToAngleConversion(this.ACPMotorMaster.getEncoder().getVelocity()) / 60.0; // Units given in
+                                                                                                       // RPM. divided
+                                                                                                       // by 60 to get
+                                                                                                       // in deg/sec
     }
 
     public boolean atTarget() {
@@ -369,7 +371,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        updateAngularVelocity();
         updateSmartDashboard();
         // this.movePIDController = new PIDController(kP, kI, kD); // added this here to
         // make sure it updates on the fly

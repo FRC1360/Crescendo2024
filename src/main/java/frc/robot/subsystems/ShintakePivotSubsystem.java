@@ -277,23 +277,24 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         return (encoderPosition * 360.0); // % 360;
     }
 
-    public void updateAngularVelocity() {
-        // time in seconds
-        double currentTime = (System.currentTimeMillis() / 1000.0);
-        double currentAngle = this.getSTPAngle();
+    // public void updateAngularVelocity() {
+    // // time in seconds
+    // double currentTime = (System.currentTimeMillis() / 1000.0);
+    // double currentAngle = this.getSTPAngle();
 
-        if (lastTime != -1) {
-            double deltaTime = (currentTime - lastTime); /// 1000.0;
+    // if (lastTime != -1) {
+    // double deltaTime = (currentTime - lastTime); /// 1000.0;
 
-            this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
-            this.lastAngle = currentAngle;
-        }
+    // this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
+    // this.lastAngle = currentAngle;
+    // }
 
-        this.lastTime = currentTime;
-    }
+    // this.lastTime = currentTime;
+    // }
 
     public Double getAngularVelocity() {
-        return this.angularVelocity;
+        return this.rotationsToAngleConversion(this.STPMotorMaster.getEncoder().getVelocity()) / 60.0; // divide: 60 RPM
+                                                                                                       // -> deg/sec
     }
 
     public boolean atTarget() {
@@ -327,7 +328,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() { // Displays angles, PID, and FF values for STP (also updates angular Velocity)
-        updateAngularVelocity();
+        // updateAngularVelocity();
         updateSmartDashboard();
 
         // All of Control Loop motion is done within the subsystem -- simply set a
