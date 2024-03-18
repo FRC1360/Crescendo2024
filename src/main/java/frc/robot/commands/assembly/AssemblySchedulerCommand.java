@@ -1,10 +1,7 @@
 package frc.robot.commands.assembly;
 
-import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-
-import javax.swing.GroupLayout.Alignment;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

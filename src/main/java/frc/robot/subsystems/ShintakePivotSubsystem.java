@@ -37,7 +37,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public TrapezoidProfile.Constraints STPMotionProfileConstraints;
 
-    private Double angularVelocity;
+    private Double angularVelocity = 0.0;
     private double lastTime;
     private Double lastAngle;
 
@@ -155,7 +155,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     public void resetMotorRotations() {
         if (this.absoluteEncoder.getAbsolutePosition() == 0.0) {
             DriverStation.reportError("STP Absolute encoder reports 0.0! Possibly not connected properly!", true);
-            System.exit(1);
+            // System.exit(1);
         }
         double newPos = (this.absoluteEncoder.getAbsolutePosition() - this.STPOffset);
 
@@ -188,6 +188,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
         // System.exit(1);
         // }
+        // voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
 
@@ -331,13 +332,12 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         // All of Control Loop motion is done within the subsystem -- simply set a
         // target angle and the subsystem will go there
-        // When the motion profile is finished, the result which it outputs will be the
+        // When the motion profile is finished, the result which it outputs will be
+        // the
         // goal, making it a PID/FF control loop only
         double out = calculateControlLoopOutput();
         SmartDashboard.putNumber("STP_Control_Loop_Out", out);
         this.setSTPNormalizedVoltage(out);
-        // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
-        // SmartDashboard.putNumber("Target Angle: ", true);
     }
 
     public void updateSmartDashboard() {

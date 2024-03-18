@@ -198,8 +198,9 @@ public class Robot extends LoggedRobot {
 	public void teleopPeriodic() {
 		m_robotContainer.pollButtonsForSmartDashboard();
 
-		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
-		m_robotContainer.noteInSource(); // checks if note is in shintake when at source
+		// m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
+		// m_robotContainer.noteInSource(); // checks if note is in shintake when at
+		// source
 	}
 
 	private class TestContext {

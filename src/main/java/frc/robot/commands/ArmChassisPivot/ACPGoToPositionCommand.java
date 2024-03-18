@@ -13,10 +13,10 @@ public class ACPGoToPositionCommand extends Command {
     double angle;
     boolean initalized = false;
 
-    BooleanSupplier needsDelay;
+    boolean needsDelay;
 
     public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem,
-            BooleanSupplier needsDelay) {
+            boolean needsDelay) {
         this.ACP = ACP;
         this.STP = STPSubsystem;
         this.angle = angle;
@@ -25,7 +25,7 @@ public class ACPGoToPositionCommand extends Command {
     }
 
     public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem) {
-        this(ACP, angle, STPSubsystem, () -> false);
+        this(ACP, angle, STPSubsystem, false);
     }
 
     @Override
@@ -39,14 +39,21 @@ public class ACPGoToPositionCommand extends Command {
     @Override
     public void execute() {
         // System.out.println("Delay: " + needsDelay.getAsBoolean());
-        if (!initalized && this.STP.getSTPAngle() < 80.0) {
-            // if (needsDelay.getAsBoolean() && this.STP.getSTPAngle() < 80.0) {
-            this.ACP.setTargetAngle(angle);
-            initalized = true;
-            // } else if (!needsDelay.getAsBoolean()) {
-            // this.ACP.setTargetAngle(angle);
-            // initalized = true;
-            // }
+        if (needsDelay) {
+            if (!initalized && this.STP.getSTPAngle() < 80.0) {
+                // if (needsDelay.getAsBoolean() && this.STP.getSTPAngle() < 80.0) {
+                this.ACP.setTargetAngle(angle);
+                initalized = true;
+                // } else if (!needsDelay.getAsBoolean()) {
+                // this.ACP.setTargetAngle(angle);
+                // initalized = true;
+                // }
+            }
+        } else {
+            if (!initalized) {
+                this.ACP.setTargetAngle(angle);
+                initalized = true;
+            }
         }
     }
 

@@ -47,7 +47,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private TrapezoidProfile.State slowProfileStartState;
     private TrapezoidProfile.State slowProfileEndState;
 
-    private double angularVelocity; // angular velocity in deg / second
+    private double angularVelocity = 0.0; // angular velocity in deg / second
     private double lastAngle;
     private double lastTime = -1;
 
@@ -211,6 +211,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             // System.exit(1);
         }
 
+        // voltage = 0.0;
         this.ACPMotorMaster.setVoltage(voltage);
         // this.ACPMotorSlave.setVoltage(voltage);
     }
@@ -224,10 +225,13 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
     public void setTargetAngle(double targetAngle) {
         this.targetAngle = targetAngle + this.cacheOffset;
-        if (this.targetAngle == targetAngle) {
-            return;
-        } else if (this.targetAngle >= Constants.ACPConstants.MAX_ACP_ANGLE
-                || this.targetAngle <= Constants.ACPConstants.MIN_ACP_ANGLE) {
+        // if (this.targetAngle == targetAngle) {
+        // return;
+        // }else
+        if (this.targetAngle >= Constants.ACPConstants.MAX_ACP_ANGLE
+                || this.targetAngle <= Constants.ACPConstants.MIN_ACP_ANGLE)
+
+        {
             DriverStation.reportError("Tried to set ACP to above or below max or min; Target: " + this.targetAngle,
                     true);
             // System.exit(1);

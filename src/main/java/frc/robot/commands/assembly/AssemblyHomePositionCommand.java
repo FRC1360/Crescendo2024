@@ -1,5 +1,7 @@
 package frc.robot.commands.assembly;
 
+import java.time.Instant;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,7 +23,8 @@ public class AssemblyHomePositionCommand extends SequentialCommandGroup {
                                 new InstantCommand(ledSubsystem::setLEDDisable),
 
                                 // Command 1
-                                new STPGoToPositionCommand(STPSubsystem, Constants.HOME_POSITION_STP, ACPSubsystem)
+                                new STPGoToPositionCommand(STPSubsystem, Constants.HOME_POSITION_STP,
+                                                ACPSubsystem)
                                                 .alongWith(new InstantCommand(() -> SmartDashboard
                                                                 .putString("Homing stage", "STAGE 2")))// ,
                                                 .alongWith(
@@ -29,8 +32,7 @@ public class AssemblyHomePositionCommand extends SequentialCommandGroup {
                                                                 new ACPGoToPositionCommand(ACPSubsystem,
                                                                                 Constants.HOME_POSITION_ACP,
                                                                                 STPSubsystem,
-                                                                                () -> sm.armPosState.equals(
-                                                                                                ArmPositionStates.atSource))
+                                                                                true)
                                                                                 .alongWith(new InstantCommand(
                                                                                                 () -> SmartDashboard
                                                                                                                 .putString("Homing stage",

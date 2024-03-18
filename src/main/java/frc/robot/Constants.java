@@ -46,12 +46,12 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
     public static class ClimbConstants {
-        public static final int CLIMBER_LEAD_CAN_ID = 99;
-        public static final int CLIMBER_SLAVE_CAN_ID = 98;
+        public static final int CLIMBER_LEAD_CAN_ID = 30;
+        public static final int CLIMBER_SLAVE_CAN_ID = 31;
         public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
-        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.9;
+        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.3;
         public static final double CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS = 0;
-        public static final double CLIMBER_ENCODER_CLIMBED_HEIGHT_IN_ROTATIONS = 0;
+        public static final double CLIMBER_ENCODER_CLIMBED_HEIGHT_IN_ROTATIONS = 10.0;
         public static final double HOME_POSITION_IN_ROTATIONS = 0.0;
     }
 
@@ -106,7 +106,7 @@ public final class Constants {
                                                           // 360
         public static final double STP_MIN_ANGLE = 15.0;
         public static final int STP_ENCODER_CHANNEL = 1;
-        public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
+        public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0); // * (1.0 / 30.0);
         public static final double STP_ENCODER_OFFSET = 0.368;
         public static final double STP_STARTING_ANGLE = 42.0;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
@@ -137,15 +137,16 @@ public final class Constants {
 
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 25.0;
-    public static final double HOME_POSITION_ACP = 17.0;
+    public static final double HOME_POSITION_ACP = 16.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 235.0; // -140.0 - 70.0; // Must go positive, wires will
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 235.0; // 156.67; // -140.0 - 70.0; // Must go positive,
+                                                                    // wires will
                                                                     // break going negative
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 50.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 50.0; // 36.67; // 0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; // 50.0;
 
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;
@@ -164,13 +165,15 @@ public final class Constants {
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0 + 3.0; // Lots of slop 335 // added 30, potentially
+    public static final double SOURCE_POSITION_STP = 180.0 + 155.0 + 3.0; // 221.0; // 180.0 + 155.0 + 3.0; // Lots of
+                                                                          // slop 335 // added 30,
+    // potentially
     // remove
-    public static final double SOURCE_POSITION_ACP = 30.0 + 3.0;
+    public static final double SOURCE_POSITION_ACP = 33.0; // 28.0;
 
     // CLIMB_POSITION
     public static final double CLIMB_POSITION_STP = 180.0;
-    public static final double CLIMB_POSITION_ACP = 80.0;
+    public static final double CLIMB_POSITION_ACP = 88.0;
 
     /*
      * Swerve Constants (newly added ones)
@@ -211,7 +214,7 @@ public final class Constants {
         public static final double DRIVE_CONVERSION_VELOCITY_FACTOR = DRIVE_CONVERSION_POSITION_FACTOR / 60.0;
         public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;
         // public static final double MAX_SPEED = 14.5 / 3.28084;
-        public static final double MAX_SPEED = Swerve.AutoConstants.maxSpeed;
+        public static final double MAX_SPEED = 4.0;
 
         /*
          * Ideally these should be independent but for getting started same pid/ff
@@ -285,7 +288,7 @@ public final class Constants {
                     1, 0, 0.0045);
             public static final com.pathplanner.lib.util.PIDConstants rotation = new com.pathplanner.lib.util.PIDConstants(
                     0.05, 0.000001, 0);
-            public static final double maxSpeed = 4; // m/s
+            public static final double maxSpeed = 4.0 / 2.0; // m/s
             public static final double maxAcceleration = 16; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); // deg/s^2

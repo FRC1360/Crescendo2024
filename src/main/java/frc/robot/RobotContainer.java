@@ -27,6 +27,8 @@ import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
 import frc.robot.commands.ShintakePivot.STPMoveManual;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
+import frc.robot.commands.assembly.AssemblyClimbCommand;
+import frc.robot.commands.assembly.AssemblyHomePositionAmpCommand;
 import frc.robot.commands.assembly.AssemblyHomePositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
@@ -88,8 +90,7 @@ public class RobotContainer {
 	public SendableChooser<Command> autoChooser;
 
 	public ArrayList<Command> tempInitAutos;
-	public ClimberSubsystem climberSubsystem;
-
+	public ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 	// public final EventLoop loop = new EventLoop();
 
 	/**
@@ -115,6 +116,9 @@ public class RobotContainer {
 								armChassisPivotSubsystem,
 								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
 						.andThen(new ShootSpeakerCommand(shintakeSubsystem)));
+
+		NamedCommands.registerCommand("HomeCommand",
+				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		System.out.println(AutoBuilder.getAllAutoNames());
 		for (String pathName : AutoBuilder.getAllAutoNames()) {
@@ -272,7 +276,7 @@ public class RobotContainer {
 						() -> right_controller.button(3).getAsBoolean())));
 
 		left_controller.button(4).whileFalse(
-				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+				new AssemblyHomePositionAmpCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		bindSourcePathfinding();
 
@@ -313,6 +317,9 @@ public class RobotContainer {
 		operator_controller.x().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.LEFT));
 		operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.RIGHT));
 		operator_controller.y().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER));
+
+		right_controller.button(4).whileTrue(new AssemblyClimbCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
+				ledSubsystem, climberSubsystem, sm));
 		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.RED_SOURCE).getCommand());
 
