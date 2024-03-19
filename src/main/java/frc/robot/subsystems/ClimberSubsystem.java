@@ -57,7 +57,9 @@ public class ClimberSubsystem extends SubsystemBase {
 	}
 
 	public boolean climbMotorReady() {
-		return !(getEncoderPosition() < 0) && Math.abs(getEncoderPosition()
+		return
+		// !(getEncoderPosition() < 0) &&
+		Math.abs(getEncoderPosition()
 				- this.targetHeight) <= 0.5;
 		// this is in rotations so the deadband number is much smaller
 	}

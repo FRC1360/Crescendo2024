@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmChassisPivotSubsystem.ArmShintakeAngleMessenger;
 import frc.robot.util.OrbitPID;
 import frc.robot.util.OrbitTimer;
 
@@ -52,6 +53,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public InterpolatingDoubleTreeMap shintakePivotDistanceAngleMap;
 
+    public ArmShintakeAngleMessenger armSTPAngleMessenger;
+
     private double kP = 0.025;
     private double kI = 0.0;
     private double kD = 0.0;
@@ -61,7 +64,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private double maxVelocity;
 
-    public ShintakePivotSubsystem() {
+    public ShintakePivotSubsystem(ArmShintakeAngleMessenger armSTPAngleMessenger) {
         this.movePIDController = new PIDController(kP, kI, kD); // TODO - Tune || 0.025, 0.0, 0.4
 
         this.STPMotorMaster = new CANSparkMax(Constants.STPConstants.STP_MOTOR_MASTER, MotorType.kBrushless);
@@ -129,6 +132,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.shintakePivotDistanceAngleMap.put(2.5, 90.0 - 26.916);
         this.shintakePivotDistanceAngleMap.put(3.0, 90.0 - 22.56);
 
+        this.armSTPAngleMessenger = armSTPAngleMessenger;
     }
 
     public double getMotorRotations() {
@@ -188,7 +192,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
         // System.exit(1);
         // }
-        // voltage = 0.0;
+        voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
 
@@ -301,6 +305,17 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         return Math.abs(this.getTargetAngle() - this.getSTPAngle()) <= Constants.STPConstants.STP_GO_TO_POS_TOLERANCE;
     }
 
+    public double calculateAngleToHorizontal(double STPTargetAngle) {
+        // Accounts for ACP and STP angle to get angle which the STP is with respect to
+        // horizontal
+        // For feedforward
+        // According to traversal C = 180.0, ACP + STP + remaining to horizontal =
+        // 180.0, remaining is relative STP
+        double angToHor = 180.0 - this.armSTPAngleMessenger.getACPAngle() - STPTargetAngle;
+        SmartDashboard.putNumber("STP_Angle_To_Horizontal", angToHor);
+        return angToHor;
+    }
+
     public void resetEncoderOffset() {
         this.STPOffset = this.absoluteEncoder.getAbsolutePosition();
     }
@@ -320,10 +335,12 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         double pidOut = this.movePIDController.calculate(input, target);
 
         double feedforwardOutput = this.STPFeedForward.calculate(
-                Math.toRadians(profileTarget.position),
+                Math.toRadians(calculateAngleToHorizontal(profileTarget.position)),
                 Math.toRadians(this.getAngularVelocity()));
 
-        return pidOut; // + feedforwardOutput;
+        SmartDashboard.putNumber("STP_Feedforward_Out", feedforwardOutput);
+
+        return pidOut + feedforwardOutput;
     }
 
     @Override

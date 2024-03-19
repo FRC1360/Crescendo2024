@@ -211,7 +211,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             // System.exit(1);
         }
 
-        // voltage = 0.0;
+        voltage = 0.0;
         this.ACPMotorMaster.setVoltage(voltage);
         // this.ACPMotorSlave.setVoltage(voltage);
     }
@@ -366,7 +366,9 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
                 Math.toRadians(profileTarget.position),
                 Math.toRadians(this.getAngularVelocity()));
 
-        return pidOut;
+        SmartDashboard.putNumber("ACP_Feedforward_Out", feedforwardOutput);
+
+        return pidOut + feedforwardOutput;
     }
 
     @Override
@@ -435,5 +437,15 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.motionProfileEndState = new TrapezoidProfile.State(this.getACPAngle(), 0.0);
 
         this.targetAngle = this.getACPAngle(); // Constants.HOME_POSITION_ACP;
+    }
+
+    public class ArmShintakeAngleMessenger {
+        public double getACPAngle() {
+            return ArmChassisPivotSubsystem.this.getACPAngle();
+        }
+
+        public double getTargetAngle() {
+            return ArmChassisPivotSubsystem.this.getTargetAngle();
+        }
     }
 }
