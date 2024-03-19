@@ -73,8 +73,9 @@ public class RobotContainer {
 	public SOURCE_SIDE SRC_SIDE = SOURCE_SIDE.CENTER;
 
 	// The robot's subsystems and commands are defined here...
-	public final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem();
 	public final ArmChassisPivotSubsystem armChassisPivotSubsystem = new ArmChassisPivotSubsystem();
+	private final ArmChassisPivotSubsystem.ArmShintakeAngleMessenger armSTPMessenger = armChassisPivotSubsystem.new ArmShintakeAngleMessenger();
+	public final ShintakePivotSubsystem shintakePivotSubsystem = new ShintakePivotSubsystem(armSTPMessenger);
 
 	public final ShintakeSubsystem shintakeSubsystem = new ShintakeSubsystem();
 	private final LEDSubsystem ledSubsystem = new LEDSubsystem();
