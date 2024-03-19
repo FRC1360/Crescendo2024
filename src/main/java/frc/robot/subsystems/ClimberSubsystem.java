@@ -15,16 +15,16 @@ import frc.robot.Constants;
 public class ClimberSubsystem extends SubsystemBase {
 
 	private final CANSparkMax m_climbMotorLead;
-	private final CANSparkMax m_climbMotorSlave;
+	private final CANSparkMax m_climbMotorFollow;
 	private Boolean isSafe = true;
 	private boolean isExtended = false;
 	private double targetHeight = 0.0;
 
 	public ClimberSubsystem() {
 		this.m_climbMotorLead = new CANSparkMax(Constants.ClimbConstants.CLIMBER_LEAD_CAN_ID, MotorType.kBrushless);
-		this.m_climbMotorSlave = new CANSparkMax(Constants.ClimbConstants.CLIMBER_SLAVE_CAN_ID, MotorType.kBrushless);
+		this.m_climbMotorFollow = new CANSparkMax(Constants.ClimbConstants.CLIMBER_SLAVE_CAN_ID, MotorType.kBrushless);
 
-		m_climbMotorSlave.follow(m_climbMotorLead);
+		m_climbMotorFollow.follow(m_climbMotorLead);
 
 	}
 
@@ -46,6 +46,10 @@ public class ClimberSubsystem extends SubsystemBase {
 		if (climbMotorReady()) {
 			stopClimber();
 		}
+	}
+
+	public void setSpeed(double speed) {
+		m_climbMotorLead.set(speed);
 	}
 
 	public void setTargetHeight(double targetHeight) { // sets the target height for the climber to go to

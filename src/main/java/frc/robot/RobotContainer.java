@@ -378,13 +378,14 @@ public class RobotContainer {
 						operator_controller));
 		operator_controller.rightBumper().whileTrue(
 				new STPMoveManual(shintakePivotSubsystem, () -> operator_controller.getRightY(), operator_controller));
-		// // new Trigger(m_exampleSubsystem::exampleCondition)
-		// // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-		// // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-		// // pressed,
-		// // cancelling on release.
-		// // XboxController.kB.whileTrue(m_exampleSubsystem.exampleMethodCommand());
+		operator_controller.leftTrigger()
+				.whileTrue(new RepeatCommand(new InstantCommand(() -> climberSubsystem.setSpeed(0.4))));
+		operator_controller.leftTrigger().onFalse(new InstantCommand(() -> climberSubsystem.setSpeed(0)));
+
+		operator_controller.rightTrigger()
+				.whileTrue(new RepeatCommand(new InstantCommand(() -> climberSubsystem.setSpeed(0.4))));
+		operator_controller.rightTrigger().onFalse(new InstantCommand(() -> climberSubsystem.setSpeed(0)));
 	}
 
 	/**
