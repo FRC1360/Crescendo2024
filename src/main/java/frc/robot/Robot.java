@@ -204,8 +204,8 @@ public class Robot extends LoggedRobot {
 	}
 
 	private class TestContext {
-		public double acpAngle = Constants.HOME_POSITION_ACP;
-		public double stpAngle = Constants.HOME_POSITION_STP;
+		public double acpAngle = 0;
+		public double stpAngle = 0;
 		public double stLeftVel = 0;
 		public double stRightVel = 0;
 		public double stIntakeVel = 0;
@@ -218,6 +218,13 @@ public class Robot extends LoggedRobot {
 	public void testInit() {
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
+
+		m_test.acpAngle = m_robotContainer.armChassisPivotSubsystem.getTargetAngle();
+		m_test.stpAngle = m_robotContainer.shintakePivotSubsystem.getTargetAngle();
+		m_test.stLeftVel = 0;
+		m_test.stRightVel = 0;
+		m_test.stIntakeVel = 0;
+		m_test.clHeight = m_robotContainer.climberSubsystem.gettargetHeight();
 
 		SmartDashboard.putNumber("TEST_ACP_ANGLE", m_test.acpAngle); // Degrees | Min = 0, Max = 80.0
 		SmartDashboard.putNumber("TEST_STP_ANGLE", m_test.stpAngle); // Degrees | Min = -180, Max = 360
