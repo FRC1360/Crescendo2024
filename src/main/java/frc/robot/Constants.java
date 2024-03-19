@@ -106,7 +106,7 @@ public final class Constants {
                                                           // 360
         public static final double STP_MIN_ANGLE = 15.0;
         public static final int STP_ENCODER_CHANNEL = 1;
-        public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0); // * (1.0 / 30.0);
+        public static final double STP_GEAR_RATIO = (1 / 36.0) * (1.0 / 5.0); // * (1.0 / 30.0);
         public static final double STP_ENCODER_OFFSET = 0.368;
         public static final double STP_STARTING_ANGLE = 42.0;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
@@ -121,7 +121,7 @@ public final class Constants {
         public static final double ACP_ENCODER_OFFSET = 0.854;
         public static final double ACP_STARTING_ANGLE = 32.0;
 
-        public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
+        public static final double ACP_GEAR_RATIO = (1 / 20) * (11 / 52) * (30 / 68) * (1 / 1.5);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 90.0;
         public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0;
