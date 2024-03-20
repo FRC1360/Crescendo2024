@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmChassisPivotSubsystem.ArmShintakeAngleMessenger;
 import frc.robot.util.OrbitPID;
 import frc.robot.util.OrbitTimer;
 
@@ -37,7 +38,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public TrapezoidProfile.Constraints STPMotionProfileConstraints;
 
-    private Double angularVelocity;
+    private Double angularVelocity = 0.0;
     private double lastTime;
     private Double lastAngle;
 
@@ -52,6 +53,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public InterpolatingDoubleTreeMap shintakePivotDistanceAngleMap;
 
+    public ArmShintakeAngleMessenger armSTPAngleMessenger;
+
     private double kP = 0.025;
     private double kI = 0.0;
     private double kD = 0.0;
@@ -61,7 +64,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     private double maxVelocity;
 
-    public ShintakePivotSubsystem() {
+    public ShintakePivotSubsystem(ArmShintakeAngleMessenger armSTPAngleMessenger) {
         this.movePIDController = new PIDController(kP, kI, kD); // TODO - Tune || 0.025, 0.0, 0.4
 
         this.STPMotorMaster = new CANSparkMax(Constants.STPConstants.STP_MOTOR_MASTER, MotorType.kBrushless);
@@ -89,8 +92,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.STP_ENCODER_CHANNEL);
 
-        this.maxVelocity = 200.0;
-        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 100); // TODO - Tune
+        this.maxVelocity = 220.0;
+        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 120); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.STPMotionProfileConstraints);
 
         // this.cacheOffset = 0.0;
@@ -107,7 +110,11 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         Preferences.initDouble("Shintake Pivot FeedForward kG", kG);
         Preferences.initDouble("Shintake Pivot FeedForward kV", kV);
 
-        resetMotorRotations();
+        // resetMotorRotations();
+
+        if (this.STPMotorMaster.getEncoder().setPosition(0.0) != REVLibError.kOk) {
+            DriverStation.reportError("Failed to set position on STP NEO Encoder", true);
+        }
 
         this.timer = new OrbitTimer();
         this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), 0.0); // this.getSTPAngle(), 0.0);
@@ -125,6 +132,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.shintakePivotDistanceAngleMap.put(2.5, 90.0 - 26.916);
         this.shintakePivotDistanceAngleMap.put(3.0, 90.0 - 22.56);
 
+        this.armSTPAngleMessenger = armSTPAngleMessenger;
     }
 
     public double getMotorRotations() {
@@ -151,7 +159,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
     public void resetMotorRotations() {
         if (this.absoluteEncoder.getAbsolutePosition() == 0.0) {
             DriverStation.reportError("STP Absolute encoder reports 0.0! Possibly not connected properly!", true);
-            System.exit(1);
+            // System.exit(1);
         }
         double newPos = (this.absoluteEncoder.getAbsolutePosition() - this.STPOffset);
 
@@ -165,6 +173,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("STP_Encoder_Updated", false);
         }
 
+        this.lastTime = -1;
     }
 
     public void setIdleMode(IdleMode mode) {
@@ -183,6 +192,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
         // System.exit(1);
         // }
+        voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
 
@@ -244,17 +254,17 @@ public class ShintakePivotSubsystem extends SubsystemBase {
                 || this.targetAngle <= Constants.STPConstants.STP_MIN_ANGLE) {
             DriverStation.reportError("Tried to set STP to above or below max or min; Target: " + this.targetAngle,
                     true);
-            System.exit(1);
+            // System.exit(1);
         }
         this.targetAngle = targetAngle + this.cacheOffset;
 
         this.movePIDController.reset();
 
         this.motionProfileStartState = new TrapezoidProfile.State(this.getSTPAngle(), this.getAngularVelocity());
-        this.motionProfileEndState = new TrapezoidProfile.State(targetAngle, 0.0);
+        this.motionProfileEndState = new TrapezoidProfile.State(this.targetAngle, 0.0);
         this.timer.start();
 
-        System.out.println("Target angle for STP scheduled for: " + targetAngle);
+        System.out.println("Target angle for STP scheduled for: " + this.targetAngle);
     }
 
     public double getTargetAngle() {
@@ -268,30 +278,42 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // encoderPosition * 360.0 = angle of motor rotation
         // angle of motor rotation * GEAR_RATIO = ACP angle
         // ACP angle % 360 = keep range between 0-360
-        return (encoderPosition * 360.0) % 360;
+        return (encoderPosition * 360.0); // % 360;
     }
 
-    public void updateAngularVelocity() {
-        // time in seconds
-        double currentTime = (System.currentTimeMillis() / 1000.0);
-        double currentAngle = this.getSTPAngle();
+    // public void updateAngularVelocity() {
+    // // time in seconds
+    // double currentTime = (System.currentTimeMillis() / 1000.0);
+    // double currentAngle = this.getSTPAngle();
 
-        if (lastTime != -1) {
-            double deltaTime = (currentTime - lastTime); /// 1000.0;
+    // if (lastTime != -1) {
+    // double deltaTime = (currentTime - lastTime); /// 1000.0;
 
-            this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
-            this.lastAngle = currentAngle;
-        }
+    // this.angularVelocity = (currentAngle - lastAngle) / deltaTime;
+    // this.lastAngle = currentAngle;
+    // }
 
-        this.lastTime = currentTime;
-    }
+    // this.lastTime = currentTime;
+    // }
 
     public Double getAngularVelocity() {
-        return this.angularVelocity;
+        return this.rotationsToAngleConversion(this.STPMotorMaster.getEncoder().getVelocity()) / 60.0; // divide: 60 RPM
+                                                                                                       // -> deg/sec
     }
 
     public boolean atTarget() {
         return Math.abs(this.getTargetAngle() - this.getSTPAngle()) <= Constants.STPConstants.STP_GO_TO_POS_TOLERANCE;
+    }
+
+    public double calculateAngleToHorizontal(double STPTargetAngle) {
+        // Accounts for ACP and STP angle to get angle which the STP is with respect to
+        // horizontal
+        // For feedforward
+        // According to traversal C = 180.0, ACP + STP + remaining to horizontal =
+        // 180.0, remaining is relative STP
+        double angToHor = 180.0 - this.armSTPAngleMessenger.getACPAngle() - STPTargetAngle;
+        SmartDashboard.putNumber("STP_Angle_To_Horizontal", angToHor);
+        return angToHor;
     }
 
     public void resetEncoderOffset() {
@@ -313,26 +335,27 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         double pidOut = this.movePIDController.calculate(input, target);
 
         double feedforwardOutput = this.STPFeedForward.calculate(
-                Math.toRadians(profileTarget.position),
+                Math.toRadians(calculateAngleToHorizontal(profileTarget.position)),
                 Math.toRadians(this.getAngularVelocity()));
 
-        return pidOut; // + feedforwardOutput;
+        SmartDashboard.putNumber("STP_Feedforward_Out", feedforwardOutput);
+
+        return pidOut + feedforwardOutput;
     }
 
     @Override
     public void periodic() { // Displays angles, PID, and FF values for STP (also updates angular Velocity)
-        updateAngularVelocity();
+        // updateAngularVelocity();
         updateSmartDashboard();
 
         // All of Control Loop motion is done within the subsystem -- simply set a
         // target angle and the subsystem will go there
-        // When the motion profile is finished, the result which it outputs will be the
+        // When the motion profile is finished, the result which it outputs will be
+        // the
         // goal, making it a PID/FF control loop only
         double out = calculateControlLoopOutput();
         SmartDashboard.putNumber("STP_Control_Loop_Out", out);
         this.setSTPNormalizedVoltage(out);
-        // SmartDashboard.putNumber("Current Angle: ", this.getACPAngle());
-        // SmartDashboard.putNumber("Target Angle: ", true);
     }
 
     public void updateSmartDashboard() {
