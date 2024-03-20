@@ -115,6 +115,13 @@ public class RobotContainer {
                 shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
             .andThen(new ShootSpeakerCommand(shintakeSubsystem)));
 
+    NamedCommands.registerCommand("AmpShoot",
+        new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
+        .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+            shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
+        .andThen(new ShootSpeakerCommand(shintakeSubsystem)));
+
+
     System.out.println(AutoBuilder.getAllAutoNames());
     for (String pathName : AutoBuilder.getAllAutoNames()) {
       this.tempInitAutos.add(new FetchPath(pathName).getCommand());
