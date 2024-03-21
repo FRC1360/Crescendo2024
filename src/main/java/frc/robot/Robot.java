@@ -239,7 +239,7 @@ public class Robot extends LoggedRobot {
 		m_test.acpAngle = SmartDashboard.getNumber("TEST_ACP_ANGLE", m_test.acpAngle);
 		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle);
 		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel);
-		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
+		m_test.stRightVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
 		m_test.stIntakeVel = SmartDashboard.getNumber("TEST_INTAKE_VEL", m_test.stIntakeVel);
 		m_test.clHeight = SmartDashboard.getNumber("TEST_CLIMB_HEIGHT", m_test.clHeight);
 
