@@ -36,6 +36,14 @@ public class ClimberSubsystem extends SubsystemBase {
 		m_climbMotorLead.set(0);
 	}
 
+	public void raiseClimber() {
+		m_climbMotorLead.set(Constants.ClimbConstants.LEAD_CLIMBER_MOTOR__SPEED);
+	}
+
+	public void lowerClimber() {
+		m_climbMotorLead.set(-Constants.ClimbConstants.LEAD_CLIMBER_MOTOR__SPEED);
+	}
+
 	public void goToPosition() { // Rotations | Goes to the target position set with no limitations currently
 		if (this.targetHeight > getEncoderPosition()) {
 			m_climbMotorLead.set(Constants.ClimbConstants.LEAD_CLIMBER_MOTOR__SPEED);
