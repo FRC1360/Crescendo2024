@@ -408,6 +408,14 @@ public class RobotContainer {
 						operator_controller));
 		operator_controller.rightBumper().whileTrue(
 				new STPMoveManual(shintakePivotSubsystem, () -> operator_controller.getRightY(), operator_controller));
+
+		operator_controller.leftTrigger()
+				.whileTrue(new RepeatCommand(new InstantCommand(() -> climberSubsystem.lowerClimber())));
+		operator_controller.leftTrigger().onFalse(new InstantCommand(() -> climberSubsystem.stopClimber()));
+
+		operator_controller.rightTrigger()
+				.whileTrue(new RepeatCommand(new InstantCommand(() -> climberSubsystem.raiseClimber())));
+		operator_controller.rightTrigger().onFalse(new InstantCommand(() -> climberSubsystem.stopClimber()));
 		// // new Trigger(m_exampleSubsystem::exampleCondition)
 		// // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
