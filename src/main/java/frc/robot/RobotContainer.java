@@ -90,7 +90,7 @@ public class RobotContainer {
 	public SendableChooser<Command> autoChooser;
 
 	public ArrayList<Command> tempInitAutos;
-	public ClimberSubsystem climberSubsystem;
+	public ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 
 	// public final EventLoop loop = new EventLoop();
 
