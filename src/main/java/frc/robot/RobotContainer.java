@@ -34,6 +34,7 @@ import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.SOURCE_SIDE;
 import frc.robot.commands.shintake.AmpScoreCommand;
+import frc.robot.commands.shintake.DefaultIntakeCommand;
 import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.shintake.OutakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
@@ -101,6 +102,7 @@ public class RobotContainer {
 
 		// m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
 
+		shintakeSubsystem.setDefaultCommand(new DefaultIntakeCommand(shintakeSubsystem));
 		// Configure the trigger bindings
 		configureBindings();
 
