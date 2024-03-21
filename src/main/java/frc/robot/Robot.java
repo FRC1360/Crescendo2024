@@ -201,7 +201,7 @@ public class Robot extends LoggedRobot {
 	}
 
 	private class TestContext {
-		public double acpAngle = Constants.HOME_POSITION_ACP;
+		public double acpAngle = 0;
 		public double stpAngle = 0;
 		public double stLeftVel = 0;
 		public double stRightVel = 0;
@@ -243,9 +243,9 @@ public class Robot extends LoggedRobot {
 		m_test.stIntakeVel = SmartDashboard.getNumber("TEST_INTAKE_VEL", m_test.stIntakeVel);
 		m_test.clHeight = SmartDashboard.getNumber("TEST_CLIMB_HEIGHT", m_test.clHeight);
 
-		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle);
-		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle);
-		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stLeftVel, m_test.stRightVel);
+		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.stpAngle);
+		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.acpAngle);
+		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stRightVel, m_test.stLeftVel);
 		m_robotContainer.shintakeSubsystem.varIntake(m_test.stIntakeVel);
 		m_robotContainer.climberSubsystem.setTargetHeight(m_test.clHeight);
 
