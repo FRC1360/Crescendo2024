@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.5168910337820676,
-      "y": 7.337966590826799
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,13 +8,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker Lineup left"
+            "pathName": "Speaker Lineup middle"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Speaker to midfield"
+            "name": "SubwooferShoot"
           }
         }
       ]
