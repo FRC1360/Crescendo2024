@@ -58,17 +58,16 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	public boolean climbMotorReady(double targetPos) {
 		return !(getEncoderPosition() < 0) && Math.abs(getEncoderPosition()
-		 - targetPos) <= 0.5; 
-		 //this is in rotations so the deadband number is much smaller
-		}
-
-
-	public void setIsSafe(boolean isSafe) {
-			this.isSafe = isSafe;
+				- targetPos) <= 0.5;
+		// this is in rotations so the deadband number is much smaller
 	}
 
-		public boolean getIsSafe() {
-			return this.isSafe;
+	public void setIsSafe(boolean isSafe) {
+		this.isSafe = isSafe;
+	}
+
+	public boolean getIsSafe() {
+		return this.isSafe;
 	}
 
 	public boolean getIsExtended() {
@@ -80,11 +79,12 @@ public class ClimberSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void periodic() { // displays if it is extended, if it is safe, the current height in rotations, and sets the position to the target Height
+	public void periodic() { // displays if it is extended, if it is safe, the current height in rotations,
+								// and sets the position to the target Height
 		SmartDashboard.putBoolean("Is extended ", isExtended);
 		SmartDashboard.putBoolean("Is climber safe", isSafe);
 		SmartDashboard.putNumber("Climber height in rotations", getEncoderPosition());
-		goToPosition();
+		// goToPosition();
 
 	}
 }

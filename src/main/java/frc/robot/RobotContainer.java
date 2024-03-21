@@ -115,14 +115,18 @@ public class RobotContainer {
 						.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
 								armChassisPivotSubsystem,
 								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
-						.andThen(new ShootSpeakerCommand(shintakeSubsystem)));
+						.andThen(new ShootSpeakerCommand(shintakeSubsystem))
+						.andThen(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
+								ledSubsystem, sm)));
 
 		NamedCommands.registerCommand("AmpShoot",
 				new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 						.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
 								armChassisPivotSubsystem,
 								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
-						.andThen(new ShootSpeakerCommand(shintakeSubsystem)));
+						.andThen(new ShootSpeakerCommand(shintakeSubsystem))
+						.andThen(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
+								ledSubsystem, sm)));
 
 		System.out.println(AutoBuilder.getAllAutoNames());
 		for (String pathName : AutoBuilder.getAllAutoNames()) {
