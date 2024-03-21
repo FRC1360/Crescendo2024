@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.autos.FetchPath;
 import frc.robot.autos.PathfindAuto;
 import frc.robot.commands.DefaultDriveCommand;
@@ -111,11 +112,13 @@ public class RobotContainer {
 		this.tempInitAutos.clear(); // in case if robot is not power cycled, data within class are typically cached
 
 		NamedCommands.registerCommand("SubwooferShoot",
-				new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-						.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
-								armChassisPivotSubsystem,
-								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
-						.andThen(new ShootSpeakerCommand(shintakeSubsystem))
+				// new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
+				// .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
+				// armChassisPivotSubsystem,
+				// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
+				new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem,
+						shintakeSubsystem, sm)
+						.andThen(new ShootSpeakerCommand(shintakeSubsystem).raceWith(new WaitCommand(2.0)))
 						.andThen(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
 								ledSubsystem, sm)));
 
@@ -272,11 +275,12 @@ public class RobotContainer {
 		left_controller.button(2).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
-		left_controller.button(3)
-				.whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
-						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-						() -> right_controller.button(3).getAsBoolean())
-						.alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
+		// left_controller.button(3)
+		// .whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
+		// armChassisPivotSubsystem,
+		// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
+		// () -> right_controller.button(3).getAsBoolean())
+		// .alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
 
 		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,

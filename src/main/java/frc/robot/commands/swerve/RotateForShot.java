@@ -12,46 +12,50 @@ import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class RotateForShot extends Command {
-    
-    private SwerveSubsystem swerveSubsystem; 
-    private DoubleSupplier xDriveSupplier; 
-    private DoubleSupplier yDriveSupplier; 
 
-    public RotateForShot(SwerveSubsystem swerve, DoubleSupplier xDriveSupplier, DoubleSupplier yDriveSupplier) { 
-        this.swerveSubsystem = swerve; 
-        this.xDriveSupplier = xDriveSupplier; 
-        this.yDriveSupplier = yDriveSupplier; 
+    private SwerveSubsystem swerveSubsystem;
+    private DoubleSupplier xDriveSupplier;
+    private DoubleSupplier yDriveSupplier;
+
+    public RotateForShot(SwerveSubsystem swerve, DoubleSupplier xDriveSupplier, DoubleSupplier yDriveSupplier) {
+        this.swerveSubsystem = swerve;
+        this.xDriveSupplier = xDriveSupplier;
+        this.yDriveSupplier = yDriveSupplier;
 
         addRequirements(swerve);
     }
 
-    public double convertToAngle() { 
-        Pose2d robotPose = swerveSubsystem.currentPose(); 
-        double deltaX = robotPose.getX() - AlignmentConstants.INTO_BLUE_SPEAKER.getX(); 
-        double deltaY = robotPose.getY() - AlignmentConstants.INTO_BLUE_SPEAKER.getY(); 
-        if (DriverStation.getAlliance().isPresent() 
-                && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) { 
-            deltaX = robotPose.getX() - AlignmentConstants.INTO_RED_SPEAKER.getX(); 
+    public double convertToAngle() {
+        Pose2d robotPose = swerveSubsystem.currentPose();
+        double deltaX = robotPose.getX() - AlignmentConstants.INTO_BLUE_SPEAKER.getX();
+        double deltaY = robotPose.getY() - AlignmentConstants.INTO_BLUE_SPEAKER.getY();
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            deltaX = robotPose.getX() - AlignmentConstants.INTO_RED_SPEAKER.getX();
             deltaY = robotPose.getY() - AlignmentConstants.INTO_RED_SPEAKER.getY();
-            return -Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); //+ 180.0;;
+            return -Math.toDegrees(Math.atan(deltaY / deltaX))
+                    + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); // + 180.0;;
         }
-        return Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees() - 180.0;
-    }
-
-    @Override 
-    public void execute() { 
-
-        double targetAngle = convertToAngle(); 
-
-        Pose2d curPose = this.swerveSubsystem.currentPose(); 
-
-        double rotOut = this.swerveSubsystem.calculateControlLoopDriveOutput(new Pose2d(curPose.getTranslation(), Rotation2d.fromDegrees(targetAngle))).rotationOut; 
-
-        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()), rotOut, true, false);
+        return Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees(); // -
+                                                                                                                        // 180.0;
     }
 
     @Override
-    public boolean isFinished() { 
+    public void execute() {
+
+        double targetAngle = convertToAngle();
+
+        Pose2d curPose = this.swerveSubsystem.currentPose();
+
+        double rotOut = this.swerveSubsystem.calculateControlLoopDriveOutput(
+                new Pose2d(curPose.getTranslation(), Rotation2d.fromDegrees(targetAngle))).rotationOut;
+
+        this.swerveSubsystem.drive(new Translation2d(xDriveSupplier.getAsDouble(), yDriveSupplier.getAsDouble()),
+                rotOut, true, false);
+    }
+
+    @Override
+    public boolean isFinished() {
         return false;
     }
 }

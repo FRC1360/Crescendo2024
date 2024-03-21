@@ -116,7 +116,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	public boolean getShooterReady(double prev) { // Sets speed of intake [.set()] | NO Max or Min
 		varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-		if (getBackEncoder() - prev > 0.5) {
+		if (Math.abs(getBackEncoder() - prev) > 0.25) {
 			stopIntake();
 			return true;
 		}
