@@ -27,6 +27,7 @@ import frc.robot.commands.ShintakePivot.STPGoToPositionCommand;
 import frc.robot.commands.ShintakePivot.STPMoveManual;
 //import frc.robot.commands.ShintakePivot.STPMoveManual;
 import frc.robot.commands.assembly.AssemblyAmpPositionCommand;
+import frc.robot.commands.assembly.AssemblyClimbCommand;
 import frc.robot.commands.assembly.AssemblyHomePositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand;
 import frc.robot.commands.assembly.AssemblySourcePositionCommand;
@@ -100,9 +101,6 @@ public class RobotContainer {
 	public RobotContainer() {
 		this.swerveSubsystem = new SwerveSubsystem();
 
-		// m_shintakeSubsystem.setDefaultCommand(m_defaultShintakeCommand);
-
-		shintakeSubsystem.setDefaultCommand(new DefaultIntakeCommand(shintakeSubsystem));
 		// Configure the trigger bindings
 		configureBindings();
 
@@ -296,6 +294,12 @@ public class RobotContainer {
 						() -> right_controller.button(3).getAsBoolean())));
 
 		right_controller.button(5).whileFalse(
+				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+
+		right_controller.button(4).whileTrue(
+				new AssemblyClimbCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+
+		right_controller.button(4).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		right_controller

@@ -15,7 +15,6 @@ public class IntakeCommand extends Command {
 
 	private ShintakeSubsystem intake;
 	private LEDSubsystem ledSubsystem;
-	private int count = 0;
 
 	public IntakeCommand(ShintakeSubsystem intake, LEDSubsystem ledSubsystem) {
 		// Use addRequirements() here to declare subsystem dependencies.
@@ -26,7 +25,6 @@ public class IntakeCommand extends Command {
 
 	@Override
 	public void initialize() {
-		intake.resetShintakeCount();
 		intake.stopShooter();
 		intake.stopIntake();
 	}
@@ -34,26 +32,13 @@ public class IntakeCommand extends Command {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		count = intake.getShintakeCount();
-		intake.resetShintakeCount();
-		if (count == 0)
-			intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
-		// count = intake.getShintakeCount();
-		// if (!intake.getDigitalInput()) {
-		// intake.varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-		// }
-		else if (count >= 1) {
-			intake.varIntake(0.05);
-			ledSubsystem.setLEDNote();
-		}
+		intake.varIntake(Constants.ShintakeConstants.INITIAL_DEFAULT_INTAKE_SPEED);
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
 		intake.stopIntake();
-		count = 0;
-		intake.resetShintakeCount();
 	}
 
 	// Returns true when the command should end.

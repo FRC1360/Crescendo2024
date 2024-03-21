@@ -46,8 +46,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
     public static class ClimbConstants {
-        public static final int CLIMBER_LEAD_CAN_ID = 99;
-        public static final int CLIMBER_SLAVE_CAN_ID = 98;
+        public static final int CLIMBER_LEAD_CAN_ID = 30;
+        public static final int CLIMBER_SLAVE_CAN_ID = 31;
         public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
         public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.4;
         public static final double CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS = 0;
@@ -103,7 +103,7 @@ public final class Constants {
         public static final int STP_MOTOR_SLAVE = 43;
         public static final double STP_MAX_ANGLE = 245.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at
                                                           // 360
-        public static final double STP_MIN_ANGLE = -180.0;
+        public static final double STP_MIN_ANGLE = -45.0;
         public static final int STP_ENCODER_CHANNEL = 1;
         public static final double STP_GEAR_RATIO = (11.0 / 60.0) * (1.0 / 20.0);
         public static final double STP_ENCODER_OFFSET = 0.307;
@@ -121,7 +121,7 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (1.0 / 35.0) * (11.0 / 52.0) * (30.0 / 68.0) * (2.0 / 3.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 90.0;
-        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0;
+        public static final double MIN_ACP_ANGLE = 19.0; // Can't go lower, limelight //-10.0; //20.0;
 
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
         public static final double ACP_SLOP_OCCUR_ANGLE = 75.0;
@@ -143,7 +143,7 @@ public final class Constants {
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 43.0; // 0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 17.0; // 50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 21.0; // 50.0;
 
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; // 50.0;
@@ -166,8 +166,8 @@ public final class Constants {
     public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION
-    public static final double CLIMB_POSITION_STP = 180.0;
-    public static final double CLIMB_POSITION_ACP = 80.0;
+    public static final double CLIMB_POSITION_STP = 125.0;
+    public static final double CLIMB_POSITION_ACP = 21.0;
 
     /*
      * Swerve Constants (newly added ones)

@@ -28,7 +28,7 @@ public class ACPGoToPositionCommand extends Command {
 
     @Override
     public void execute() {
-        if (this.STP.getSTPAngle() < 120.0 && !initalized) {
+        if (this.STP.getSTPAngle() < 140.0 && !initalized) {
             this.ACP.setTargetAngle(angle);
             initalized = true;
         }
