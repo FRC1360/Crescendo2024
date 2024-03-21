@@ -61,8 +61,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     private boolean goingUp = true;
     private boolean specialCase = false;
 
-    private double kP = 0.0325;
-    private double kI = 0.0;
+    private double kP = 0.3;
+    private double kI = 0.00001;
     private double kD = 0.0;
     private double kS = 0.0;
     private double kG = 0.0;
@@ -104,16 +104,17 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         // this.ACPMotorSlave.setInverted(true);
 
         this.ACPMotorMaster.getEncoder().setPositionConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
+        this.ACPMotorMaster.getEncoder().setVelocityConversionFactor(Constants.ACPConstants.ACP_GEAR_RATIO);
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.ACPConstants.ACP_ENCODER_CHANNEL);
 
-        this.maxVelocity = 60.0;
+        this.maxVelocity = 85.0;
         // This units are deg / second for velocity and deg / sec^2 for acceleration
-        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 60);
+        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 120.0);
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints);
 
-        this.slowMaxVelocity = 25.0;
-        this.slowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(this.slowMaxVelocity, 15.0));
+        this.slowMaxVelocity = 70.0;
+        this.slowProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(this.slowMaxVelocity, 100.0));
 
         Preferences.initDouble("ACP_Move_P_Gain", this.movePIDController.getP());
         Preferences.initDouble("ACP_Move_I_Gain", this.movePIDController.getI());
@@ -211,7 +212,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
             // System.exit(1);
         }
 
-        voltage = 0.0;
+        // voltage = 0.0;
         this.ACPMotorMaster.setVoltage(voltage);
         // this.ACPMotorSlave.setVoltage(voltage);
     }

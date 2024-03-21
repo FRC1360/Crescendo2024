@@ -55,7 +55,7 @@ public class AssemblySubwooferPositionCommand extends SequentialCommandGroup {
                                                                                                         () -> SmartDashboard
                                                                                                                         .putString("Subwoofer stage",
                                                                                                                                         "STAGE 3")))// ,
-                                                        ).alongWith(
+                                                        ).andThen(
                                                                         new ShootSpeakerFullCommand(shintake,
                                                                                         ACPSubsystem)),
                                         new InstantCommand(() -> ledSubsystem.setLEDScoring()),

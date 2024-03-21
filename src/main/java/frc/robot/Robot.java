@@ -93,10 +93,10 @@ public class Robot extends LoggedRobot {
 		}
 
 		if (isReal()) { // real bot
-			Logger.addDataReceiver(new WPILOGWriter());
+			// Logger.addDataReceiver(new WPILOGWriter());
 			Logger.addDataReceiver(new NT4Publisher());
 			PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kRev);
-            powerDistribution.setSwitchableChannel(true);
+			powerDistribution.setSwitchableChannel(true);
 		} else if (!Constants.isReplay) { // regular sim
 			Logger.addDataReceiver(new NT4Publisher());
 		} else { // replay
@@ -110,7 +110,7 @@ public class Robot extends LoggedRobot {
 
 		Logger.registerURCL(URCL.startExternal());
 		Logger.start();
-		DataLogManager.start();
+		// DataLogManager.start();
 	}
 
 	/**
@@ -141,7 +141,6 @@ public class Robot extends LoggedRobot {
 	/** This function is called once each time the robot enters Disabled mode. */
 	@Override
 	public void disabledInit() {
-		new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
 	}
 
 	@Override
@@ -152,7 +151,6 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.armChassisPivotSubsystem.resetArmTargetAngle();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
 		m_robotContainer.shintakePivotSubsystem.resetSTPTargetAngle();
-		m_robotContainer.shintakePivotSubsystem.resetMotorRotations();
 	}
 
 	/**
@@ -167,9 +165,9 @@ public class Robot extends LoggedRobot {
 		// Rotation2d.fromDegrees(90.0)));
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+			m_robotContainer.getHoming()
+					.andThen(m_autonomousCommand).schedule();
 		}
-		m_robotContainer.getHoming().schedule();
 	}
 
 	/** This function is called periodically during autonomous. */

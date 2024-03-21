@@ -55,7 +55,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
 
     public ArmShintakeAngleMessenger armSTPAngleMessenger;
 
-    private double kP = 0.025;
+    private double kP = 0.05;
     private double kI = 0.0;
     private double kD = 0.0;
     private double kS = 0.0;
@@ -89,11 +89,12 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // this.STPMotorSlave.setInverted(true);
 
         this.STPMotorMaster.getEncoder().setPositionConversionFactor(Constants.STPConstants.STP_GEAR_RATIO);
+        this.STPMotorMaster.getEncoder().setVelocityConversionFactor(Constants.STPConstants.STP_GEAR_RATIO);
 
         this.absoluteEncoder = new DutyCycleEncoder(Constants.STPConstants.STP_ENCODER_CHANNEL);
 
         this.maxVelocity = 220.0;
-        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 120); // TODO - Tune
+        this.STPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 360); // TODO - Tune
         this.stpMotionProfile = new TrapezoidProfile(this.STPMotionProfileConstraints);
 
         // this.cacheOffset = 0.0;
@@ -192,7 +193,7 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         // + 25.0 + "; Actual velocity: " + this.getAngularVelocity(), true);
         // System.exit(1);
         // }
-        voltage = 0.0;
+        // voltage = 0.0;
         this.STPMotorMaster.setVoltage(voltage);
     }
 
