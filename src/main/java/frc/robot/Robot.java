@@ -202,12 +202,11 @@ public class Robot extends LoggedRobot {
 
 	private class TestContext {
 		public double acpAngle = Constants.HOME_POSITION_ACP;
-		public double stpAngle = Constants.HOME_POSITION_STP;
+		public double stpAngle = 0;
 		public double stLeftVel = 0;
 		public double stRightVel = 0;
 		public double stIntakeVel = 0;
 		public double clHeight = 0;
-		public double clSpeed = 0;
 	}
 
 	private TestContext m_test = new TestContext();
@@ -216,6 +215,21 @@ public class Robot extends LoggedRobot {
 	public void testInit() {
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
+
+		m_test.acpAngle = m_robotContainer.armChassisPivotSubsystem.getTargetAngle();
+		m_test.stpAngle = m_robotContainer.shintakePivotSubsystem.getTargetAngle();
+		m_test.stLeftVel = 0;
+		m_test.stRightVel = 0;
+		m_test.stIntakeVel = 0;
+		m_test.clHeight = m_robotContainer.climberSubsystem.gettargetHeight();
+
+		SmartDashboard.putNumber("TEST_ACP_ANGLE", m_test.acpAngle); // Degrees | Min = 0, Max = 80.0
+		SmartDashboard.putNumber("TEST_STP_ANGLE", m_test.stpAngle); // Degrees | Min = -180, Max = 360
+		SmartDashboard.putNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel); // RPM | limit is 6784
+		SmartDashboard.putNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel); // RPM | limit is 6784
+		SmartDashboard.putNumber("TEST_INTAKE_VEL", m_test.stIntakeVel); // RPM | limit is 6784
+		SmartDashboard.putNumber("TEST_CLIMB_HEIGHT", m_test.clHeight); // Height in Motor rotations | Min and Max
+																		// currently unknown
 	}
 
 	/** This function is called periodically during test mode. */
@@ -226,13 +240,14 @@ public class Robot extends LoggedRobot {
 		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle);
 		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel);
 		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
-		m_test.clHeight = SmartDashboard.getNumber("Climb target height", m_test.clHeight);
+		m_test.stIntakeVel = SmartDashboard.getNumber("TEST_INTAKE_VEL", m_test.stIntakeVel);
+		m_test.clHeight = SmartDashboard.getNumber("TEST_CLIMB_HEIGHT", m_test.clHeight);
 
-		m_robotContainer.climberSubsystem.setTargetHeight(m_test.clHeight);
 		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle);
 		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle);
 		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stLeftVel, m_test.stRightVel);
 		m_robotContainer.shintakeSubsystem.varIntake(m_test.stIntakeVel);
+		m_robotContainer.climberSubsystem.setTargetHeight(m_test.clHeight);
 
 		m_robotContainer.shintakePivotSubsystem.periodic();
 		m_robotContainer.armChassisPivotSubsystem.periodic();
