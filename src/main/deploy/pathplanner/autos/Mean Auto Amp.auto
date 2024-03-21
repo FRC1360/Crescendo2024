@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AmpShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Mean Path Amp"
