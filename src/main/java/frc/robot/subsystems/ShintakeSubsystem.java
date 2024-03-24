@@ -116,7 +116,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	public boolean getShooterReady(double prev) { // Sets speed of intake [.set()] | NO Max or Min
 		varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-		if (Math.abs(getBackEncoder() - prev) > 0.25) {
+		if (Math.abs(getBackEncoder() - prev) > 0.5) {
 			stopIntake();
 			return true;
 		}
@@ -210,6 +210,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 				Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER);
 		SmartDashboard.putNumber("Target right Wheel Velocity",
 				Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER);
+
+		SmartDashboard.putBoolean("SHOOTER READY", this.shooterWheelsReady());
 		// SmartDashboard.putNumber("left Wheel kp", kp);
 		// leftWheelPID.setP()
 		// SmartDashboard.getNumber("right kP", rightkP);

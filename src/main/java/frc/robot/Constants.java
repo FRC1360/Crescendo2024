@@ -49,7 +49,7 @@ public final class Constants {
         public static final int CLIMBER_LEAD_CAN_ID = 30;
         public static final int CLIMBER_SLAVE_CAN_ID = 31;
         public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
-        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.4;
+        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.8;
         public static final double CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS = 0;
         public static final double CLIMBER_ENCODER_CLIMBED_HEIGHT_IN_ROTATIONS = 0;
         public static final double HOME_POSITION_IN_ROTATIONS = 0.0;
@@ -121,7 +121,7 @@ public final class Constants {
         public static final double ACP_GEAR_RATIO = (1.0 / 35.0) * (11.0 / 52.0) * (30.0 / 68.0) * (2.0 / 3.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
         public static final double MAX_ACP_ANGLE = 90.0;
-        public static final double MIN_ACP_ANGLE = 19.0; // Can't go lower, limelight //-10.0; //20.0;
+        public static final double MIN_ACP_ANGLE = 10.0; // Can't go lower, limelight //-10.0; //20.0;
 
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
         public static final double ACP_SLOP_OCCUR_ANGLE = 75.0;
@@ -137,7 +137,7 @@ public final class Constants {
     public static final double HOME_POSITION_ACP = 21.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 145.0; // -140.0 - 70.0; // Must go positive, wires will
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0; // -140.0 - 70.0; // Must go positive, wires will
                                                                     // break going negative
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 

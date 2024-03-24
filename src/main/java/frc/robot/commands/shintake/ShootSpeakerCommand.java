@@ -29,8 +29,8 @@ public class ShootSpeakerCommand extends Command {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if (m_shooter.shooterWheelsReady())
-			m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
+		// if (m_shooter.shooterWheelsReady())
+		m_shooter.varIntake(Constants.ShintakeConstants.SHOOT_SPEED_BACK_SPEAKER);
 	}
 
 	// Called once the command ends or is interrupted.

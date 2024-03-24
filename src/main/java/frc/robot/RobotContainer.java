@@ -118,9 +118,21 @@ public class RobotContainer {
 				// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
 				new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem,
 						shintakeSubsystem, sm)
-						.andThen(new ShootSpeakerCommand(shintakeSubsystem).raceWith(new WaitCommand(2.0)))
+						.andThen(new ShootSpeakerCommand(shintakeSubsystem).raceWith(new WaitCommand(0.5)))
 						.andThen(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
 								ledSubsystem, sm)));
+
+		NamedCommands.registerCommand("SubwooferShootNoHome",
+				// new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
+				// .andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
+				// armChassisPivotSubsystem,
+				// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm, () -> false))
+				new AssemblySubwooferPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem,
+						shintakeSubsystem, sm)
+						.andThen(new ShootSpeakerCommand(shintakeSubsystem).raceWith(new WaitCommand(0.5))));
+
+		NamedCommands.registerCommand("HomeCommand",
+				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		NamedCommands.registerCommand("AmpShoot",
 				new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
