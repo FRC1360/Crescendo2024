@@ -147,7 +147,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 	}
 
 	public boolean shooterWheelsReady() {
-		return getVelocityLeft() != 0 && getVelocityRight() != 0
+		return getVelocityLeft() != 0 || getVelocityRight() != 0
 				&& Math.abs(getVelocityLeft() - this.leftVelocity) <= 100
 				&& Math.abs(getVelocityRight() - this.rightVelocity) <= 100;
 	}

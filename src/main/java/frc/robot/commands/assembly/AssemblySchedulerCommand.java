@@ -77,6 +77,7 @@ public class AssemblySchedulerCommand extends Command {
         double d = Math.hypot(x, y);
 
         double theta = Math.toDegrees(Math.atan(y / x)) + Math.toDegrees(Math.acos(f / d)) - 90;
+        theta = theta + (43 - theta) * 0.5;
         return theta;
     }
 
@@ -148,10 +149,10 @@ public class AssemblySchedulerCommand extends Command {
                     // SmartDashboard.putNumber("Target angle",
                     // shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
 
-                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot,
+                    this.assemblyCommand = new AssemblyDefendedArmPositionCommand(chassisPivot,
                             shintakePivot, led, shintake, sm,
                             () -> calculateArmAngle(swerveSubsystem
-                                    .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))));
+                                    .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
                     break;
                 default:
                     break;
