@@ -148,10 +148,10 @@ public class AssemblySchedulerCommand extends Command {
                     // SmartDashboard.putNumber("Target angle",
                     // shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
 
-                    this.assemblyCommand = new RepeatCommand(new AssemblyDefendedArmPositionCommand(chassisPivot,
+                    this.assemblyCommand = new AssemblyDefendedArmPositionCommand(chassisPivot,
                             shintakePivot, led, shintake, sm,
                             () -> calculateArmAngle(swerveSubsystem
-                                    .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))));
+                                    .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
                     break;
                 default:
                     break;
