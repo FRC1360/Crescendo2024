@@ -36,7 +36,7 @@ import frc.robot.commands.assembly.AssemblySubwooferPositionCommand;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.ASSEMBLY_LEVEL;
 import frc.robot.commands.assembly.AssemblySchedulerCommand.SOURCE_SIDE;
 import frc.robot.commands.shintake.AmpScoreCommand;
-import frc.robot.commands.shintake.DefaultIntakeCommand;
+//import frc.robot.commands.shintake.DefaultIntakeCommand;
 import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.shintake.OutakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
@@ -337,7 +337,29 @@ public class RobotContainer {
 																												// alliance
 																												// color
 												() -> -modifyAlliance(modifyAxis(left_controller.getX()))
-														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2))));
+														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2,
+												true))));
+		left_controller
+				.button(
+						3)
+				.and(() -> !swerveSubsystem.manualDrive)
+				.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER_ARM)
+						.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
+								armChassisPivotSubsystem,
+								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
+								() -> right_controller.button(3).getAsBoolean())
+								.alongWith(
+										new RotateForShot(swerveSubsystem,
+												() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2, // Modify
+																												// axis
+																												// also
+																												// for
+																												// alliance
+																												// color
+												() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2,
+												false))));
 
 		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
@@ -379,6 +401,13 @@ public class RobotContainer {
 		// shintakePivotSubsystem));
 		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.RED_SOURCE).getCommand());
+
+		operator_controller.a().whileTrue(new PathfindAuto(swerveSubsystem,
+				AlignmentConstants.BLUE_SOURCE_CENTER).getCommand());
+		operator_controller.b().whileTrue(new PathfindAuto(swerveSubsystem,
+				AlignmentConstants.BLUE_SOURCE_LEFT).getCommand());
+		operator_controller.x().whileTrue(new PathfindAuto(swerveSubsystem,
+				AlignmentConstants.BLUE_SOURCE_RIGHT).getCommand());
 
 		// // left_controller.button(3).whileTrue(new
 		// // PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());
@@ -442,13 +471,6 @@ public class RobotContainer {
 		operator_controller.rightTrigger()
 				.whileTrue(new RepeatCommand(new InstantCommand(() -> climberSubsystem.raiseClimber())));
 		operator_controller.rightTrigger().onFalse(new InstantCommand(() -> climberSubsystem.stopClimber()));
-		// // new Trigger(m_exampleSubsystem::exampleCondition)
-		// // .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-		// // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-		// // pressed,
-		// // cancelling on release.
-		// // XboxController.kB.whileTrue(m_exampleSubsystem.exampleMethodCommand());
 	}
 
 	/**

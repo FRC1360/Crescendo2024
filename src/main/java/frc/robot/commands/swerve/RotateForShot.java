@@ -16,11 +16,16 @@ public class RotateForShot extends Command {
     private SwerveSubsystem swerveSubsystem;
     private DoubleSupplier xDriveSupplier;
     private DoubleSupplier yDriveSupplier;
+    // KD shot is short for kevin durant shot, high shot with arm at 90 degree angle
+    // and note shoting out of back
+    private boolean isKDShot;
 
-    public RotateForShot(SwerveSubsystem swerve, DoubleSupplier xDriveSupplier, DoubleSupplier yDriveSupplier) {
+    public RotateForShot(SwerveSubsystem swerve, DoubleSupplier xDriveSupplier, DoubleSupplier yDriveSupplier,
+            boolean isKDShot) {
         this.swerveSubsystem = swerve;
         this.xDriveSupplier = xDriveSupplier;
         this.yDriveSupplier = yDriveSupplier;
+        this.isKDShot = isKDShot;
 
         addRequirements(swerve);
     }
@@ -44,6 +49,9 @@ public class RotateForShot extends Command {
     public void execute() {
 
         double targetAngle = convertToAngle();
+        if (isKDShot) {
+            targetAngle = (targetAngle + 180) % 360;
+        }
 
         Pose2d curPose = this.swerveSubsystem.currentPose();
 
