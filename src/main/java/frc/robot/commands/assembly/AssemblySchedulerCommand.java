@@ -6,6 +6,12 @@ import java.util.function.Supplier;
 
 import javax.swing.GroupLayout.Alignment;
 
+import com.ctre.phoenix.Util;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,16 +76,42 @@ public class AssemblySchedulerCommand extends Command {
         return condition.getAsBoolean() ? onTrue : onFalse;
     }
 
-    private double calculateArmAngle(double distanceToCenter) {
-        double f = 5.5 * (2.54 / 100);
-        double y = 2.10 - (9 * (2.54 / 100));
-        double x = distanceToCenter + (9.75 * (2.54 / 100));
-        double d = Math.hypot(x, y);
+    // private double calculateArmAngle(double distanceToCenter) {
+    //     double f = 5.5 * (2.54 / 100);
+    //     double y = 2.10 - (9 * (2.54 / 100));
+    //     double x = distanceToCenter + (9.75 * (2.54 / 100));
+    //     double d = Math.hypot(x, y);
 
-        double theta = Math.toDegrees(Math.atan(y / x)) + Math.toDegrees(Math.acos(f / d)) - 90;
-        theta = theta + (43 - theta) * 0.5;
-        return theta;
-    }
+    //     double theta = Math.toDegrees(Math.atan(y / x)) + Math.toDegrees(Math.acos(f / d)) - 90;
+    //     theta = theta + (43 - theta) * 0.5;
+    //     return theta;
+    // }
+
+
+    private double getXVel() {
+		Pose2d velocity = swerveSubsystem.currentVelocity;
+		double theta = swerveSubsystem.currentPose().getRotation().getRadians();
+		return Math.sin(theta) * velocity.getY() + Math.cos(theta) * velocity.getX();
+	}
+
+    public double calculateArmAngle(double distanceToCenter) {
+        double NOTE_VELOCITY = 12.78;
+        double TARGET_HEIGHT = Units.inchesToMeters(95);
+        double SHOOTER_HEIGHT = Units.inchesToMeters(8.75);
+		double dx = distanceToCenter + (9.75 * (2.54 / 100));
+		double dy = 2.10 - (9 * (2.54 / 100));
+		double distance = Math.hypot(dx, dy);
+
+		double y = TARGET_HEIGHT - SHOOTER_HEIGHT;
+		double flight_time = distance / NOTE_VELOCITY; /*+ getXVel()*/
+				// * MathUtil.clamp(shintake.getVelocityLeft() / shintake.leftVelocity, 0.25, 1);
+		y += 9.8 / 2 * flight_time * flight_time;
+		SmartDashboard.putNumber("Angle", Units.radiansToDegrees(Math.atan(y / distanceToCenter)));
+		SmartDashboard.putNumber("Distance", distance);
+
+		return 90 - Units.radiansToDegrees(Math.atan(y / distance));
+	}
+
 
     @Override
     public void initialize() {

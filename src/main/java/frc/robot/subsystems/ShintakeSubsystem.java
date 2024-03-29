@@ -32,7 +32,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 	private Counter m_counter;
 	private SparkPIDController rightWheelPID;
 	private SparkPIDController leftWheelPID;
-	private double leftVelocity, rightVelocity;
+	public double leftVelocity, rightVelocity;
 
 	private final TuningTable kP_Upper = new TuningTable("P_Upper_Shooter");
 	private final TuningTable kI_Upper = new TuningTable("I_Upper_Shooter");
