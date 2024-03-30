@@ -94,6 +94,12 @@ public class AssemblySchedulerCommand extends Command {
 		return Math.sin(theta) * velocity.getY() + Math.cos(theta) * velocity.getX();
 	}
 
+    private double getYVel() {
+		Pose2d velocity = swerveSubsystem.currentVelocity;
+		double theta = swerveSubsystem.currentPose().getRotation().getRadians();
+		return Math.sin(theta) * velocity.getX() + Math.cos(theta) * velocity.getY();
+	}
+
     public double calculateArmAngle(double distanceToCenter) {
         double NOTE_VELOCITY = 12.78;
         double TARGET_HEIGHT = Units.inchesToMeters(95);
@@ -103,8 +109,9 @@ public class AssemblySchedulerCommand extends Command {
 		double distance = Math.hypot(dx, dy);
 
 		double y = TARGET_HEIGHT - SHOOTER_HEIGHT;
-		double flight_time = distance / NOTE_VELOCITY; /*+ getXVel()*/
-				// * MathUtil.clamp(shintake.getVelocityLeft() / shintake.leftVelocity, 0.25, 1);
+		double flight_time = //distance // NOTE_VELOCITY; USE THIS IF NO SHOOT ON MOVE 
+                distance / (NOTE_VELOCITY +  (Math.sqrt(getXVel() * getXVel() + getYVel() * getYVel())))
+				* MathUtil.clamp(shintake.getVelocityLeft() / shintake.leftVelocity, 0.25, 1);
 		y += 9.8 / 2 * flight_time * flight_time;
 		SmartDashboard.putNumber("Angle", Units.radiansToDegrees(Math.atan(y / distanceToCenter)));
 		SmartDashboard.putNumber("Distance", distance);
