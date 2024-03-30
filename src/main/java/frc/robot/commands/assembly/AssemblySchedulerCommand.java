@@ -33,8 +33,9 @@ public class AssemblySchedulerCommand extends Command {
         PODIUM_LEFT,
         PODIUM_FAR,
         PODIUM_RIGHT,
-        SUBWOOFER,
-        SUBWOOFER_DEFENDED,
+        SUBWOOFER, // fixed shot with shintake pivot
+        SUBWOOFER_DEFENDED, // the Kevin Durant shot from the back
+        SUBWOOFER_ARM, // subwoofer shot using arm
         AMP,
         SOURCE
     }
@@ -181,18 +182,23 @@ public class AssemblySchedulerCommand extends Command {
                     // );
                     break;
                 case SUBWOOFER_DEFENDED:
-                    // this.assemblyCommand = new RepeatCommand(new
-                    // AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led, shintake,
-                    // sm,
-                    // shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER))));
-                    // SmartDashboard.putNumber("Target angle",
-                    // shintakePivot.shintakePivotDistanceAngleMap.get(swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
+                    // based on lookup table to calculate shintake angle
+                    this.assemblyCommand = new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led,
+                            shintake,
+                            sm,
+                            shintakePivot.shintakePivotDistanceAngleMap.get(
+                                    swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
+                    SmartDashboard.putNumber("Target angle",
+                            shintakePivot.shintakePivotDistanceAngleMap.get(
+                                    swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
 
+                    break;
+                case SUBWOOFER_ARM:
+                    // based on trig to calculate arm angle
                     this.assemblyCommand = new AssemblyDefendedArmPositionCommand(chassisPivot,
                             shintakePivot, led, shintake, sm,
                             () -> calculateArmAngle(swerveSubsystem
                                     .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
-                    break;
                 default:
                     break;
             }
@@ -260,6 +266,7 @@ public class AssemblySchedulerCommand extends Command {
                                     () -> calculateArmAngle(swerveSubsystem
                                             .calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER))));
                     break;
+
                 default:
                     break;
             }

@@ -154,7 +154,7 @@ public final class Constants {
 
     // NOTE_SCORE_DEFENDED_SPEAKER_POSITION
     public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 30.0;
-    public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 80.0;
+    public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 88.0;
 
     // NOTE_SCORE_PODIUM_SPEAKER_POSITION
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 0;
