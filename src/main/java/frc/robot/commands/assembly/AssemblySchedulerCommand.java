@@ -78,48 +78,47 @@ public class AssemblySchedulerCommand extends Command {
     }
 
     // private double calculateArmAngle(double distanceToCenter) {
-    //     double f = 5.5 * (2.54 / 100);
-    //     double y = 2.10 - (9 * (2.54 / 100));
-    //     double x = distanceToCenter + (9.75 * (2.54 / 100));
-    //     double d = Math.hypot(x, y);
+    // double f = 5.5 * (2.54 / 100);
+    // double y = 2.10 - (9 * (2.54 / 100));
+    // double x = distanceToCenter + (9.75 * (2.54 / 100));
+    // double d = Math.hypot(x, y);
 
-    //     double theta = Math.toDegrees(Math.atan(y / x)) + Math.toDegrees(Math.acos(f / d)) - 90;
-    //     theta = theta + (43 - theta) * 0.5;
-    //     return theta;
+    // double theta = Math.toDegrees(Math.atan(y / x)) + Math.toDegrees(Math.acos(f
+    // / d)) - 90;
+    // theta = theta + (43 - theta) * 0.5;
+    // return theta;
     // }
 
-
     private double getXVel() {
-		Pose2d velocity = swerveSubsystem.currentVelocity;
-		double theta = swerveSubsystem.currentPose().getRotation().getRadians();
-		return Math.sin(theta) * velocity.getY() + Math.cos(theta) * velocity.getX();
-	}
+        Pose2d velocity = swerveSubsystem.currentVelocity;
+        double theta = swerveSubsystem.currentPose().getRotation().getRadians();
+        return Math.sin(theta) * velocity.getY() + Math.cos(theta) * velocity.getX();
+    }
 
     private double getYVel() {
-		Pose2d velocity = swerveSubsystem.currentVelocity;
-		double theta = swerveSubsystem.currentPose().getRotation().getRadians();
-		return Math.sin(theta) * velocity.getX() + Math.cos(theta) * velocity.getY();
-	}
+        Pose2d velocity = swerveSubsystem.currentVelocity;
+        double theta = swerveSubsystem.currentPose().getRotation().getRadians();
+        return Math.sin(theta) * velocity.getX() + Math.cos(theta) * velocity.getY();
+    }
 
     public double calculateArmAngle(double distanceToCenter) {
-        double NOTE_VELOCITY = 12.78;
+        double NOTE_VELOCITY = 11.28;
         double TARGET_HEIGHT = Units.inchesToMeters(95);
         double SHOOTER_HEIGHT = Units.inchesToMeters(8.75);
-		double dx = distanceToCenter + (9.75 * (2.54 / 100));
-		double dy = 2.10 - (9 * (2.54 / 100));
-		double distance = Math.hypot(dx, dy);
+        double dx = distanceToCenter + (9.75 * (2.54 / 100));
+        double dy = 2.10 - (9 * (2.54 / 100));
+        double distance = Math.hypot(dx, dy);
 
-		double y = TARGET_HEIGHT - SHOOTER_HEIGHT;
-		double flight_time = //distance // NOTE_VELOCITY; USE THIS IF NO SHOOT ON MOVE 
-                distance / (NOTE_VELOCITY +  (Math.sqrt(getXVel() * getXVel() + getYVel() * getYVel())))
-				* MathUtil.clamp(shintake.getVelocityLeft() / shintake.leftVelocity, 0.25, 1);
-		y += 9.8 / 2 * flight_time * flight_time;
-		SmartDashboard.putNumber("Angle", Units.radiansToDegrees(Math.atan(y / distanceToCenter)));
-		SmartDashboard.putNumber("Distance", distance);
-
-		return 90 - Units.radiansToDegrees(Math.atan(y / distance));
-	}
-
+        double y = TARGET_HEIGHT - SHOOTER_HEIGHT;
+        double flight_time = // distance / NOTE_VELOCITY; // USE THIS IF NO SHOOT ON MOVE
+                distance / (NOTE_VELOCITY + (Math.sqrt(getXVel() * getXVel() + getYVel() * getYVel())));
+        // * MathUtil.clamp(shintake.getVelocityLeft() / shintake.leftVelocity, 0.25,
+        // 1);
+        y += 9.8 / 2 * flight_time * flight_time;
+        SmartDashboard.putNumber("Angle", Units.radiansToDegrees(Math.atan(y / distance)));
+        SmartDashboard.putNumber("Distance", distance);
+        return (Units.radiansToDegrees(Math.atan(y / distance)));
+    }
 
     @Override
     public void initialize() {
@@ -174,11 +173,11 @@ public class AssemblySchedulerCommand extends Command {
 
                 case SOURCE:
                     this.assemblyCommand =
-                            // conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem,
-                            // AlignmentConstants.BLUE_SOURCE_CENTER, true)
-                            // .getCommand(), noPathFind)
-                            // .alongWith(
-                            new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm);
+                            conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem,
+                            AlignmentConstants.BLUE_SOURCE_CENTER, true)
+                            .getCommand(), noPathFind)
+                            .alongWith(
+                            new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
                     // );
                     break;
                 case SUBWOOFER_DEFENDED:

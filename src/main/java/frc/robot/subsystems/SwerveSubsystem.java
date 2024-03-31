@@ -50,7 +50,7 @@ public class SwerveSubsystem extends SubsystemBase {
 								// Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
 	private double YkI = 0.00000;
 	private double YkD = 0.000;
-    private double AkP = 0.0037; // changed mar 27 for testing 0.04; // 0.4? // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p,
+    private double AkP = 0.0035; // changed mar 27 for testing 0.04; // 0.4? // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p,
 								// Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
 	private double AkI = 0.000000;
 	private double AkD = 0.001; // 0.01?

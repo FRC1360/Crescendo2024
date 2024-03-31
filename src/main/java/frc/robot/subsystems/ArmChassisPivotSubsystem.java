@@ -225,10 +225,12 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
     }
 
     public void setTargetAngle(double targetAngle) {
+        if (this.targetAngle == (targetAngle + this.cacheOffset)) {
+            return;
+        }
+        
         this.targetAngle = targetAngle + this.cacheOffset;
-        // if (this.targetAngle == targetAngle) {
-        // return;
-        // }else
+
         if (this.targetAngle >= Constants.ACPConstants.MAX_ACP_ANGLE
                 || this.targetAngle <= Constants.ACPConstants.MIN_ACP_ANGLE)
 

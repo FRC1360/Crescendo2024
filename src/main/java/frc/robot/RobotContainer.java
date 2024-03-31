@@ -260,7 +260,7 @@ public class RobotContainer {
 		right_controller.button(1)
 				.and(
 						() -> (this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
-								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)))
+								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED) || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
 				.whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
 
 		// operator_controller.leftBumper().whileTrue(new InstantCommand(() ->
@@ -358,7 +358,7 @@ public class RobotContainer {
 																												// color
 												() -> -modifyAlliance(modifyAxis(left_controller.getX()))
 														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2,
-												false))));
+												false)))).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
