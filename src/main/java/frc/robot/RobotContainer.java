@@ -40,6 +40,7 @@ import frc.robot.commands.shintake.IntakeCommand;
 import frc.robot.commands.shintake.OutakeCommand;
 import frc.robot.commands.shintake.ShootSpeakerCommand;
 import frc.robot.commands.shintake.ShootSpeakerFullCommand;
+import frc.robot.commands.shintake.ShootTrapCommand;
 import frc.robot.commands.swerve.LockWheels;
 import frc.robot.commands.swerve.RotateForShot;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -260,8 +261,23 @@ public class RobotContainer {
 		right_controller.button(1)
 				.and(
 						() -> (this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
-								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED) || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
+								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
+								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
 				.whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
+
+		right_controller.button(1)
+				.and(
+						() -> !(this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
+								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
+								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
+				.whileTrue(new OutakeCommand(shintakeSubsystem));
+
+		// () -> (this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
+		// || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED) ||
+		// this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM) ||
+		// right_controller.button(1).getAsBoolean()).whileFalse(new InstantCommand(()
+		// -> shintakeSubsystem.stopShooter()).and(new InstantCommand( () ->
+		// shintakeSubsystem.stopIntake())));
 
 		// operator_controller.leftBumper().whileTrue(new InstantCommand(() ->
 		// shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() *
@@ -297,6 +313,14 @@ public class RobotContainer {
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
 						() -> right_controller.button(3).getAsBoolean())));
+
+		left_controller.button(9).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.TRAP)
+				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
+						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
+						() -> right_controller.button(3).getAsBoolean())));
+
+		left_controller.button(5).whileFalse(
+				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
 		left_controller.button(4).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
@@ -358,7 +382,9 @@ public class RobotContainer {
 																												// color
 												() -> -modifyAlliance(modifyAxis(left_controller.getX()))
 														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2,
-												false)))).whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
+												false))))
+				.whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
+						ledSubsystem, sm));
 
 		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
@@ -424,7 +450,7 @@ public class RobotContainer {
 
 		// right_controller.button(11).onTrue(new
 		// InstantCommand(swerveSubsystem::zeroGyro));
-		right_controller.button(10).onTrue(new InstantCommand(() -> swerveSubsystem.toggleManualDrive()));
+		right_controller.button(7).onTrue(new InstantCommand(() -> swerveSubsystem.toggleManualDrive()));
 
 		// // Debounce makes for more stability
 		// // new BooleanEvent(loop, operator_controller::getYButton).debounce(0.1)

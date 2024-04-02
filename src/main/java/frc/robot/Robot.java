@@ -93,7 +93,7 @@ public class Robot extends LoggedRobot {
 		}
 
 		if (isReal()) { // real bot
-			// Logger.addDataReceiver(new WPILOGWriter());
+			Logger.addDataReceiver(new WPILOGWriter());
 			Logger.addDataReceiver(new NT4Publisher());
 			PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kRev);
 			powerDistribution.setSwitchableChannel(true);
@@ -110,7 +110,7 @@ public class Robot extends LoggedRobot {
 
 		Logger.registerURCL(URCL.startExternal());
 		Logger.start();
-		// DataLogManager.start();
+		DataLogManager.start();
 	}
 
 	/**

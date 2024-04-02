@@ -110,7 +110,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
 
         this.maxVelocity = 85.0;
         // This units are deg / second for velocity and deg / sec^2 for acceleration
-        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 120.0);
+        this.ACPMotionProfileConstraints = new TrapezoidProfile.Constraints(this.maxVelocity, 140.0);
         this.acpMotionProfile = new TrapezoidProfile(this.ACPMotionProfileConstraints);
 
         this.slowMaxVelocity = 70.0;
@@ -211,7 +211,6 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
                     + this.getAngularVelocity(), true);
             // System.exit(1);
         }
-
         // voltage = 0.0;
         this.ACPMotorMaster.setVoltage(voltage);
         // this.ACPMotorSlave.setVoltage(voltage);
@@ -228,7 +227,7 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         if (this.targetAngle == (targetAngle + this.cacheOffset)) {
             return;
         }
-        
+
         this.targetAngle = targetAngle + this.cacheOffset;
 
         if (this.targetAngle >= Constants.ACPConstants.MAX_ACP_ANGLE

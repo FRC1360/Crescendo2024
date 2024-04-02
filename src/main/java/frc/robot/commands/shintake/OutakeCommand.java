@@ -28,7 +28,7 @@ public class OutakeCommand extends Command {
     @Override
     public void execute() {
         // intake.varShoot(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-        intake.varFix(Constants.ShintakeConstants.OUTAKE_SPEED_BACK);
+        intake.varIntake(Constants.ShintakeConstants.OUTAKE_SPEED_BACK);
         intake.varShoot(Constants.ShintakeConstants.OUTAKE_SPEED_FRONT);
     }
 

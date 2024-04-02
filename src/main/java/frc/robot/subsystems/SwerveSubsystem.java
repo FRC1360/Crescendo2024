@@ -50,8 +50,9 @@ public class SwerveSubsystem extends SubsystemBase {
 								// Constants.Swerve.driveAlignPID.i, Constants.Swerve.driveAlignPID.d
 	private double YkI = 0.00000;
 	private double YkD = 0.000;
-    private double AkP = 0.0035; // changed mar 27 for testing 0.04; // 0.4? // A as in Angle for anglePID || replaces onstants.Swerve.anglePID.p,
-								// Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
+	private double AkP = 0.0035; // changed mar 27 for testing 0.04; // 0.4? // A as in Angle for anglePID ||
+									// replaces onstants.Swerve.anglePID.p,
+									// Constants.Swerve.anglePID.i, Constants.Swerve.anglePID.d
 	private double AkI = 0.000000;
 	private double AkD = 0.001; // 0.01?
 	public boolean manualDrive = false;
@@ -469,6 +470,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		swerveDrivePoseEstimator.update(navX.getYaw(), getPositions());
 		Pose2d odoPose = swerveDrivePoseEstimator.getEstimatedPosition();
 
+		SmartDashboard.putBoolean("LIMELIGHT RUNNING", pCameraWrapper.isLLConnected());
 		// Vision update
 		Optional<EstimatedRobotPose> result = pCameraWrapper.getEstimatedGlobalPose(odoPose);
 		if (result.isPresent()) {

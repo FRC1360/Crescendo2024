@@ -84,8 +84,9 @@ public final class Constants {
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 6200; // 6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6200; // 6250;
+        public static final double SHOOT_SPEED_FRONT_TRAP = 0.5232900943396226;
+        public static final double SHOOT_VELOCITY_FRONT = 6600; // 6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6600; // 6250;
         public static final double AMP_VELOCITY_FRONT = 3000;
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
@@ -149,8 +150,8 @@ public final class Constants {
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; // 50.0;
 
     // NOTE_SCORE_TRAP_POSITION
-    public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
-    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 80.0; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_STP = 24; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 68.5; // TODO: SET ACTUAL VALUES
 
     // NOTE_SCORE_DEFENDED_SPEAKER_POSITION
     public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 30.0;

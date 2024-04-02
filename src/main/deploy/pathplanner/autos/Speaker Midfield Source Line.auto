@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Speaker to midfield"

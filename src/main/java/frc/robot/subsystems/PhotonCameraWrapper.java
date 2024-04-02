@@ -61,6 +61,10 @@ public class PhotonCameraWrapper {
         }
     }
 
+    public boolean isLLConnected() {
+        return photonCamera.isConnected();
+    }
+
     /**
      * @param estimatedRobotPose The current best guess at robot pose
      * @return an EstimatedRobotPose with an estimated pose, the timestamp, and

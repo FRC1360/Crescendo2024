@@ -37,7 +37,8 @@ public class AssemblySchedulerCommand extends Command {
         SUBWOOFER_DEFENDED, // the Kevin Durant shot from the back
         SUBWOOFER_ARM, // subwoofer shot using arm
         AMP,
-        SOURCE
+        SOURCE,
+        TRAP
     }
 
     public static enum SOURCE_SIDE {
@@ -102,8 +103,8 @@ public class AssemblySchedulerCommand extends Command {
     }
 
     public double calculateArmAngle(double distanceToCenter) {
-        double NOTE_VELOCITY = 11.28;
-        double TARGET_HEIGHT = Units.inchesToMeters(95);
+        double NOTE_VELOCITY = 10;
+        double TARGET_HEIGHT = Units.inchesToMeters(86);
         double SHOOTER_HEIGHT = Units.inchesToMeters(8.75);
         double dx = distanceToCenter + (9.75 * (2.54 / 100));
         double dy = 2.10 - (9 * (2.54 / 100));
@@ -172,12 +173,11 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SOURCE:
-                    this.assemblyCommand =
-                            conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem,
+                    this.assemblyCommand = conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem,
                             AlignmentConstants.BLUE_SOURCE_CENTER, true)
                             .getCommand(), noPathFind)
                             .alongWith(
-                            new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                                    new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
                     // );
                     break;
                 case SUBWOOFER_DEFENDED:
@@ -198,6 +198,17 @@ public class AssemblySchedulerCommand extends Command {
                             shintakePivot, led, shintake, sm,
                             () -> calculateArmAngle(swerveSubsystem
                                     .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
+
+                    break;
+                // case TRAP:
+                // new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
+                // break;
+
+                case TRAP:
+                    this.assemblyCommand = new AssemblyTrapPositionCommand(chassisPivot, shintakePivot, led, sm,
+                            shintake);
+                    break;
+
                 default:
                     break;
             }
@@ -264,6 +275,19 @@ public class AssemblySchedulerCommand extends Command {
                                     shintake, sm,
                                     () -> calculateArmAngle(swerveSubsystem
                                             .calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER))));
+                    break;
+
+                case SUBWOOFER_ARM:
+                    // based on trig to calculate arm angle
+                    this.assemblyCommand = new AssemblyDefendedArmPositionCommand(chassisPivot,
+                            shintakePivot, led, shintake, sm,
+                            () -> calculateArmAngle(swerveSubsystem
+                                    .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
+                    break;
+
+                case TRAP:
+                    this.assemblyCommand = new AssemblyTrapPositionCommand(chassisPivot, shintakePivot, led, sm,
+                            shintake);
                     break;
 
                 default:

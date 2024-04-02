@@ -58,14 +58,14 @@ public class ShintakeSubsystem extends SubsystemBase {
 		this.m_counter = new Counter(m_digital);
 		this.m_encoderLeft = m_left.getEncoder();
 		this.m_encoderRight = m_right.getEncoder();
-		this.leftkP = 0.0008;
-		this.leftkI = 0.000;
+		this.leftkP = 0.002;
+		this.leftkI = 0.00017;
 		this.leftkD = 0.00;
-		this.leftFF = 0.00016;
-		this.rightkP = 0.0008;
-		this.rightkI = 0.0;
+		this.leftFF = 0.0002;
+		this.rightkP = 0.0025;
+		this.rightkI = 0.00021;
 		this.rightkD = 0.00;
-		this.rightFF = 0.00016;
+		this.rightFF = 0.0002;
 
 		Preferences.initDouble("right kP", rightkP);
 		Preferences.initDouble("right kI", rightkI);
@@ -177,10 +177,6 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	public void varIntake(double backSpeed) {
 		m_back.set(backSpeed);
-	}
-
-	public void varFix(double backSpeed) {
-		m_back.set(-backSpeed);
 	}
 
 	public void varShoot(double speed) {
