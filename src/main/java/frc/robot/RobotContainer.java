@@ -388,12 +388,10 @@ public class RobotContainer {
 
 		right_controller.button(2).and(() -> !swerveSubsystem.manualDrive).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		// operator_controller.x().onTrue(new InstantCommand(() -> this.SRC_SIDE =
-		// SOURCE_SIDE.LEFT));
-		// operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE =
-		// SOURCE_SIDE.RIGHT));
-		// operator_controller.y().onTrue(new InstantCommand(() -> this.SRC_SIDE =
-		// SOURCE_SIDE.CENTER));
+
+		operator_controller.x().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.LEFT));
+		operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.RIGHT));
+		operator_controller.y().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER));
 
 		// operator_controller.y()
 		// .onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 30.0,
@@ -427,12 +425,12 @@ public class RobotContainer {
 		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.RED_SOURCE).getCommand());
 
-		operator_controller.a().whileTrue(new PathfindAuto(swerveSubsystem,
-				AlignmentConstants.BLUE_SOURCE_CENTER).getCommand());
-		operator_controller.b().whileTrue(new PathfindAuto(swerveSubsystem,
-				AlignmentConstants.BLUE_SOURCE_LEFT).getCommand());
-		operator_controller.x().whileTrue(new PathfindAuto(swerveSubsystem,
-				AlignmentConstants.BLUE_SOURCE_RIGHT).getCommand());
+		// operator_controller.a().whileTrue(new PathfindAuto(swerveSubsystem,
+		// AlignmentConstants.BLUE_SOURCE_CENTER).getCommand());
+		// operator_controller.b().whileTrue(new PathfindAuto(swerveSubsystem,
+		// AlignmentConstants.BLUE_SOURCE_LEFT).getCommand());
+		// operator_controller.x().whileTrue(new PathfindAuto(swerveSubsystem,
+		// AlignmentConstants.BLUE_SOURCE_RIGHT).getCommand());
 
 		// // left_controller.button(3).whileTrue(new
 		// // PathfindAuto(AlignmentConstants.BLUE_AMP).getCommand());

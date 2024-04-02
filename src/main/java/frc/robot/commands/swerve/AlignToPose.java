@@ -32,14 +32,18 @@ public class AlignToPose extends Command {
 
     @Override
     public void execute() {
-        PIDSwerveValues pidOutput = this.swerveSubsystem.calculateControlLoopDriveOutput(this.target); 
-        
-        this.swerveSubsystem.drive(new Translation2d(pidOutput.xOut, pidOutput.yOut), pidOutput.rotationOut, true, false);
+        PIDSwerveValues pidOutput = this.swerveSubsystem.calculateControlLoopDriveOutput(this.target);
+
+        this.swerveSubsystem.drive(new Translation2d(pidOutput.xOut, pidOutput.yOut), pidOutput.rotationOut, true,
+                false);
     }
 
     @Override
     public boolean isFinished() {
-        return allowEnd && (this.swerveSubsystem.drivePIDAtTarget() || Math.abs(this.swerveSubsystem.calculateDistanceToTarget(this.target)) < 0.1); 
+        return allowEnd && (this.swerveSubsystem.drivePIDAtTarget()
+                || (Math.abs(this.swerveSubsystem.calculateDistanceToTarget(this.target)) < 0.05
+                        && Math.abs(this.target.getRotation().getDegrees()
+                                - this.swerveSubsystem.currentPose().getRotation().getDegrees()) < 5.0));
     }
 
     @Override

@@ -124,7 +124,7 @@ public class SwerveSubsystem extends SubsystemBase {
 		Preferences.initDouble("Swerve Angle kI", this.AkI);
 		Preferences.initDouble("Swerve Angle kD", this.AkD);
 
-		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED - 2.0, 0.5);
+		this.driveConstraints = new TrapezoidProfile.Constraints(Constants.Swerve.MAX_SPEED - 2.0, 2.0);
 		this.driveXMotionProfile = new TrapezoidProfile(driveConstraints);
 		this.driveYMotionProfile = new TrapezoidProfile(driveConstraints);
 		this.driveMotionProfileXStartState = new TrapezoidProfile.State(0.0, 0.0);
