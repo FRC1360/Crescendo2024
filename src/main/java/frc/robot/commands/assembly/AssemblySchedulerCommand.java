@@ -173,11 +173,12 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SOURCE:
-                    this.assemblyCommand = conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem,
-                            AlignmentConstants.BLUE_SOURCE_CENTER, true)
-                            .getCommand(), noPathFind)
-                            .alongWith(
-                                    new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand =
+                            // conditionalCommand(new InstantCommand(), new PathfindAuto(swerveSubsystem,
+                            // AlignmentConstants.BLUE_SOURCE_CENTER, true)
+                            // .getCommand(), noPathFind)
+                            // .alongWith(
+                            new AssemblySourcePositionCommand(chassisPivot, shintakePivot, led, sm);
                     // );
                     break;
                 case SUBWOOFER_DEFENDED:
