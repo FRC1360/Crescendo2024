@@ -60,6 +60,7 @@ public class AssemblySchedulerCommand extends Command {
     private ShintakeSubsystem shintake;
     private BooleanSupplier noPathFind;
     private int n = 0;
+    private double fudgeFactor = 1.05;
 
     public AssemblySchedulerCommand(Supplier<ASSEMBLY_LEVEL> level, SwerveSubsystem swerveSubsystem,
             ArmChassisPivotSubsystem chassisPivot, ShintakePivotSubsystem shintakePivot, ShintakeSubsystem shintake,
@@ -105,7 +106,7 @@ public class AssemblySchedulerCommand extends Command {
     }
 
     public double calculateArmAngle(double distanceToCenter) {
-        double NOTE_VELOCITY = 10;
+        double NOTE_VELOCITY = 10.25;
         double TARGET_HEIGHT = Units.inchesToMeters(86);
         double SHOOTER_HEIGHT = Units.inchesToMeters(8.75);
         double dx = distanceToCenter + (9.75 * (2.54 / 100));
@@ -120,7 +121,7 @@ public class AssemblySchedulerCommand extends Command {
         y += 9.8 / 2 * flight_time * flight_time;
         SmartDashboard.putNumber("Angle", Units.radiansToDegrees(Math.atan(y / distance)));
         SmartDashboard.putNumber("Distance", distance);
-        return (Units.radiansToDegrees(Math.atan(y / distance)));
+        return (Units.radiansToDegrees(Math.atan(y / distance)) * fudgeFactor);
     }
 
     @Override
