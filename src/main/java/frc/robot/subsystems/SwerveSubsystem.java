@@ -463,6 +463,7 @@ public class SwerveSubsystem extends SubsystemBase {
 				+ Math.hypot(Math.abs(target.getX() - curPose.getX()), Math.abs(target.getY() - curPose.getY())));
 		return Math.hypot(Math.abs(target.getX() - curPose.getX()), Math.abs(target.getY() - curPose.getY()));
 	}
+	
 
 	@Override
 	public void periodic() {

@@ -38,7 +38,7 @@ public class RotateForShot extends Command {
                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
             deltaX = robotPose.getX() - AlignmentConstants.INTO_RED_SPEAKER.getX();
             deltaY = robotPose.getY() - AlignmentConstants.INTO_RED_SPEAKER.getY();
-            return -Math.toDegrees(Math.atan(deltaY / deltaX))
+            return Math.toDegrees(Math.atan(deltaY / deltaX))
                     + AlignmentConstants.RED_SPEAKER.getRotation().getDegrees(); // + 180.0;;
         }
         return Math.toDegrees(Math.atan(deltaY / deltaX)) + AlignmentConstants.BLUE_SPEAKER.getRotation().getDegrees(); // -
