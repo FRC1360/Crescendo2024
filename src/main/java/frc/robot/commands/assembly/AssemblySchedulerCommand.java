@@ -292,11 +292,24 @@ public class AssemblySchedulerCommand extends Command {
                     // //
                     // shintakePivot.shintakePivotDistanceAngleMap.get(this.swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.RED_SPEAKER))));
 
-                    this.assemblyCommand = new RepeatCommand(
-                            new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led,
-                                    shintake, sm,
-                                    () -> calculateArmAngle(swerveSubsystem
-                                            .calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER))));
+                    // DL.2024-04-03 commented out, not working for RED
+                    // this.assemblyCommand = new RepeatCommand(
+                    // new AssemblyDefendedArmPositionCommand(chassisPivot, shintakePivot, led,
+                    // shintake, sm,
+                    // () -> calculateArmAngle(swerveSubsystem
+                    // .calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER))));
+
+                    // DL.2024-04-03 copied from working BLUE case
+                    // based on lookup table to calculate shintake angle
+                    this.assemblyCommand = new AssemblyDefendedPositionCommand(chassisPivot, shintakePivot, led,
+                            shintake,
+                            sm,
+                            shintakePivot.shintakePivotDistanceAngleMap.get(
+                                    swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER)));
+                    SmartDashboard.putNumber("Target angle",
+                            shintakePivot.shintakePivotDistanceAngleMap.get(
+                                    swerveSubsystem.calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER)));
+
                     break;
 
                 case SUBWOOFER_ARM:
