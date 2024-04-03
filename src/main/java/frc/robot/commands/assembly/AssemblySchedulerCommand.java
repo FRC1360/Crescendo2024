@@ -60,7 +60,6 @@ public class AssemblySchedulerCommand extends Command {
     private ShintakeSubsystem shintake;
     private BooleanSupplier noPathFind;
     private int n = 0;
-    private double fudgeFactor = 1.05;
 
     public AssemblySchedulerCommand(Supplier<ASSEMBLY_LEVEL> level, SwerveSubsystem swerveSubsystem,
             ArmChassisPivotSubsystem chassisPivot, ShintakePivotSubsystem shintakePivot, ShintakeSubsystem shintake,
@@ -121,7 +120,13 @@ public class AssemblySchedulerCommand extends Command {
         y += 9.8 / 2 * flight_time * flight_time;
         SmartDashboard.putNumber("Angle", Units.radiansToDegrees(Math.atan(y / distance)));
         SmartDashboard.putNumber("Distance", distance);
-        return (Units.radiansToDegrees(Math.atan(y / distance)) * fudgeFactor);
+
+        // The theoretical shooting angle, theta
+        double theta = Units.radiansToDegrees(Math.atan(y / distance));
+        // But scale it by an experimental factor,
+        // small for far shots with small angle, larger for close shots with large angle
+        double fudgedAngle = 1.33 * theta - 10.5;
+        return (fudgedAngle);
     }
 
     @Override
