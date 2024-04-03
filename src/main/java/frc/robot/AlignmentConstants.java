@@ -31,6 +31,8 @@ public class AlignmentConstants {
 
         // This is used to get into the speaker
         public static final Pose2d INTO_BLUE_SPEAKER = new Pose2d(0.23, 5.55, Rotation2d.fromDegrees(180.0)); // prev=0.2
+        // Note: x=-0.0380 is actual speaker position, 0.268 m out from that is where we
+        // aim
 
         // STAGE with respect to blue alliance (far is cannot be seen)
 
@@ -46,10 +48,10 @@ public class AlignmentConstants {
         public static final Pose2d RED_SOURCE_RIGHT = new Pose2d(0.62, 1.32, Rotation2d.fromDegrees(-119.51));
 
         public static final Pose2d RED_SPEAKER = new Pose2d(15.12, 5.56, Rotation2d.fromDegrees(0.0)); // ID 3 & 4
-        public static final Pose2d INTO_RED_SPEAKER = new Pose2d(16.58, 5.55, Rotation2d.fromDegrees(0.0)); // prev=16.26
-        // x was 16.31m, not sure if we need to mirror the x offset in INTO_BLUE_SPEAKER
-        // x coordinate?
-        // from field drawings, x should be 16.58m, if matched to AprilTag 4
+        public static final Pose2d INTO_RED_SPEAKER = new Pose2d(16.302, 5.55, Rotation2d.fromDegrees(0.0)); // prev=16.26
+        // AprilTag location is x=16.57
+        // Note: into red speaker should be 0.268 m out from the plane of the AprilTag
+        // (for side shots in particular, use the speaker hood and bounce in)
 
         public static final Pose2d RED_AMP = new Pose2d(14.70, 7.60, Rotation2d.fromDegrees(-90.0)); // ID 5
 
