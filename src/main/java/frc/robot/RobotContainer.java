@@ -169,25 +169,37 @@ public class RobotContainer {
 				&& DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
 	}
 
-	private void bindSourcePathfinding() {
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER) && isBlue()))
-				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_CENTER).getCommand());
+	// private void bindSourcePathfinding() {
+	// left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER)
+	// && isBlue()))
+	// .whileTrue(new PathfindAuto(swerveSubsystem,
+	// AlignmentConstants.BLUE_SOURCE_CENTER).getCommand());
 
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.LEFT) && isBlue()))
-				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_LEFT).getCommand());
+	// left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.LEFT)
+	// && isBlue()))
+	// .whileTrue(new PathfindAuto(swerveSubsystem,
+	// AlignmentConstants.BLUE_SOURCE_LEFT).getCommand());
 
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT) && isBlue()))
-				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SOURCE_RIGHT).getCommand());
+	// left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT)
+	// && isBlue()))
+	// .whileTrue(new PathfindAuto(swerveSubsystem,
+	// AlignmentConstants.BLUE_SOURCE_RIGHT).getCommand());
 
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER) && !isBlue()))
-				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_CENTER).getCommand());
+	// left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.CENTER)
+	// && !isBlue()))
+	// .whileTrue(new PathfindAuto(swerveSubsystem,
+	// AlignmentConstants.RED_SOURCE_CENTER).getCommand());
 
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.LEFT) && !isBlue()))
-				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_LEFT).getCommand());
+	// left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.LEFT)
+	// && !isBlue()))
+	// .whileTrue(new PathfindAuto(swerveSubsystem,
+	// AlignmentConstants.RED_SOURCE_LEFT).getCommand());
 
-		left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT) && !isBlue()))
-				.whileTrue(new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SOURCE_RIGHT).getCommand());
-	}
+	// left_controller.button(5).and(() -> (this.SRC_SIDE.equals(SOURCE_SIDE.RIGHT)
+	// && !isBlue()))
+	// .whileTrue(new PathfindAuto(swerveSubsystem,
+	// AlignmentConstants.RED_SOURCE_RIGHT).getCommand());
+	// }
 
 	/**
 	 * Use this method to define your trigger->command mappings. Triggers can be
@@ -265,12 +277,13 @@ public class RobotContainer {
 								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
 				.whileTrue(new ShootSpeakerCommand(shintakeSubsystem));
 
-		right_controller.button(1)
-				.and(
-						() -> !(this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
-								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
-								|| this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
-				.whileTrue(new OutakeCommand(shintakeSubsystem));
+		// right_controller.button(1)
+		// .and(
+		// () -> !(this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
+		// || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED)
+		// || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_ARM)))
+		// .whileTrue(new ShootSpeakerFullCommand(shintakeSubsystem,
+		// armChassisPivotSubsystem));
 
 		// () -> (this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
 		// || this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER_DEFENDED) ||
@@ -299,6 +312,9 @@ public class RobotContainer {
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
 						() -> right_controller.button(3).getAsBoolean())));
 
+		left_controller.button(5)
+				.whileTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem));
+
 		left_controller.button(2).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
@@ -325,7 +341,7 @@ public class RobotContainer {
 		left_controller.button(4).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
 
-		bindSourcePathfinding();
+		// bindSourcePathfinding();
 
 		right_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,

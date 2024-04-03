@@ -143,7 +143,7 @@ public final class Constants {
     public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 43.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 38.0; // 0.0;
     public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 21.0; // 50.0;
 
     public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;

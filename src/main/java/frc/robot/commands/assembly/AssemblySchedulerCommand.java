@@ -38,7 +38,9 @@ public class AssemblySchedulerCommand extends Command {
         SUBWOOFER_ARM, // subwoofer shot using arm
         AMP,
         SOURCE,
-        TRAP
+        TRAP,
+        AMP_NO_PATHFIND,
+        SUBWOOFER_NO_PATHFIND
     }
 
     public static enum SOURCE_SIDE {
@@ -155,21 +157,27 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SUBWOOFER:
-                    this.assemblyCommand = conditionalCommand(
-                            new InstantCommand(),
-                            new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER, true).getCommand(),
-                            noPathFind)
-                            .alongWith(
-                                    new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake,
-                                            sm));
+                    this.assemblyCommand = /*
+                                            * conditionalCommand(
+                                            * new InstantCommand(),
+                                            * new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_SPEAKER,
+                                            * true).getCommand(),
+                                            * noPathFind)
+                                            * .alongWith(
+                                            */
+                            new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake,
+                                    sm);
                     break;
 
                 case AMP:
-                    this.assemblyCommand = conditionalCommand(new InstantCommand(),
-                            new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP, true).getCommand(),
-                            noPathFind)
-                            .alongWith(
-                                    new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = /*
+                                            * conditionalCommand(new InstantCommand(),
+                                            * new PathfindAuto(swerveSubsystem, AlignmentConstants.BLUE_AMP,
+                                            * true).getCommand(),
+                                            * noPathFind)
+                                            * .alongWith(
+                                            */
+                            new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm);
                     break;
 
                 case SOURCE:
@@ -244,16 +252,23 @@ public class AssemblySchedulerCommand extends Command {
                     break;
 
                 case SUBWOOFER:
-                    this.assemblyCommand = conditionalCommand(new InstantCommand(),
-                            new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_SPEAKER).getCommand(), noPathFind)
-                            .alongWith(new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake,
-                                    sm));
+                    this.assemblyCommand = /*
+                                            * conditionalCommand(new InstantCommand(),
+                                            * new PathfindAuto(swerveSubsystem,
+                                            * AlignmentConstants.RED_SPEAKER).getCommand(), noPathFind)
+                                            * .alongWith(
+                                            */
+                            new AssemblySubwooferPositionCommand(chassisPivot, shintakePivot, led, shintake,
+                                    sm);
                     break;
 
                 case AMP:
-                    this.assemblyCommand = conditionalCommand(new InstantCommand(),
-                            new PathfindAuto(swerveSubsystem, AlignmentConstants.RED_AMP).getCommand(), noPathFind)
-                            .alongWith(new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm));
+                    this.assemblyCommand = /*
+                                            * conditionalCommand(new InstantCommand(),
+                                            * new PathfindAuto(swerveSubsystem,
+                                            * AlignmentConstants.RED_AMP).getCommand(), noPathFind)
+                                            * .alongWith(
+                                            */new AssemblyAmpPositionCommand(chassisPivot, shintakePivot, led, sm);
                     break;
 
                 case SOURCE:
@@ -283,7 +298,7 @@ public class AssemblySchedulerCommand extends Command {
                     this.assemblyCommand = new AssemblyDefendedArmPositionCommand(chassisPivot,
                             shintakePivot, led, shintake, sm,
                             () -> calculateArmAngle(swerveSubsystem
-                                    .calculateDistanceToTarget(AlignmentConstants.INTO_BLUE_SPEAKER)));
+                                    .calculateDistanceToTarget(AlignmentConstants.INTO_RED_SPEAKER)));
                     break;
 
                 case TRAP:
