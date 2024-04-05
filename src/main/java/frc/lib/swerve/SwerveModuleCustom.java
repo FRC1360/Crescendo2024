@@ -152,10 +152,10 @@ public class SwerveModuleCustom {
             this.prevTime = System.currentTimeMillis();
             this.prevSpeed = desiredState.speedMetersPerSecond;
             // }
-            // SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber,
-            // desiredState.speedMetersPerSecond);
-            // SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber,
-            // this.getSpeed());
+            SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber,
+            desiredState.speedMetersPerSecond);
+            SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber,
+            this.getSpeed());
             // System.out.println("Accel: " + this.currentAcceleration);
             driveController.setReference(
                     desiredState.speedMetersPerSecond,

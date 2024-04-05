@@ -28,7 +28,8 @@ public class OutakeCommand extends SequentialCommandGroup {
                 new MoveBackNoteCommand(shooter),
                 new STPGoToPositionCommand(STP, 30, ACP),
                 new InstantCommand(() -> shooter.setVelocity(Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER,
-                        Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER))
+                        Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER)),
+                new InstantCommand(() -> shooter.varIntake(1.0)).onlyIf(() -> shooter.shooterWheelsReady())
         // .alongWith(new ACPGoToPositionCommand(ACP,
         // Constants.NOTE_SCORE_SPEAKER_POSITION_ACP)/* REPLACE OUTAKE COMMAND WITH GO
         // TO POSITION COMMAND */)

@@ -52,6 +52,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 		// Using CANSparkFlexes for the two shooter neo vortexes
 		this.m_left = new CANSparkFlex(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
 		this.m_right = new CANSparkFlex(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+		this.m_left.setIdleMode(IdleMode.kBrake);
+		this.m_right.setIdleMode(IdleMode.kBrake);
 		this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
 		this.m_back.setIdleMode(IdleMode.kBrake);
 		this.m_digital = new DigitalInput(Constants.ShintakeConstants.SHINTAKE_SENSOR_PIN);
@@ -150,9 +152,9 @@ public class ShintakeSubsystem extends SubsystemBase {
 	}
 
 	public boolean shooterWheelsReady() {
-		return getVelocityLeft() != 0 || getVelocityRight() != 0
-				&& Math.abs(getVelocityLeft() - this.leftVelocity) <= 100
-				&& Math.abs(getVelocityRight() - this.rightVelocity) <= 100;
+		return (getVelocityLeft() != 0 || getVelocityRight() != 0)
+				&& (Math.abs(getVelocityLeft() - this.leftVelocity) <= 100
+				|| Math.abs(getVelocityRight() - this.rightVelocity) <= 100);
 	}
 
 	public double getVelocityLeft() {

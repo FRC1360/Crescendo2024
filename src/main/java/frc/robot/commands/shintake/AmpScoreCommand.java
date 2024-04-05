@@ -26,8 +26,9 @@ public class AmpScoreCommand extends Command {
 
   @Override
   public void initialize() { 
-      shintakeSubsystem.setVelocity(Constants.ShintakeConstants.AMP_VELOCITY_FRONT, Constants.ShintakeConstants.AMP_VELOCITY_FRONT);
-  }
+      //shintakeSubsystem.setVelocity(Constants.ShintakeConstants.AMP_VELOCITY_FRONT, Constants.ShintakeConstants.AMP_VELOCITY_FRONT);
+    shintakeSubsystem.varShoot(0.5);
+    }
 
   @Override
   public void execute() { 

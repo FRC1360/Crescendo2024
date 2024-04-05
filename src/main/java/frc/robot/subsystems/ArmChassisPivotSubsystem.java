@@ -95,8 +95,8 @@ public class ArmChassisPivotSubsystem extends SubsystemBase {
         this.ACPMotorMaster.setIdleMode(IdleMode.kBrake);
         this.ACPMotorSlave.setIdleMode(IdleMode.kBrake);
 
-        this.ACPMotorMaster.setSmartCurrentLimit(80);
-        this.ACPMotorSlave.setSmartCurrentLimit(80);
+        this.ACPMotorMaster.setSmartCurrentLimit(30);
+        this.ACPMotorSlave.setSmartCurrentLimit(30);
 
         this.ACPMotorSlave.follow(this.ACPMotorMaster);
 

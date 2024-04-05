@@ -313,7 +313,8 @@ public class RobotContainer {
 						() -> right_controller.button(3).getAsBoolean())));
 
 		left_controller.button(5)
-				.whileTrue(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem));
+				.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
+				.andThen(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem)));
 
 		left_controller.button(2).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
