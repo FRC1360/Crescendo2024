@@ -305,16 +305,17 @@ public class RobotContainer {
 				right_controller));
 
 		left_controller.button(7).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
+		right_controller.button(3).whileTrue(new LockWheels(swerveSubsystem));
 
 		// Right controller Button 4 is score trap
 		left_controller.button(2).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-						() -> right_controller.button(3).getAsBoolean())));
+						() -> right_controller.button(9).getAsBoolean())));
 
 		left_controller.button(5)
 				.whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SUBWOOFER)
-				.andThen(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem)));
+						.andThen(new ShootSpeakerFullCommand(shintakeSubsystem, armChassisPivotSubsystem)));
 
 		left_controller.button(2).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
@@ -323,18 +324,18 @@ public class RobotContainer {
 		// .whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
 		// armChassisPivotSubsystem,
 		// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-		// () -> right_controller.button(3).getAsBoolean())
+		// () -> right_controller.button(9).getAsBoolean())
 		// .alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
 
 		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-						() -> right_controller.button(3).getAsBoolean())));
+						() -> right_controller.button(9).getAsBoolean())));
 
 		left_controller.button(9).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.TRAP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-						() -> right_controller.button(3).getAsBoolean())));
+						() -> right_controller.button(9).getAsBoolean())));
 
 		left_controller.button(5).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
@@ -347,7 +348,7 @@ public class RobotContainer {
 		right_controller.button(5).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.SOURCE)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
 						shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-						() -> right_controller.button(3).getAsBoolean())));
+						() -> right_controller.button(9).getAsBoolean())));
 
 		right_controller.button(5).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
@@ -366,7 +367,7 @@ public class RobotContainer {
 						.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
 								armChassisPivotSubsystem,
 								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-								() -> right_controller.button(3).getAsBoolean())
+								() -> right_controller.button(9).getAsBoolean())
 								.alongWith(
 										new RotateForShot(swerveSubsystem,
 												() -> -modifyAlliance(modifyAxis(left_controller.getY()))
@@ -387,7 +388,7 @@ public class RobotContainer {
 						.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
 								armChassisPivotSubsystem,
 								shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-								() -> right_controller.button(3).getAsBoolean())
+								() -> right_controller.button(9).getAsBoolean())
 								.alongWith(
 										new RotateForShot(swerveSubsystem,
 												() -> -modifyAlliance(modifyAxis(left_controller.getY()))
@@ -455,7 +456,6 @@ public class RobotContainer {
 		// // left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.BLUE_SPEAKER).getCommand());
 
-		// left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem));
 		// right_controller.button(6).whileTrue(new RotateForShot(swerveSubsystem,
 		// () -> -modifyAlliance(modifyAxis(left_controller.getY()))
 		// * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for
