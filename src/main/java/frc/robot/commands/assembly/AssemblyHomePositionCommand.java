@@ -21,12 +21,12 @@ public class AssemblyHomePositionCommand extends SequentialCommandGroup {
 
                 // Command 1
                 new STPGoToPositionCommand(STPSubsystem, Constants.HOME_POSITION_STP, ACPSubsystem)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Homing stage", "STAGE 2"))), 
-                // .alongWith(
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Homing stage", "STAGE 2")))//, 
+                 .alongWith(
                 // Command 2
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.HOME_POSITION_ACP)
-                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Homing stage", "STAGE 3"))), 
-                // ), 
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.HOME_POSITION_ACP, STPSubsystem)
+                        .alongWith(new InstantCommand(() -> SmartDashboard.putString("Homing stage", "STAGE 3")))//, 
+                 ), 
 
                 new InstantCommand(ledSubsystem::setLEDEnable),
                 new InstantCommand(() -> SmartDashboard.putString("Homing stage", "DONE")),

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.4721592269660398,
-      "y": 7.225586148743903
+      "x": 0.5168910337820676,
+      "y": 7.337966590826799
     },
     "rotation": 0
   },
@@ -14,18 +14,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Lineup Amp Line"
+            "pathName": "Speaker Lineup left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Mean Path Amp"
+            "pathName": "Speaker to midfield"
           }
         }
       ]
     }
   },
-  "folder": "Amp",
+  "folder": "Speaker",
   "choreoAuto": false
 }

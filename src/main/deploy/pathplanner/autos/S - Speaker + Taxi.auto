@@ -2,25 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.49489567064240514,
-      "y": 2.125065526726797
+      "x": 0.6924444618120023,
+      "y": 4.311854008323402
     },
-    "rotation": 0
+    "rotation": 119.10452944424644
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Speaker Lineup"
+            "name": "SubwooferShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to midfield"
+            "pathName": "Right side speaker and leave"
           }
         }
       ]

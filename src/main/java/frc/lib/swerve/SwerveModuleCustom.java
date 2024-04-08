@@ -33,8 +33,8 @@ public class SwerveModuleCustom {
     /* Encoders and their values */
     private RelativeEncoder driveEncoder;
     private RelativeEncoder integratedAngleEncoder;
-    //public MagEncoder angleEncoder;
-    public CANCoderSwerve angleEncoder; 
+    // public MagEncoder angleEncoder;
+    public CANCoderSwerve angleEncoder;
 
     @AutoLogOutput(key = "Swerve/Modules/M{moduleNumber}/LastAngle")
     private double lastAngle;
@@ -54,6 +54,10 @@ public class SwerveModuleCustom {
 
     private SwerveModuleState targetState = new SwerveModuleState();
 
+    private double currentAcceleration;
+    private double prevSpeed = 0.0;
+    private double prevTime = -1;
+
     public SwerveModuleCustom(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
 
@@ -61,8 +65,8 @@ public class SwerveModuleCustom {
         this.driveSVA = moduleConstants.driveSVA;
 
         /* Angle Encoder Config */
-        angleEncoder = new CANCoderSwerve(moduleConstants.canCoderID);  
-        
+        angleEncoder = new CANCoderSwerve(moduleConstants.canCoderID);
+
         System.out.println(angleEncoder.setAbsoluteEncoderOffset(moduleConstants.angleOffset));
 
         /* Angle Motor Config */
@@ -134,39 +138,45 @@ public class SwerveModuleCustom {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
-            //double percentOutput = desiredState.speedMetersPerSecond / Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND;
-            // double percentOutput = 0.25; 
-            // System.out.println("Setting"); 
-            // driveMotor.set(percentOutput);
-
-            //this.targetSpeed = desiredState.speedMetersPerSecond;
-            driveController.setReference(
-                desiredState.speedMetersPerSecond,
-                    ControlType.kVelocity,
-                    0,
-                    feedforward.calculate(desiredState.speedMetersPerSecond));
+            double percentOutput = desiredState.speedMetersPerSecond / Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND;
+            driveMotor.set(percentOutput);
         } else {
             this.targetSpeed = desiredState.speedMetersPerSecond;
-            SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber, desiredState.speedMetersPerSecond); 
+            if (this.prevTime == -1) {
+                this.prevTime = System.currentTimeMillis();
+            }
+            // if (Math.abs(desiredState.speedMetersPerSecond) > Constants.Swerve.MAX_SPEED
+            // * 0.01) {
+            double deltaTime = (System.currentTimeMillis() / 1000d) - (this.prevTime / 1000d);
+            this.currentAcceleration = (desiredState.speedMetersPerSecond - this.prevSpeed) / deltaTime;
+            this.prevTime = System.currentTimeMillis();
+            this.prevSpeed = desiredState.speedMetersPerSecond;
+            // }
+            SmartDashboard.putNumber("Target Drive Mod " + this.moduleNumber,
+            desiredState.speedMetersPerSecond);
+            SmartDashboard.putNumber("Measured Mod Speed " + this.moduleNumber,
+            this.getSpeed());
+            // System.out.println("Accel: " + this.currentAcceleration);
             driveController.setReference(
                     desiredState.speedMetersPerSecond,
                     ControlType.kVelocity,
                     0,
-                    feedforward.calculate(desiredState.speedMetersPerSecond));
+                    feedforward.calculate(desiredState.speedMetersPerSecond, this.currentAcceleration));
         }
     }
 
     private void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents jittering.
 
-        double angle = desiredState.angle.getDegrees();
-        if (desiredState.speedMetersPerSecond != 0.0 
-                && (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))) { 
-                    angle = lastAngle; 
+        double angle = desiredState.angle.getDegrees() % 360.0;
+        if (desiredState.speedMetersPerSecond != 0.0
+                && (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01))) {
+            // System.out.println("IN Last angle");
+            angle = lastAngle;
         }
 
-        //System.out.println("Desired angle: " + angle); 
-        SmartDashboard.putNumber("Target Mod Angle " + this.moduleNumber, angle); 
+        // System.out.println("Desired angle: " + angle);
+        // SmartDashboard.putNumber("Target Mod Angle " + this.moduleNumber, angle);
         angleController.setReference(angle, ControlType.kPosition);
         lastAngle = angle;
         this.targetAngle = angle;

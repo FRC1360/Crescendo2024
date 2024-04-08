@@ -20,9 +20,16 @@ public class PathfindAuto {
 
     private Pose2d targetPose;
 
+    private boolean allowEnd;
+
     public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose) {
+        this(swerveSubsystem, targetPose, false);
+    }
+
+    public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose, boolean allowEnd) {
         this.targetPose = targetPose;
 
+        
         this.swerveSubsystem = swerveSubsystem;
 
         this.constraints = new PathConstraints(Constants.Swerve.AutoConstants.maxSpeed,
@@ -30,17 +37,30 @@ public class PathfindAuto {
                 Constants.Swerve.AutoConstants.maxAngularVelocity,
                 Constants.Swerve.AutoConstants.maxAngularAcceleration);
 
+        this.allowEnd = allowEnd;
     }
 
     public Command getCommand() {
-        if (!this.swerveSubsystem.manualDrive)
-            return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
-                    .until(() -> swerveSubsystem.isInRange(targetPose, AutoConstants.positionTolerance * 20.0,
-                            AutoConstants.angleTolerance * 10))
-                    .alongWith(new InstantCommand(() -> System.out.println("Pathfinding to: " + this.targetPose)))
-                    .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", this.targetPose)))
-                    .andThen(new AlignToPose(this.swerveSubsystem, targetPose))
-                    .andThen(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose", new Pose2d())));
+        if (!this.swerveSubsystem.manualDrive) {
+            // return AutoBuilder.pathfindToPose(this.targetPose, constraints, 0.0, 0.5)
+            // .until(() -> swerveSubsystem.isInRange(targetPose,
+            // AutoConstants.positionTolerance,
+            // AutoConstants.angleTolerance))
+            // .alongWith(new InstantCommand(() -> System.out.println("Pathfinding to: " +
+            // this.targetPose)))
+            // .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
+            // this.targetPose)))
+            // .andThen(
+            // return new InstantCommand(() ->
+            // swerveSubsystem.setMotionProfileInit(false))//)
+            // .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
+            // this.targetPose)))
+            // .andThen(new AlignToPose(this.swerveSubsystem, targetPose, allowEnd))
+            // .andThen(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
+            // new Pose2d())));
+
+            return new InstantCommand();
+        }
 
         return new InstantCommand();
     }

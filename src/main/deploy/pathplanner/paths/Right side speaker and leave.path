@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.48389798907257386,
-        "y": 7.271980501407812
+        "x": 0.6924444618120023,
+        "y": 4.311854008323402
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7706267327428273,
-        "y": 7.458941088094942
+        "x": 1.3239288017037585,
+        "y": 3.10808698540474
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.7926220958824899,
-        "y": 7.53592485908376
+        "x": 6.454739063324283,
+        "y": 0.8090893104863142
       },
       "prevControl": {
-        "x": 1.2945574370576298,
-        "y": 7.078498879716901
+        "x": 5.454739063324283,
+        "y": 0.8090893104863142
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,18 +32,21 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 16.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": -1.38035407344442,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Lineups",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 119.74488129694225,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

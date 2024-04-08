@@ -1,30 +1,42 @@
 package frc.robot.commands.ArmChassisPivot;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmChassisPivotSubsystem; 
+import frc.robot.subsystems.ArmChassisPivotSubsystem;
+import frc.robot.subsystems.ShintakePivotSubsystem;
 
 public class ACPGoToPositionCommand extends Command {
 
-    ArmChassisPivotSubsystem ACP; 
-    double angle; 
-    
-    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle) {
+    ArmChassisPivotSubsystem ACP;
+    ShintakePivotSubsystem STP;
+    double angle;
+    boolean initalized = false;
+
+    public ACPGoToPositionCommand(ArmChassisPivotSubsystem ACP, double angle, ShintakePivotSubsystem STPSubsystem) {
         this.ACP = ACP;
-        this.angle = angle; 
+        this.STP = STPSubsystem;
+        this.angle = angle;
         addRequirements(ACP);
     }
 
     @Override
     public void initialize() {
-        this.ACP.setTargetAngle(angle);
+        initalized = false;
+        // this.ACP.setTargetAngle(angle);
 
-        System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle());
+        // System.out.println("Shoulder angle set to: " + this.ACP.getTargetAngle());
     }
 
     @Override
-    public boolean isFinished() { 
-        return this.ACP.atTarget(); 
+    public void execute() {
+        if (this.STP.getSTPAngle() < 140.0 && !initalized) {
+            this.ACP.setTargetAngle(angle);
+            initalized = true;
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return this.ACP.atTarget() && initalized;
     }
 
     @Override

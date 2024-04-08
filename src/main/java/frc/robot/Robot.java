@@ -15,6 +15,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
@@ -57,16 +59,18 @@ public class Robot extends LoggedRobot {
 
 		m_robotContainer = new RobotContainer();
 
-		/*Pathfinding.setPathfinder(new LocalADStar());
+		Pathfinding.setPathfinder(new LocalADStar());
+
+		NamedCommands.registerCommand("", m_autonomousCommand);
 
 		m_robotContainer.loadAllAutos();
 
 		m_robotContainer.initalizeAutoChooser();
-		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
-													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
+		SmartDashboard.putString("ALLIANCE",
+				DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 		SmartDashboard.putBoolean("PODIUM_FAR_SCH", false);
 		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", false);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);*/
+		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", false);
 	}
 
 	private void loggerInit() {
@@ -91,7 +95,8 @@ public class Robot extends LoggedRobot {
 		if (isReal()) { // real bot
 			Logger.addDataReceiver(new WPILOGWriter());
 			Logger.addDataReceiver(new NT4Publisher());
-			PowerDistribution powerDistribution = new PowerDistribution(0, ModuleType.kCTRE);
+			PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+			powerDistribution.setSwitchableChannel(true);
 		} else if (!Constants.isReplay) { // regular sim
 			Logger.addDataReceiver(new NT4Publisher());
 		} else { // replay
@@ -103,7 +108,7 @@ public class Robot extends LoggedRobot {
 
 		AutoLogOutputManager.addPackage("frc.lib");
 
-        Logger.registerURCL(URCL.startExternal());
+		Logger.registerURCL(URCL.startExternal());
 		Logger.start();
 		DataLogManager.start();
 	}
@@ -128,6 +133,7 @@ public class Robot extends LoggedRobot {
 		// robot's periodic
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
+		m_robotContainer.noteInSource(); // checks if note is in shintake when at source
 		// m_robotContainer.loop.poll();
 		// System.out.println("Podium scheduled: " + m_robotContainer.LEVEL);
 	}
@@ -135,7 +141,6 @@ public class Robot extends LoggedRobot {
 	/** This function is called once each time the robot enters Disabled mode. */
 	@Override
 	public void disabledInit() {
-		// new LEDColorSelect(m_robotContainer.getLedSubsystem(), LEDSubsystem.LEDStates.DISABLED);
 	}
 
 	@Override
@@ -143,7 +148,9 @@ public class Robot extends LoggedRobot {
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 		m_robotContainer.swerveSubsystem.resetModuleZeros();
 		m_robotContainer.armChassisPivotSubsystem.updateSmartDashboard();
+		m_robotContainer.armChassisPivotSubsystem.resetArmTargetAngle();
 		m_robotContainer.shintakePivotSubsystem.updateSmartDashboard();
+		m_robotContainer.shintakePivotSubsystem.resetSTPTargetAngle();
 	}
 
 	/**
@@ -158,7 +165,8 @@ public class Robot extends LoggedRobot {
 		// Rotation2d.fromDegrees(90.0)));
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+			m_robotContainer.getHoming()
+					.andThen(m_autonomousCommand).schedule();
 		}
 	}
 
@@ -176,30 +184,29 @@ public class Robot extends LoggedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		SmartDashboard.putString("ALLIANCE", DriverStation.getAlliance().isPresent() ? 
-													DriverStation.getAlliance().get().toString() : "NOT AVAIL");
+		m_robotContainer.getHoming().schedule();
+		SmartDashboard.putString("ALLIANCE",
+				DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get().toString() : "NOT AVAIL");
 
-		m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
-		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
+		// m_robotContainer.shintakePivotSubsystem.setTargetAngle(Constants.HOME_POSITION_STP);
+		// m_robotContainer.armChassisPivotSubsystem.setTargetAngle(Constants.HOME_POSITION_ACP);
 	}
 
 	/** This function is called periodically during operator control. */
 	@Override
 	public void teleopPeriodic() {
-		SmartDashboard.putBoolean("PODIUM_FAR_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_FAR);
-		SmartDashboard.putBoolean("PODIUM_LEFT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_LEFT);
-		SmartDashboard.putBoolean("PODIUM_RIGHT_SCH", m_robotContainer.LEVEL == ASSEMBLY_LEVEL.PODIUM_RIGHT);
+		m_robotContainer.pollButtonsForSmartDashboard();
 
 		m_robotContainer.swerveSubsystem.updateAbsAngleSmartDashboard();
 	}
 
-	private class TestContext
-	{
-		public double acpAngle = Constants.HOME_POSITION_ACP;
-		public double stpAngle = Constants.HOME_POSITION_STP;
+	private class TestContext {
+		public double acpAngle = 0;
+		public double stpAngle = 0;
 		public double stLeftVel = 0;
 		public double stRightVel = 0;
 		public double stIntakeVel = 0;
+		public double clHeight = 0;
 	}
 
 	private TestContext m_test = new TestContext();
@@ -208,25 +215,44 @@ public class Robot extends LoggedRobot {
 	public void testInit() {
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
+
+		m_test.acpAngle = m_robotContainer.armChassisPivotSubsystem.getTargetAngle();
+		m_test.stpAngle = m_robotContainer.shintakePivotSubsystem.getTargetAngle();
+		m_test.stLeftVel = 0;
+		m_test.stRightVel = 0;
+		m_test.stIntakeVel = 0;
+		m_test.clHeight = m_robotContainer.climberSubsystem.gettargetHeight();
+
+		SmartDashboard.putNumber("TEST_ACP_ANGLE", m_test.acpAngle); // Degrees | Min = 0, Max = 80.0
+		SmartDashboard.putNumber("TEST_STP_ANGLE", m_test.stpAngle); // Degrees | Min = -180, Max = 360
+		SmartDashboard.putNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel); // RPM | limit is 6784
+		SmartDashboard.putNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel); // RPM | limit is 6784
+		SmartDashboard.putNumber("TEST_INTAKE_VEL", m_test.stIntakeVel); // RPM | limit is 6784
+		SmartDashboard.putNumber("TEST_CLIMB_HEIGHT", m_test.clHeight); // Height in Motor rotations | Min and Max
+																		// currently unknown
 	}
 
 	/** This function is called periodically during test mode. */
 	@Override
 	public void testPeriodic() {
-		
+
 		m_test.acpAngle = SmartDashboard.getNumber("TEST_ACP_ANGLE", m_test.acpAngle);
 		m_test.stpAngle = SmartDashboard.getNumber("TEST_STP_ANGLE", m_test.stpAngle);
 		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_LEFT_VEL", m_test.stLeftVel);
-		m_test.stLeftVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
-		
-		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.acpAngle);
-		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.stpAngle);
-		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stLeftVel, m_test.stRightVel);
+		m_test.stRightVel = SmartDashboard.getNumber("TEST_ST_RIGHT_VEL", m_test.stRightVel);
+		m_test.stIntakeVel = SmartDashboard.getNumber("TEST_INTAKE_VEL", m_test.stIntakeVel);
+		m_test.clHeight = SmartDashboard.getNumber("TEST_CLIMB_HEIGHT", m_test.clHeight);
+
+		m_robotContainer.shintakePivotSubsystem.setTargetAngle(m_test.stpAngle);
+		m_robotContainer.armChassisPivotSubsystem.setTargetAngle(m_test.acpAngle);
+		m_robotContainer.shintakeSubsystem.setVelocity(m_test.stRightVel, m_test.stLeftVel);
 		m_robotContainer.shintakeSubsystem.varIntake(m_test.stIntakeVel);
+		m_robotContainer.climberSubsystem.setTargetHeight(m_test.clHeight);
 
 		m_robotContainer.shintakePivotSubsystem.periodic();
 		m_robotContainer.armChassisPivotSubsystem.periodic();
 		m_robotContainer.shintakeSubsystem.periodic();
+		m_robotContainer.climberSubsystem.periodic();
 	}
 
 	/** This function is called once when the robot is first started up. */

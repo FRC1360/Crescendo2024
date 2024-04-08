@@ -2,24 +2,24 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.4721592269660398,
-      "y": 7.225586148743903
+      "x": 0.761513061487663,
+      "y": 4.351321779566637
     },
-    "rotation": 0
+    "rotation": 119.0546040990772
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Mean Path Source"
+            "name": "SubwooferShoot"
           }
         }
       ]
     }
   },
-  "folder": "Mean",
+  "folder": "Speaker",
   "choreoAuto": false
 }

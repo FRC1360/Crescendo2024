@@ -16,7 +16,7 @@ public class AssemblyClimbCommand extends SequentialCommandGroup {
             ShintakePivotSubsystem STPSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
         addCommands(
                 new InstantCommand(() -> sm.setAtClimb()),
-                new InstantCommand(ledSubsystem::setLEDDisable),
+                new InstantCommand(() -> ledSubsystem.setLEDDisable()),
 
                 // Command 1
 
@@ -25,12 +25,12 @@ public class AssemblyClimbCommand extends SequentialCommandGroup {
                 
                 .alongWith(
                 // Command 2
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.CLIMB_POSITION_ACP)
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.CLIMB_POSITION_ACP, STPSubsystem)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Climb stage", "STAGE 3")))
                 ), 
                 // Command 3 add climber stuff here
 
-                new InstantCommand(ledSubsystem::setLEDEnable),
+                new InstantCommand(() -> ledSubsystem.setLEDEnable()),
                 new InstantCommand(() -> SmartDashboard.putString("Climb stage", "DONE")),
                 new InstantCommand(() -> sm.setAtAmpScore()));
     }

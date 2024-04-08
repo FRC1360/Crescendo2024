@@ -21,20 +21,24 @@ public class STPGoToPositionCommand extends Command {
     @Override
     public void initialize() {
         initalized = false; 
-        System.out.println("STP angle set to: " + this.ShintakePivot.getTargetAngle());
-        this.ShintakePivot.setTargetAngle(angle); 
+        // System.out.println("STP angle set to: " + this.ShintakePivot.getTargetAngle());
+        // this.ShintakePivot.setTargetAngle(angle); 
     }
 
     @Override
     public void execute() {
-        // if (this.arm.getACPAngle() > 20.0 && !initalized) { 
-            // this.ShintakePivot.setTargetAngle(angle); 
-            // initalized = true;  
-        // }
+        if (angle >= 80.0 && this.arm.getACPAngle() > 20.0 && !initalized) { 
+            this.ShintakePivot.setTargetAngle(angle); 
+            initalized = true;  
+        }
+        else if (angle < 80.0 && !initalized) { 
+            this.ShintakePivot.setTargetAngle(angle); 
+            initalized = true;  
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return this.ShintakePivot.atTarget(); 
+        return this.ShintakePivot.atTarget() && initalized; 
     }
 }

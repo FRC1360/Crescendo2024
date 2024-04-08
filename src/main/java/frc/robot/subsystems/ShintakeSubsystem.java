@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -32,7 +35,7 @@ public class ShintakeSubsystem extends SubsystemBase {
 	private Counter m_counter;
 	private SparkPIDController rightWheelPID;
 	private SparkPIDController leftWheelPID;
-	private double leftVelocity, rightVelocity;
+	public double leftVelocity, rightVelocity;
 
 	private final TuningTable kP_Upper = new TuningTable("P_Upper_Shooter");
 	private final TuningTable kI_Upper = new TuningTable("I_Upper_Shooter");
@@ -49,20 +52,22 @@ public class ShintakeSubsystem extends SubsystemBase {
 		// Using CANSparkFlexes for the two shooter neo vortexes
 		this.m_left = new CANSparkFlex(Constants.ShintakeConstants.LEFT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
 		this.m_right = new CANSparkFlex(Constants.ShintakeConstants.RIGHT_SHOOTAKE_CAN_ID, MotorType.kBrushless);
+		this.m_left.setIdleMode(IdleMode.kBrake);
+		this.m_right.setIdleMode(IdleMode.kBrake);
 		this.m_back = new CANSparkMax(Constants.ShintakeConstants.BACK_SHOOTAKE_ID, MotorType.kBrushless);
 		this.m_back.setIdleMode(IdleMode.kBrake);
 		this.m_digital = new DigitalInput(Constants.ShintakeConstants.SHINTAKE_SENSOR_PIN);
 		this.m_counter = new Counter(m_digital);
 		this.m_encoderLeft = m_left.getEncoder();
 		this.m_encoderRight = m_right.getEncoder();
-		this.leftkP = 0.0008;
-		this.leftkI = 0.000;
+		this.leftkP = 0.002;
+		this.leftkI = 0.00017;
 		this.leftkD = 0.00;
-		this.leftFF = 0.00016;
-		this.rightkP = 0.0008;
-		this.rightkI = 0.0;
+		this.leftFF = 0.0002;
+		this.rightkP = 0.0025;
+		this.rightkI = 0.00021;
 		this.rightkD = 0.00;
-		this.rightFF = 0.00016;
+		this.rightFF = 0.0002;
 
 		Preferences.initDouble("right kP", rightkP);
 		Preferences.initDouble("right kI", rightkI);
@@ -104,13 +109,19 @@ public class ShintakeSubsystem extends SubsystemBase {
 		return m_counter.get() > 0;
 	}
 
+	public void clearFaults() {
+		m_left.clearFaults();
+		m_right.clearFaults();
+		m_back.clearFaults();
+	}
+
 	public double getBackEncoder() {
 		return m_back.getEncoder().getPosition();
 	}
 
-	public boolean getShooterReady(double prev) {
+	public boolean getShooterReady(double prev) { // Sets speed of intake [.set()] | NO Max or Min
 		varIntake(-Constants.ShintakeConstants.UNFEED_SPEED_BACK);
-		if (-(getBackEncoder() - prev) > (58.095 - 57.548)) {
+		if (Math.abs(getBackEncoder() - prev) > 0.5) {
 			stopIntake();
 			return true;
 		}
@@ -121,25 +132,29 @@ public class ShintakeSubsystem extends SubsystemBase {
 		m_counter.reset();
 	}
 
-	public void setVelocity(double rightVelocity, double leftVelocity) {
+	public void setVelocity(double rightVelocity, double leftVelocity) { // RPM | Sets the velocity of the shooter
+																			// wheels | limit is 6784 RPM
 		System.out.println("Setting velocity to: " + rightVelocity);
-		if (this.leftVelocity != leftVelocity)
-		{
+		if (leftVelocity >= 6700 || leftVelocity <= -6700 || rightVelocity >= 6700 || rightVelocity <= -6700) {
+			m_left.set(0.0);
+			m_right.set(0.0);
+		}
+
+		if (this.leftVelocity != leftVelocity) {
 			this.leftVelocity = leftVelocity;
 			leftWheelPID.setReference(this.leftVelocity, CANSparkFlex.ControlType.kVelocity);
 		}
-		
-		if (this.rightVelocity != rightVelocity)
-		{
+
+		if (this.rightVelocity != rightVelocity) {
 			this.rightVelocity = rightVelocity;
-			rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);	
+			rightWheelPID.setReference(this.rightVelocity, CANSparkFlex.ControlType.kVelocity);
 		}
 	}
 
 	public boolean shooterWheelsReady() {
-		return getVelocityLeft() != 0 && getVelocityRight() != 0
-				&& Math.abs(getVelocityLeft() - this.leftVelocity) <= 100
-				&& Math.abs(getVelocityRight() - this.rightVelocity) <= 100;
+		return (getVelocityLeft() != 0 || getVelocityRight() != 0)
+				&& (Math.abs(getVelocityLeft() - this.leftVelocity) <= 100
+				|| Math.abs(getVelocityRight() - this.rightVelocity) <= 100);
 	}
 
 	public double getVelocityLeft() {
@@ -152,6 +167,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	// Stops both motors
 	public void stopShooter() {
+		this.leftVelocity = 0.0;
+		this.rightVelocity = 0.0;
 		m_left.set(0.0);
 		m_right.set(0.0);
 	}
@@ -162,10 +179,6 @@ public class ShintakeSubsystem extends SubsystemBase {
 
 	public void varIntake(double backSpeed) {
 		m_back.set(backSpeed);
-	}
-
-	public void varFix(double backSpeed) {
-		m_back.set(-backSpeed);
 	}
 
 	public void varShoot(double speed) {
@@ -187,7 +200,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void periodic() {
+	public void periodic() { // Displays vortex velocities, target velocities, intake sensor state (false =
+								// detecting something), and if the shintake is in motion
 		SmartDashboard.putBoolean("Intake in motion: ",
 				!(m_left.get() == 0 && m_right.get() == 0 && m_back.get() == 0));
 		SmartDashboard.putBoolean("intake sensor state", m_digital.get());
@@ -197,6 +211,8 @@ public class ShintakeSubsystem extends SubsystemBase {
 				Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER);
 		SmartDashboard.putNumber("Target right Wheel Velocity",
 				Constants.ShintakeConstants.TARGET_SHOOT_VELOCITY_SPEAKER);
+
+		SmartDashboard.putBoolean("SHOOTER READY", this.shooterWheelsReady());
 		// SmartDashboard.putNumber("left Wheel kp", kp);
 		// leftWheelPID.setP()
 		// SmartDashboard.getNumber("right kP", rightkP);

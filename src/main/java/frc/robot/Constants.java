@@ -35,10 +35,10 @@ public final class Constants {
     public static final boolean isReplay = true; // only used if sim
 
     public static class LED {
-        public static final int LEDPort = 2;
+        public static final int LEDPort = 0;
         public static final float ENABLED_COLOR = 0.87f; // BLUE
         public static final float DISABLED_COLOR = 0.77f; // GREEN
-        public static final float NOTE_COLOR = 0.6f; // ORANGE
+        public static final float NOTE_COLOR = 0.81f; // ORANGE
         public static final float SOURCE_COLOR = 0.93f; // WHITE
         public static final float SCORING_COLOR = 0.61f; // RED
     }
@@ -46,12 +46,13 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
     public static class ClimbConstants {
-        public static final int CLIMBER_LEAD_CAN_ID = 99;
-        public static final int CLIMBER_SLAVE_CAN_ID = 98;
+        public static final int CLIMBER_LEAD_CAN_ID = 30;
+        public static final int CLIMBER_SLAVE_CAN_ID = 31;
         public static final double CLIMBER_ENCODER_EXTENDED_HEIGHT_IN_ROTATIONS = 20.0;
-        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.9;
+        public static final double LEAD_CLIMBER_MOTOR__SPEED = 0.8;
         public static final double CLIMBER_ENCODER_RETRACTED_HEIGHT_IN_ROTATIONS = 0;
         public static final double CLIMBER_ENCODER_CLIMBED_HEIGHT_IN_ROTATIONS = 0;
+        public static final double HOME_POSITION_IN_ROTATIONS = 0.0;
     }
 
     public static class OperatorConstants {
@@ -66,7 +67,7 @@ public final class Constants {
                                 Units.inchesToMeters(13.5),
                                 Units.inchesToMeters(-6.5),
                                 Units.inchesToMeters(9.0)), // forward is positive X, left is positive Y, and up is
-                                                           // positive Z.
+                                                            // positive Z.
                         new Rotation3d(
                                 0,
                                 Math.toRadians(-45.0),
@@ -78,14 +79,15 @@ public final class Constants {
 
     public static class ShintakeConstants {
         public static final double UNFEED_SPEED_BACK = 0.1;
-        public static final double INTAKE_SPEED_BACK = 0.1;
+        public static final double INTAKE_SPEED_BACK = 0.15;
         public static final double INITIAL_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double SECOND_DEFAULT_INTAKE_SPEED = 0.2;
         public static final double DEFAULT_INTAKE_SPEED = 0.1;
         public static final double SHOOT_SPEED_FRONT = 0.5;
-        public static final double SHOOT_VELOCITY_FRONT = 5800; //6250;
-        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 5800; //6250;
-        public static final double AMP_VELOCITY_FRONT = 3000; 
+        public static final double SHOOT_SPEED_FRONT_TRAP = 0.24;
+        public static final double SHOOT_VELOCITY_FRONT = 6600; // 6250;
+        public static final double TARGET_SHOOT_VELOCITY_SPEAKER = 6600; // 62,50;
+        public static final double AMP_VELOCITY_FRONT = 3000;
         public static final double SHOOT_SPEED_BACK_AMP = 0.1;
         public static final double SHOOT_SPEED_BACK_SPEAKER = 1.0;
         public static final int RIGHT_SHOOTAKE_CAN_ID = 37;
@@ -100,11 +102,12 @@ public final class Constants {
     public static class STPConstants { // random placeholder numbers
         public static final int STP_MOTOR_MASTER = 42;
         public static final int STP_MOTOR_SLAVE = 43;
-        public static final double STP_MAX_ANGLE = 2;
-        public static final double STP_MIN_ANGLE = 3;
-        public static final int STP_ENCODER_CHANNEL = 4;
-        public static final double STP_GEAR_RATIO = (11.0 / 40.0) * (1.0 / 20.0);
-        public static final double STP_ENCODER_OFFSET = 0.650;
+        public static final double STP_MAX_ANGLE = 245.0; // MUST NOT GO PASS 360!! The STP angle will report 0 when at
+                                                          // 360
+        public static final double STP_MIN_ANGLE = -45.0;
+        public static final int STP_ENCODER_CHANNEL = 1;
+        public static final double STP_GEAR_RATIO = (11.0 / 60.0) * (1.0 / 20.0);
+        public static final double STP_ENCODER_OFFSET = 0.307;
         public static final double STP_GO_TO_POS_TOLERANCE = 2.0; // in deg
     }
 
@@ -114,50 +117,58 @@ public final class Constants {
         public static final int ACP_MOTOR_SLAVE = 41;
         public static final int ACP_ENCODER_CHANNEL = 0;
 
-        public static final double ACP_ENCODER_OFFSET = 0.229;
+        public static final double ACP_ENCODER_OFFSET = 0.819;
 
-        public static final double ACP_GEAR_RATIO = (11.0 / 52.0) * (30.0 / 68.0) * (1.0 / 20.0);
+        public static final double ACP_GEAR_RATIO = (1.0 / 35.0) * (11.0 / 52.0) * (30.0 / 68.0) * (2.0 / 3.0);
         public static final double ACP_MANUAL_OVERRIDE_RANGE = 10.0;
-        public static final double MAX_ACP_ANGLE = 80.0;
-        public static final double MIN_ACP_ANGLE = 0.0; // Can't go lower, limelight //-10.0; //20.0; 
-        
+        public static final double MAX_ACP_ANGLE = 90.0;
+        public static final double MIN_ACP_ANGLE = 10.0; // Can't go lower, limelight //-10.0; //20.0;
+
         public static final double ACP_GO_TO_POS_TOLERANCE = 2.0; // in degrees
-    } 
+        public static final double ACP_SLOP_OCCUR_ANGLE = 75.0;
+    }
+
+    public static final boolean SHOOT_ONLY_WITH_ACP = false;
     // START_POSITION
     public static final double START_POSITION_STP = 0.0;
     public static final double START_POSITION_ACP = 40.0;
-    
+
     // HOME_POSITION
     public static final double HOME_POSITION_STP = 0.0;
     public static final double HOME_POSITION_ACP = 21.0;
 
     // NOTE_SCORE_AMP_POSITION
-    public static final double NOTE_SCORE_AMP_POSITION_STP = 220.0; //-140.0 - 70.0; // Must go positive, wires will break going negative
-    public static final double NOTE_SCORE_AMP_POSITION_ACP = 73.0; //80.0;
+    public static final double NOTE_SCORE_AMP_POSITION_STP = 140.0; // -140.0 - 70.0; // Must go positive, wires will
+                                                                    // break going negative
+    public static final double NOTE_SCORE_AMP_POSITION_ACP = 88.0; // 80.0;
 
     // NOTE_SCORE_SUBWOOFER_SPEAKER_POSITION
-    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 0.0;
-    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 50.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP = 41.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP = 21.0; // 50.0;
+
+    public static final double NOTE_SCORE_SPEAKER_POSITION_STP_2 = 0.0; // 0.0;
+    public static final double NOTE_SCORE_SPEAKER_POSITION_ACP_2 = 50.0; // 50.0;
 
     // NOTE_SCORE_TRAP_POSITION
-    public static final double NOTE_SCORE_TRAP_POSITION_STP = 140.0; // TODO: SET ACTUAL VALUES
-    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 80.0; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_STP = 25.5; // TODO: SET ACTUAL VALUES
+    public static final double NOTE_SCORE_TRAP_POSITION_ACP = 68.5; // TODO: SET ACTUAL VALUES
 
     // NOTE_SCORE_DEFENDED_SPEAKER_POSITION
     public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_STP = 30.0;
-    public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 80.0;
+    public static final double NOTE_SCORE_DEFENDED_SPEAKER_POSITION_ACP = 88.0;
 
     // NOTE_SCORE_PODIUM_SPEAKER_POSITION
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_STP = 0;
     public static final double NOTE_SCORE_PODIUM_SPEAKER_POSITION_ACP = 45.0;
 
     // SOURCE_POSITION
-    public static final double SOURCE_POSITION_STP = 180.0 + 155.0; // Lots of slop
+    public static final double SOURCE_POSITION_STP = 200.0; // 223.0 // 180.0 + 155.0; // Lots of slop 335 // added 30,
+                                                            // potentially remove
     public static final double SOURCE_POSITION_ACP = 30.0;
 
     // CLIMB_POSITION
-    public static final double CLIMB_POSITION_STP = 180.0;
-    public static final double CLIMB_POSITION_ACP = 80.0;
+    public static final double CLIMB_POSITION_STP = 125.0;
+    public static final double CLIMB_POSITION_ACP = 21.0;
 
     /*
      * Swerve Constants (newly added ones)
@@ -204,13 +215,21 @@ public final class Constants {
          * Ideally these should be independent but for getting started same pid/ff
          * values should work just fine
          */
-        public static final PIDConstants drivePID = new PIDConstants(0.3, 0.0000, 0.0045);
-        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3, 0.4);
-        public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); //p=0.023
-
+        // public static final PIDConstants drivePID = new PIDConstants(0.33, 0.0000001,
+        // 0.006); // Our tuned
+        public static final PIDConstants drivePID = new PIDConstants(0.00018, 0.0000002, 0.5); // YAGSL suggested // kD
+                                                                                               // = 1.0 // kP = 0.00023
+                                                                                               // //kD=0.65
+        // kv is calculated = optimal Voltage / maxSpeed; ka = optimal voltage /
+        // maxAcceleration <-- practically is the coefficient of friction * 9.81 causing
+        // accel
+        public static final SimpleMotorFeedforward driveSVA = new SimpleMotorFeedforward(0.1, 3.0, 0.9);
+        public static final PIDConstants anglePID = new PIDConstants(0.035, 0.0001, 0.0); // p=0.023
+        // public static final PIDConstants anglePID = new PIDConstants(0.004, 0.0000,
+        // 1.5); <-- YAGSL
         /* Custom PID Controllers */
-        //public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0, 0.00005);
-        public static final PIDConstants driveAlignPID = new PIDConstants(1.25, 0, 0);
+        // public static final OrbitPID robotRotationPID = new OrbitPID(0.1, 0,
+        // 0.00005);
 
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
@@ -227,7 +246,7 @@ public final class Constants {
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
             public static final int driveMotorID = 15;
-            public static final int angleMotorID = 16; 
+            public static final int angleMotorID = 16;
             public static final int canCoderID = 17;
 
             public static final double angleOffset = 264.72;
@@ -268,8 +287,8 @@ public final class Constants {
             public static final double maxAcceleration = 16; // m/s^2
             public static final double maxAngularVelocity = Units.degreesToRadians(540); // d/s
             public static final double maxAngularAcceleration = Units.degreesToRadians(720); // deg/s^2
-            public static final double positionTolerance = 0.025;
-            public static final double angleTolerance = Math.toRadians(1);
+            public static final double positionTolerance = 0.025 * 20;
+            public static final double angleTolerance = Math.toRadians(1) * 10;
         }
 
     }
@@ -297,7 +316,7 @@ public final class Constants {
      */
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
-    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 1 /
+    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 /
             Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
     // SDS Module Configurations

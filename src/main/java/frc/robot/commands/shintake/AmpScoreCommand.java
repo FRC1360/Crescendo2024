@@ -21,12 +21,14 @@ public class AmpScoreCommand extends Command {
   /** Creates a new AmpScoreCommand. */
   public AmpScoreCommand(ShintakeSubsystem shintakeSubsystem, LEDSubsystem ledSubsystem, StateMachine sm) {
     this.shintakeSubsystem = shintakeSubsystem; 
+    addRequirements(this.shintakeSubsystem);
   }
 
   @Override
   public void initialize() { 
-      shintakeSubsystem.setVelocity(Constants.ShintakeConstants.AMP_VELOCITY_FRONT, Constants.ShintakeConstants.AMP_VELOCITY_FRONT);
-  }
+      //shintakeSubsystem.setVelocity(Constants.ShintakeConstants.AMP_VELOCITY_FRONT, Constants.ShintakeConstants.AMP_VELOCITY_FRONT);
+    shintakeSubsystem.varShoot(0.5);
+    }
 
   @Override
   public void execute() { 
@@ -36,5 +38,6 @@ public class AmpScoreCommand extends Command {
   @Override
   public void end(boolean interrupted) { 
     this.shintakeSubsystem.stopShooter();
+    this.shintakeSubsystem.stopIntake();
   }
 }

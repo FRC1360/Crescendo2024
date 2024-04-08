@@ -2,25 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4516939672177216,
-      "y": 3.796713125341144
+      "x": 0.7365015087811937,
+      "y": 4.351321779566637
     },
-    "rotation": 0
+    "rotation": 117.7481499056483
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Speaker Lineup"
+            "name": "SubwooferShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to midfield"
+            "pathName": "Mean Path Speaker Right"
           }
         }
       ]

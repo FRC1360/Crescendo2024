@@ -22,7 +22,7 @@ public class GoToStartPosition extends SequentialCommandGroup {
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Start stage", "STAGE 2"))), 
                 // .alongWith(
                 // Command 2
-                new ACPGoToPositionCommand(ACPSubsystem, Constants.START_POSITION_ACP)
+                new ACPGoToPositionCommand(ACPSubsystem, Constants.START_POSITION_ACP, STPSubsystem)
                         .alongWith(new InstantCommand(() -> SmartDashboard.putString("Start stage", "STAGE 3"))), 
                 // ), 
 
