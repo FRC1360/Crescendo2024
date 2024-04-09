@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -86,6 +87,7 @@ public class RobotContainer {
 	private final CommandJoystick left_controller = new CommandJoystick(0);
 	private final CommandJoystick right_controller = new CommandJoystick(1);
 	private final CommandXboxController operator_controller = new CommandXboxController(2);
+	private static SlewRateLimiter rateLimiter = new SlewRateLimiter(0.5); // Example rate limit of 0.5 ft per second
 
 	public SwerveSubsystem swerveSubsystem;
 
@@ -216,60 +218,10 @@ public class RobotContainer {
 	 * joysticks}.
 	 */
 	private void configureBindings() {
-		// operator_controller.a().whileTrue(new InstantCommand(()->
-		// armChassisPivotSubsystem.setACPNormalizedVoltage(0.15)));
-		// operator_controller.b().whileTrue(new InstantCommand(()->
-		// armChassisPivotSubsystem.setACPNormalizedVoltage(-0.05)));
-		// operator_controller.a().onTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem, 60.0));
-		// operator_controller.b().onTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem, 30.0));
-		// operator_controller.y().onTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem, 50.0));
-
-		// operator_controller.a().whileTrue(new
-		// AssemblySubwooferPositionCommand(armChassisPivotSubsystem,
-		// shintakePivotSubsystem, ledSubsystem, sm));
-
-		// operator_controller.a().whileTrue(new
-		// ACPGoToPositionCommand(armChassisPivotSubsystem, 0.0));
-		// operator_controller.a().whileTrue(new
-		// AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
-		// ledSubsystem, sm));
-		// operator_controller.a().whileTrue(new
-		// AssemblySourcePositionCommand(armChassisPivotSubsystem,
-		// shintakePivotSubsystem, ledSubsystem, sm));
-		// operator_controller.a().onTrue(new
-		// STPGoToPositionCommand(shintakePivotSubsystem, 150.0));
-		// operator_controller.b().onTrue(new
-		// STPGoToPositionCommand(shintakePivotSubsystem, 60.0));
-		// operator_controller.y().onTrue(new
-		// STPGoToPositionCommand(shintakePivotSubsystem, 90.0,
-		// armChassisPivotSubsystem));
-
-		// operator_controller.b().whileTrue(new
-		// AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
-		// ledSubsystem, sm));
-
-		// operator_controller.rightBumper().whileTrue(new
-		// IntakeCommand(shintakeSubsystem, ledSubsystem));
 		left_controller.button(1).whileTrue(new IntakeCommand(shintakeSubsystem, ledSubsystem));
-
-		// operator_controller.x().whileTrue(new OutakeCommand(shintakeSubsystem));
-
-		// operator_controller.povUp().whileTrue(new
-		// ShootSpeakerCommand(shintakeSubsystem));
-		// operator_controller.y().whileTrue(new AmpScoreCommand(shintakeSubsystem,
-		// armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-		// operator_controller.povUp().and(() ->
-		// this.LEVEL.equals(ASSEMBLY_LEVEL.AMP)).whileTrue(new
-		// ShootSpeakerCommand(shintakeSubsystem));
-
 		right_controller.button(1)
 				.and(() -> this.LEVEL.equals(ASSEMBLY_LEVEL.AMP))
 				.whileTrue(new AmpScoreCommand(shintakeSubsystem, ledSubsystem, sm));
-		// operator_controller.x().onTrue(new ShootSpeakerFullCommand(shintakeSubsystem,
-		// armChassisPivotSubsystem, operator_controller));
 		right_controller.button(1)
 				.and(
 						() -> (this.LEVEL.equals(ASSEMBLY_LEVEL.SUBWOOFER)
@@ -292,9 +244,6 @@ public class RobotContainer {
 		// -> shintakeSubsystem.stopShooter()).and(new InstantCommand( () ->
 		// shintakeSubsystem.stopIntake())));
 
-		// operator_controller.leftBumper().whileTrue(new InstantCommand(() ->
-		// shintakeSubsystem.setVelocity(operator_controller.getLeftTriggerAxis() *
-		// 2800, operator_controller.getLeftTriggerAxis() * 2800)));
 		swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
 				swerveSubsystem,
 				() -> -modifyAlliance(modifyAxis(left_controller.getY()))
@@ -317,13 +266,6 @@ public class RobotContainer {
 
 		left_controller.button(2).whileFalse(
 				new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem, ledSubsystem, sm));
-
-		// left_controller.button(3)
-		// .whileTrue(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem,
-		// armChassisPivotSubsystem,
-		// shintakePivotSubsystem, shintakeSubsystem, ledSubsystem, sm,
-		// () -> right_controller.button(3).getAsBoolean())
-		// .alongWith(new InstantCommand(() -> System.out.println(this.LEVEL))));
 
 		left_controller.button(4).whileTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.AMP)
 				.andThen(new AssemblySchedulerCommand(() -> this.LEVEL, swerveSubsystem, armChassisPivotSubsystem,
@@ -409,35 +351,6 @@ public class RobotContainer {
 		operator_controller.b().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.RIGHT));
 		operator_controller.y().onTrue(new InstantCommand(() -> this.SRC_SIDE = SOURCE_SIDE.CENTER));
 
-		// operator_controller.y()
-		// .onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 30.0,
-		// armChassisPivotSubsystem));
-		// operator_controller.b()
-		// .onTrue(new STPGoToPositionCommand(shintakePivotSubsystem, 0.0,
-		// armChassisPivotSubsystem));
-		// operator_controller.x().onTrue(new
-		// STPGoToPositionCommand(shintakePivotSubsystem, 180.0,
-		// armChassisPivotSubsystem));
-
-		// operator_controller.y()
-		// .onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 45.0,
-		// shintakePivotSubsystem)
-		// .alongWith(
-		// new STPGoToPositionCommand(shintakePivotSubsystem, 180.0,
-		// armChassisPivotSubsystem)));
-
-		// operator_controller.x().onTrue(
-		// new AssemblyHomePositionCommand(armChassisPivotSubsystem,
-		// shintakePivotSubsystem, ledSubsystem, sm));
-		// operator_controller.y()
-		// .onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 21.0,
-		// shintakePivotSubsystem));
-		// operator_controller.b()
-		// .onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 45.0,
-		// shintakePivotSubsystem));
-		// operator_controller.x()
-		// .onTrue(new ACPGoToPositionCommand(armChassisPivotSubsystem, 60.0,
-		// shintakePivotSubsystem));
 		// // left_controller.button(2).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.RED_SOURCE).getCommand());
 
@@ -454,16 +367,6 @@ public class RobotContainer {
 		// // left_controller.button(4).whileTrue(new PathfindAuto(swerveSubsystem,
 		// // AlignmentConstants.BLUE_SPEAKER).getCommand());
 
-		// left_controller.button(7).whileTrue(new LockWheels(swerveSubsystem));
-		// right_controller.button(6).whileTrue(new RotateForShot(swerveSubsystem,
-		// () -> -modifyAlliance(modifyAxis(left_controller.getY()))
-		// * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for
-		// alliance color
-		// () -> -modifyAlliance(modifyAxis(left_controller.getX()))
-		// * Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND));
-
-		// right_controller.button(11).onTrue(new
-		// InstantCommand(swerveSubsystem::zeroGyro));
 		right_controller.button(7).onTrue(new InstantCommand(() -> swerveSubsystem.toggleManualDrive()));
 
 		// // Debounce makes for more stability
@@ -483,19 +386,6 @@ public class RobotContainer {
 		operator_controller.povUp().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_FAR));
 		operator_controller.povLeft().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_LEFT));
 		operator_controller.povRight().onTrue(new InstantCommand(() -> this.LEVEL = ASSEMBLY_LEVEL.PODIUM_RIGHT));
-
-		// // left_controller.button(7).onTrue(new IntakeCommand(m_shintakeSubsystem));
-
-		// // operator_controller.b().whileTrue(new
-		// AssemblySubwooferPositionCommand(armChassisPivotSubsystem,
-		// shintakePivotSubsystem, ledSubsystem, sm));
-		// // operator_controller.a().whileTrue(new
-		// AssemblyAmpPositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
-		// ledSubsystem, sm));
-		// // operator_controller.x().whileTrue(new
-		// AssemblySourcePositionCommand(armChassisPivotSubsystem,
-		// shintakePivotSubsystem, ledSubsystem, sm));
-		// // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
 		operator_controller.leftBumper().whileTrue(
 				new ACPMoveManual(armChassisPivotSubsystem, () -> operator_controller.getRightY(),
@@ -557,7 +447,7 @@ public class RobotContainer {
 		// Square the axis
 		value = Math.copySign(value * value, value);
 
-		return value;
+		return rateLimiter.calculate(value);
 	}
 
 	public LEDSubsystem getLedSubsystem() {
