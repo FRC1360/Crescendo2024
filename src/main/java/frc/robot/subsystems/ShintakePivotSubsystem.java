@@ -80,8 +80,8 @@ public class ShintakePivotSubsystem extends SubsystemBase {
         this.STPMotorMaster.setIdleMode(IdleMode.kBrake);
         this.STPMotorSlave.setIdleMode(IdleMode.kBrake);
 
-        this.STPMotorMaster.setSmartCurrentLimit(80);
-        this.STPMotorSlave.setSmartCurrentLimit(80);
+        this.STPMotorMaster.setSmartCurrentLimit(30); //prev=80
+        this.STPMotorSlave.setSmartCurrentLimit(30);
 
         this.STPMotorSlave.follow(this.STPMotorMaster);
 

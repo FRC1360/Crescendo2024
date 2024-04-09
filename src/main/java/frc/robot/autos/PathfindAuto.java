@@ -29,6 +29,7 @@ public class PathfindAuto {
     public PathfindAuto(SwerveSubsystem swerveSubsystem, Pose2d targetPose, boolean allowEnd) {
         this.targetPose = targetPose;
 
+        
         this.swerveSubsystem = swerveSubsystem;
 
         this.constraints = new PathConstraints(Constants.Swerve.AutoConstants.maxSpeed,
@@ -50,15 +51,15 @@ public class PathfindAuto {
             // .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
             // this.targetPose)))
             // .andThen(
-            return new InstantCommand(() ->
-            swerveSubsystem.setMotionProfileInit(false))//)
-            .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
-            this.targetPose)))
-            .andThen(new AlignToPose(this.swerveSubsystem, targetPose, allowEnd))
-            .andThen(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
-            new Pose2d())));
+            // return new InstantCommand(() ->
+            // swerveSubsystem.setMotionProfileInit(false))//)
+            // .alongWith(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
+            // this.targetPose)))
+            // .andThen(new AlignToPose(this.swerveSubsystem, targetPose, allowEnd))
+            // .andThen(new InstantCommand(() -> Logger.recordOutput("Swerve/TargetPose",
+            // new Pose2d())));
 
-            //return new InstantCommand();
+            return new InstantCommand();
         }
 
         return new InstantCommand();
