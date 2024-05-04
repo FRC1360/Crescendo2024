@@ -306,7 +306,7 @@ public final class Constants {
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.61; // FIXME Measure and set wheelbase
 
-    public static final double ROBOT_MAX_VELOCITY_METERS_PER_SECOND = 14.5 / 3.28084; // ft/s divide ft/m to convert to
+    public static final double ROBOT_MAX_VELOCITY_METERS_PER_SECOND = 14.5 / 3.28084 * 0.3; // ft/s divide ft/m to convert to
     // m/s
 
     /**
@@ -317,7 +317,7 @@ public final class Constants {
     // Here we calculate the theoretical maximum angular velocity. You can also
     // replace this with a measured amount.
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 /
-            Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
+            Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0) * 0.3;
 
     // SDS Module Configurations
     public static final double SWERVE_WHEEL_DIAMETER = 0.10033; // in meters

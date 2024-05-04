@@ -83,6 +83,9 @@ public class RobotContainer {
 	private final LEDSubsystem ledSubsystem = new LEDSubsystem();
 	private final StateMachine sm = new StateMachine();
 	// Replace with CommandPS4Controller or CommandJoystick if needed
+	private final SlewRateLimiter slx = new SlewRateLimiter(0.7, -0.7, 0);
+	private final SlewRateLimiter sly = new SlewRateLimiter(0.7, -0.7, 0);
+	private final SlewRateLimiter sla = new SlewRateLimiter(1.2, -1.2, 0);
 
 	private final CommandJoystick left_controller = new CommandJoystick(0);
 	private final CommandJoystick right_controller = new CommandJoystick(1);
@@ -246,11 +249,11 @@ public class RobotContainer {
 
 		swerveSubsystem.setDefaultCommand(new DefaultDriveCommand(
 				swerveSubsystem,
-				() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+				() -> -modifyAlliance(modifyAxis(left_controller.getY(), sly))
 						* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND, // Modify axis also for alliance color
-				() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+				() -> -modifyAlliance(modifyAxis(left_controller.getX(), slx))
 						* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND,
-				() -> -modifyAxis(right_controller.getX()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+				() -> -modifyAxis(right_controller.getX(), sla) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 				right_controller));
 
 		left_controller.button(7).onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
@@ -319,14 +322,14 @@ public class RobotContainer {
 								() -> right_controller.button(9).getAsBoolean())
 								.alongWith(
 										new RotateForShot(swerveSubsystem,
-												() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+												() -> -modifyAlliance(modifyAxis(left_controller.getY(), sly))
 														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2, // Modify
 																												// axis
 																												// also
 																												// for
 																												// alliance
 																												// color
-												() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+												() -> -modifyAlliance(modifyAxis(left_controller.getX(), slx))
 														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2,
 												true))));
 		left_controller
@@ -340,14 +343,14 @@ public class RobotContainer {
 								() -> right_controller.button(9).getAsBoolean())
 								.alongWith(
 										new RotateForShot(swerveSubsystem,
-												() -> -modifyAlliance(modifyAxis(left_controller.getY()))
+												() -> -modifyAlliance(modifyAxis(left_controller.getY(), sly))
 														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2, // Modify
 																												// axis
 																												// also
 																												// for
 																												// alliance
 																												// color
-												() -> -modifyAlliance(modifyAxis(left_controller.getX()))
+												() -> -modifyAlliance(modifyAxis(left_controller.getX(), slx))
 														* Constants.ROBOT_MAX_VELOCITY_METERS_PER_SECOND * 0.2,
 												false))))
 				.whileFalse(new AssemblyHomePositionCommand(armChassisPivotSubsystem, shintakePivotSubsystem,
@@ -458,14 +461,15 @@ public class RobotContainer {
 			ledSubsystem.setLEDNote();
 	}
 
-	private static double modifyAxis(double value) {
+	private static double modifyAxis(double value, SlewRateLimiter sl) {
 		// Deadband
 		value = deadband(value, 0.05);
 
 		// Square the axis
 		value = Math.copySign(value * value, value);
 
-		return rateLimiter.calculate(value);
+		//return value;
+		return sl.calculate(value);
 	}
 
 	public LEDSubsystem getLedSubsystem() {
